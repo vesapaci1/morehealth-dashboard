@@ -17,16 +17,16 @@ export function Login() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#22d3ee]/20 rounded-full blur-[100px] pointer-events-none" />
         
         <div className="relative z-10">
-          <BrandLogo />
+          <BrandLogo variant="light" className="h-9" />
         </div>
 
         <div className="relative z-10 max-w-md">
-          <h1 className="text-5xl font-display font-bold leading-tight mb-4 tracking-tight">
-            More Health<br />Growth Hub<br />
-            <span className="text-primary-foreground/70 text-4xl mt-2 block font-normal tracking-normal">成长中心</span>
+          <h1 className="text-5xl font-display font-semibold leading-[1.05] mb-5 tracking-tight">
+            Your business,<br />beautifully run.
+            <span className="text-primary-foreground/70 text-3xl mt-3 block font-normal tracking-normal">经营你的事业，从此简单优雅。</span>
           </h1>
-          <p className="text-xl text-primary-foreground/80 font-medium mb-12">
-            Build your business. 经营你的事业。
+          <p className="text-lg text-primary-foreground/80 font-medium mb-12">
+            The Partner platform for More Health creators.
           </p>
 
           <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 mt-12">
