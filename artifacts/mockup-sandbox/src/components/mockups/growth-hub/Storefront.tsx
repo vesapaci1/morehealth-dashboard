@@ -1,5 +1,6 @@
 import "./_group.css";
 import React from "react";
+import { QRCodeSVG } from "qrcode.react";
 import { AppLayout } from "./_shared/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -36,13 +37,21 @@ export function Storefront() {
               </div>
             </div>
             <div className="bg-secondary/50 border-l border-border/50 p-8 md:p-10 flex flex-col items-center justify-center min-w-[300px]">
-              {/* Fake QR Code */}
-              <div className="w-48 h-48 bg-white rounded-2xl p-3 shadow-sm border border-border flex items-center justify-center relative overflow-hidden">
-                <div className="w-full h-full border-[12px] border-black rounded-lg absolute inset-2" style={{ borderStyle: 'dashed' }}></div>
-                <div className="w-full h-full border-[8px] border-black rounded absolute inset-6" style={{ borderStyle: 'dotted' }}></div>
-                <div className="w-12 h-12 bg-white absolute flex items-center justify-center z-10 rounded">
-                  <div className="w-8 h-8 bg-primary rounded-sm"></div>
-                </div>
+              <div className="w-52 h-52 bg-white rounded-2xl p-4 shadow-sm border border-border flex items-center justify-center">
+                <QRCodeSVG
+                  value="https://morehealth.com/brady"
+                  size={184}
+                  bgColor="#ffffff"
+                  fgColor="#0B271F"
+                  level="H"
+                  marginSize={0}
+                  imageSettings={{
+                    src: "/__mockup/images/more-health-logo.png",
+                    height: 44,
+                    width: 44,
+                    excavate: true,
+                  }}
+                />
               </div>
               <Button variant="ghost" className="mt-4 gap-2 text-muted-foreground hover:text-foreground">
                 <Download className="w-4 h-4" /> Download QR Code
