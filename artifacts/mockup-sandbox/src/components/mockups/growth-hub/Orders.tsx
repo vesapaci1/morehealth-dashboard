@@ -98,7 +98,7 @@ export function Orders() {
                   <tbody className="divide-y divide-border/50">
                     {ORDERS.map((order) => (
                       <tr key={order.id} className="hover:bg-secondary/20 transition-colors group">
-                        <td className="px-6 py-4 font-medium text-foreground">{order.id}</td>
+                        <td className="px-6 py-4 font-medium text-foreground whitespace-nowrap font-mono text-xs">{order.id}</td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             <Avatar className="w-6 h-6 border border-border">
