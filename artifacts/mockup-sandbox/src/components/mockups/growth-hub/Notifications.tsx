@@ -209,39 +209,6 @@ export function Notifications() {
           </div>
         </div>
 
-        {/* CATEGORY SUMMARY */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-          {(Object.keys(CATEGORY_META) as Notification["category"][]).map((cat) => {
-            const meta = CATEGORY_META[cat];
-            const Icon = meta.Icon;
-            const count = counts[cat];
-            const unread = items.filter((n) => n.category === cat && n.unread).length;
-            return (
-              <button
-                key={cat}
-                onClick={() => setFilter(cat)}
-                className={`text-left bg-card border border-border/50 rounded-2xl p-4 hover:shadow-md transition-all ${
-                  filter === cat ? "ring-2 ring-primary/40 border-primary/40" : ""
-                }`}
-              >
-                <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-3 ${meta.tint}`}>
-                  <Icon className="w-4 h-4" />
-                </div>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-2xl font-display font-bold tabular-nums tracking-tight">{count}</span>
-                  {unread > 0 && (
-                    <span className="text-[11px] font-semibold text-primary bg-primary/10 px-1.5 py-0.5 rounded-md">
-                      {unread} new
-                    </span>
-                  )}
-                </div>
-                <p className="text-sm font-medium text-foreground mt-1">{meta.label}</p>
-                <p className="text-xs text-muted-foreground">{meta.zh}</p>
-              </button>
-            );
-          })}
-        </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* FEED */}
           <div className="lg:col-span-2 space-y-4">
