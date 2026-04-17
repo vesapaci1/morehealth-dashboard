@@ -385,21 +385,6 @@ export function Notifications() {
               </Button>
             </Card>
 
-            <Card className="shadow-sm border-primary/20 rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-9 h-9 rounded-full bg-primary/15 text-primary flex items-center justify-center">
-                  <TrendingUp className="w-4 h-4" />
-                </div>
-                <div>
-                  <p className="text-sm font-display font-semibold text-foreground">Quiet hours</p>
-                  <p className="text-[11px] text-muted-foreground">免打扰时段</p>
-                </div>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Push alerts pause from <span className="font-semibold text-foreground">22:00 – 07:00 CST</span>. Payout
-                and high-value order alerts always come through.
-              </p>
-            </Card>
           </div>
         </div>
       </div>
