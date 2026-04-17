@@ -20,8 +20,8 @@ import {
 
 const NAV_ITEMS = [
   { icon: LayoutDashboard, label: "Dashboard", zh: "仪表盘", id: "dashboard", path: "/dashboard" },
-  { icon: ShoppingBag, label: "Shop Products", zh: "商城", id: "shop", path: "/shop" },
-  { icon: UserPlus, label: "Enroll Partner", zh: "邀请伙伴", id: "enroll", path: "/enroll" },
+  { icon: ShoppingBag, label: "Shop", zh: "商城", id: "shop", path: "https://morehealth-3.myshopify.com/collections/all", external: true },
+  { icon: UserPlus, label: "Enroll", zh: "邀请伙伴", id: "enroll", path: "https://morehealth-3.myshopify.com/pages/enrollment", external: true },
   { icon: Store, label: "My Storefront", zh: "我的店铺", id: "storefront", path: "/storefront" },
   { icon: Wallet, label: "Wallet", zh: "钱包", id: "wallet", path: "/earnings" },
   { icon: Repeat, label: "Subscriptions", zh: "订阅", id: "subscriptions", path: "/subscriptions" },
@@ -57,20 +57,17 @@ export function Sidebar({ activeId }: { activeId?: string }) {
 
       <div className="flex-1 overflow-y-auto px-3 pb-6 space-y-1 scrollbar-hide">
         {NAV_ITEMS.map((item) => {
-          const isActive = activeId
+          const isActive = !item.external && (activeId
             ? item.id === activeId
-            : location === item.path || (location === "/" && item.id === "dashboard");
+            : location === item.path || (location === "/" && item.id === "dashboard"));
           const Icon = item.icon;
-          return (
-            <Link
-              key={item.id}
-              href={item.path}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                isActive
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-              }`}
-            >
+          const className = `w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+            isActive
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+          }`;
+          const inner = (
+            <>
               <div className="flex items-center gap-3">
                 <Icon className={`w-4 h-4 ${isActive ? "opacity-100" : "opacity-70"}`} />
                 <span>{item.label}</span>
@@ -88,6 +85,18 @@ export function Sidebar({ activeId }: { activeId?: string }) {
                   {item.zh}
                 </span>
               )}
+            </>
+          );
+          if (item.external) {
+            return (
+              <a key={item.id} href={item.path} target="_blank" rel="noopener noreferrer" className={className}>
+                {inner}
+              </a>
+            );
+          }
+          return (
+            <Link key={item.id} href={item.path} className={className}>
+              {inner}
             </Link>
           );
         })}
