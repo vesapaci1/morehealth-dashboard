@@ -33,12 +33,12 @@ export function MobileSettings() {
         <div className="px-5 mt-2">
           <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-border/50 rounded-2xl p-4 flex items-center gap-3">
             <Avatar className="w-14 h-14 border border-border">
-              <AvatarImage src="https://i.pravatar.cc/150?u=brady" />
-              <AvatarFallback>BC</AvatarFallback>
+              <AvatarImage src="/images/matt-baros.jpeg" />
+              <AvatarFallback>MB</AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
-              <p className="text-base font-display font-semibold">Brady Cooper</p>
-              <p className="text-[11px] text-muted-foreground">Gold Partner · ID 880214</p>
+              <p className="text-base font-display font-semibold">Matt Baros</p>
+              <p className="text-[11px] text-muted-foreground">Elite Influencer · ID 880214</p>
               <p className="text-[10px] uppercase tracking-wider text-primary font-semibold mt-1">brady@morehealth.com</p>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />

@@ -44,11 +44,11 @@ export function Dashboard() {
           
           <div className="relative z-10 flex flex-col md:flex-row justify-between items-start gap-8">
             <div className="flex flex-col gap-2">
-              <h1 className="text-3xl font-display font-bold tracking-tight">Welcome back, Brady <span className="font-sans font-normal text-primary-foreground/80">欢迎回来</span></h1>
+              <h1 className="text-3xl font-display font-bold tracking-tight">Welcome back, Matt <span className="font-sans font-normal text-primary-foreground/80">欢迎回来</span></h1>
               <div className="flex flex-wrap items-center gap-2">
                 <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">
                   <span className="w-2 h-2 rounded-full bg-accent"></span>
-                  Gold Partner / 金牌伙伴
+                  Elite Influencer / 精英影响者
                 </div>
                 <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-primary-foreground/90">
                   <span>Apr 11 – Apr 17, 2026</span>

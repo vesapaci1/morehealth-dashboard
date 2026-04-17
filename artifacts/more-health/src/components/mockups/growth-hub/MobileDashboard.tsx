@@ -21,12 +21,12 @@ export function MobileDashboard() {
       <header className="px-5 py-2 flex justify-between items-center z-10">
         <div className="flex items-center gap-3">
           <Avatar className="w-10 h-10 border border-border">
-            <AvatarImage src="https://i.pravatar.cc/150?u=brady" />
-            <AvatarFallback>BC</AvatarFallback>
+            <AvatarImage src="/images/matt-baros.jpeg" />
+            <AvatarFallback>MB</AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Gold Partner</span>
-            <span className="text-sm font-semibold leading-none">Hi, Brady</span>
+            <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Elite Influencer</span>
+            <span className="text-sm font-semibold leading-none">Hi, Matt</span>
           </div>
         </div>
         <button className="relative w-10 h-10 flex items-center justify-center bg-secondary rounded-full">

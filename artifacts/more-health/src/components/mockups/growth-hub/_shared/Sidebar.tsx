@@ -44,12 +44,12 @@ export function Sidebar({ activeId }: { activeId?: string }) {
       <div className="px-4 mb-6">
         <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary/50 border border-border/50">
           <Avatar className="w-10 h-10 border border-background">
-            <AvatarFallback className="bg-primary/10 text-primary font-medium">BC</AvatarFallback>
-            <AvatarImage src="https://i.pravatar.cc/150?u=brady" />
+            <AvatarFallback className="bg-primary/10 text-primary font-medium">MB</AvatarFallback>
+            <AvatarImage src="/images/matt-baros.jpeg" />
           </Avatar>
           <div className="flex flex-col">
-            <span className="text-sm font-semibold">Brady Chen</span>
-            <span className="text-xs text-muted-foreground">Gold Partner</span>
+            <span className="text-sm font-semibold">Matt Baros</span>
+            <span className="text-xs text-muted-foreground">Elite Influencer</span>
           </div>
         </div>
       </div>

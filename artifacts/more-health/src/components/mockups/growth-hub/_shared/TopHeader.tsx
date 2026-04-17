@@ -30,8 +30,8 @@ export function TopHeader() {
 
         <Link href="/settings" className="block">
           <Avatar className="w-8 h-8 cursor-pointer border border-border hover:opacity-80 transition-opacity">
-            <AvatarFallback className="bg-primary/10 text-primary text-xs">BC</AvatarFallback>
-            <AvatarImage src="https://i.pravatar.cc/150?u=brady" />
+            <AvatarFallback className="bg-primary/10 text-primary text-xs">MB</AvatarFallback>
+            <AvatarImage src="/images/matt-baros.jpeg" />
           </Avatar>
         </Link>
       </div>

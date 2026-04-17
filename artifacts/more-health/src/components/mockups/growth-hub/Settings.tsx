@@ -55,8 +55,8 @@ export function Settings() {
               {/* Avatar Section */}
               <div className="flex items-center gap-6">
                 <Avatar className="w-20 h-20 border-2 border-background shadow-sm ring-1 ring-border">
-                  <AvatarFallback className="bg-primary/10 text-primary text-xl font-medium">BC</AvatarFallback>
-                  <AvatarImage src="https://i.pravatar.cc/150?u=brady" />
+                  <AvatarFallback className="bg-primary/10 text-primary text-xl font-medium">MB</AvatarFallback>
+                  <AvatarImage src="/images/matt-baros.jpeg" />
                 </Avatar>
                 <div>
                   <Button variant="outline" className="shadow-sm rounded-xl mb-2">Upload new photo</Button>
@@ -67,7 +67,7 @@ export function Settings() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" defaultValue="Brady" className="bg-secondary/30 rounded-xl" />
+                  <Input id="firstName" defaultValue="Matt" className="bg-secondary/30 rounded-xl" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName">Last Name / 姓</Label>
