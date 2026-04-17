@@ -18,16 +18,16 @@ const SALES_DATA = [
 ];
 
 const EARNINGS_DATA = [
-  { name: 'Week 1', value: 1200 },
-  { name: 'Week 2', value: 1500 },
-  { name: 'Week 3', value: 1800 },
-  { name: 'Week 4', value: 2200 },
+  { name: 'Mar 23–29', value: 1200 },
+  { name: 'Mar 30–Apr 5', value: 1500 },
+  { name: 'Apr 6–12', value: 1800 },
+  { name: 'Apr 13–19', value: 2200 },
 ];
 
 const ACTIVITY_FEED = [
-  { id: 1, type: 'purchase', text: 'John bought SomaDerm Transdermal Gel', amount: '+¥244.80 commission', time: '2 hours ago', avatar: 'J' },
-  { id: 2, type: 'subscription', text: 'Lisa subscribed monthly to Revitalize Eye Cream', time: '5 hours ago', avatar: 'L' },
-  { id: 3, type: 'payout', text: 'Wallet payout sent', amount: '¥3,200', time: 'Yesterday', avatar: 'MH' },
+  { id: 1, type: 'purchase', text: 'John bought SomaDerm Transdermal Gel', amount: '+¥244.80 commission', time: 'Today, 2:14 PM · 2h ago', avatar: 'J' },
+  { id: 2, type: 'subscription', text: 'Lisa subscribed monthly to Revitalize Eye Cream', time: 'Today, 11:02 AM · 5h ago', avatar: 'L' },
+  { id: 3, type: 'payout', text: 'Wallet payout sent', amount: '¥3,200', time: 'Yesterday, 6:48 PM', avatar: 'MH' },
 ];
 
 export function Dashboard() {
@@ -130,11 +130,12 @@ export function Dashboard() {
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={EARNINGS_DATA} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
-                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6b7280' }} dy={10} />
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#6b7280' }} dy={10} interval={0} />
                     <Tooltip 
                       cursor={{ fill: '#f3f4f6' }}
                       contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                       formatter={(val) => [`¥${val}`, 'Earnings']}
+                      labelFormatter={(label) => `Week of ${label}`}
                     />
                     <Bar dataKey="value" fill="#f59e0b" radius={[4, 4, 0, 0]} maxBarSize={40} />
                   </BarChart>
