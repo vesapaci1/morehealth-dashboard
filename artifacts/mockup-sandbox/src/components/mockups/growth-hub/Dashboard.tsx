@@ -25,8 +25,8 @@ const EARNINGS_DATA = [
 ];
 
 const ACTIVITY_FEED = [
-  { id: 1, type: 'purchase', text: 'John bought Collagen Peptides', amount: '+¥48 commission', time: '2 hours ago', avatar: 'J' },
-  { id: 2, type: 'subscription', text: 'Lisa subscribed monthly to Daily Greens', time: '5 hours ago', avatar: 'L' },
+  { id: 1, type: 'purchase', text: 'John bought SomaDerm Transdermal Gel', amount: '+¥244.80 commission', time: '2 hours ago', avatar: 'J' },
+  { id: 2, type: 'subscription', text: 'Lisa subscribed monthly to Revitalize Eye Cream', time: '5 hours ago', avatar: 'L' },
   { id: 3, type: 'payout', text: 'Wallet payout sent', amount: '¥3,200', time: 'Yesterday', avatar: 'MH' },
 ];
 

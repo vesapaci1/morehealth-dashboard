@@ -77,15 +77,15 @@ export function Storefront() {
             </div>
             <div className="p-0">
               {[
-                { name: "Marine Collagen Peptides", units: 42, rev: "¥35,280", thumb: "💊" },
-                { name: "Daily Greens Powder", units: 28, rev: "¥14,560", thumb: "🌿" },
-                { name: "Adaptogen Mushroom Blend", units: 15, rev: "¥10,200", thumb: "🍄" },
-                { name: "Probiotic Complete", units: 12, rev: "¥5,040", thumb: "🦠" },
+                { name: "SomaDerm Transdermal Gel", units: 42, rev: "¥51,408", thumb: "/__mockup/images/somaderm.png" },
+                { name: "Rose & Cole Luxe Set", units: 15, rev: "¥50,760", thumb: "/__mockup/images/rose-cole-luxe.png" },
+                { name: "TRi-M*LT Liquid Shot", units: 22, rev: "¥18,216", thumb: "/__mockup/images/tri-mlt.png" },
+                { name: "Revitalize Eye Cream", units: 28, rev: "¥15,680", thumb: "/__mockup/images/revitalize-eye-cream.png" },
               ].map((product, i) => (
                 <div key={i} className="flex items-center justify-between p-4 border-b border-border/50 last:border-0 hover:bg-secondary/30 transition-colors">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-secondary flex items-center justify-center text-xl border border-border/50 shadow-sm">
-                      {product.thumb}
+                    <div className="w-12 h-12 rounded-lg bg-white flex items-center justify-center border border-border/50 shadow-sm overflow-hidden p-1">
+                      <img src={product.thumb} alt={product.name} className="max-w-full max-h-full object-contain" />
                     </div>
                     <div>
                       <p className="font-medium text-foreground">{product.name}</p>

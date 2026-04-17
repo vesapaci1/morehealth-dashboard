@@ -8,9 +8,9 @@ import { Plus, MoreVertical, CalendarClock, CreditCard, MapPin, PackageOpen } fr
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const SUBSCRIPTIONS = [
-  { id: "SUB-001", product: "Daily Greens + Probiotic Complete", freq: "Monthly / 月度", date: "Nov 02, 2023", amount: "¥940.00", pm: "Visa •••• 4242", city: "Shanghai", status: "Active", image: "🌿" },
-  { id: "SUB-002", product: "Marine Collagen Peptides", freq: "Monthly / 月度", date: "Nov 05, 2023", amount: "¥840.00", pm: "WeChat Pay", city: "Beijing", status: "Active", image: "💊" },
-  { id: "SUB-003", product: "Adaptogen Mushroom Blend", freq: "Bi-Monthly / 双月", date: "Dec 10, 2023", amount: "¥680.00", pm: "Alipay", city: "Shenzhen", status: "Paused", image: "🍄" },
+  { id: "SUB-001", product: "SomaDerm Transdermal Gel", freq: "Monthly / 月度", date: "Nov 02, 2023", amount: "¥1,224.00", pm: "Visa •••• 4242", city: "Shanghai", status: "Active", image: "/__mockup/images/somaderm.png" },
+  { id: "SUB-002", product: "Revitalize Eye Cream", freq: "Monthly / 月度", date: "Nov 05, 2023", amount: "¥560.00", pm: "WeChat Pay", city: "Beijing", status: "Active", image: "/__mockup/images/revitalize-eye-cream.png" },
+  { id: "SUB-003", product: "TRi-M*LT Liquid Shot", freq: "Bi-Monthly / 双月", date: "Dec 10, 2023", amount: "¥828.00", pm: "Alipay", city: "Shenzhen", status: "Paused", image: "/__mockup/images/tri-mlt.png" },
 ];
 
 export function Subscriptions() {
@@ -45,8 +45,8 @@ export function Subscriptions() {
           {SUBSCRIPTIONS.map((sub) => (
             <Card key={sub.id} className="shadow-sm border-border/50 rounded-2xl overflow-hidden bg-card hover:shadow-md transition-shadow">
               <div className="p-5 border-b border-border/50 bg-secondary/20 flex gap-4 items-center">
-                <div className="w-16 h-16 rounded-xl bg-background border border-border/50 flex items-center justify-center text-2xl shadow-sm">
-                  {sub.image}
+                <div className="w-16 h-16 rounded-xl bg-white border border-border/50 flex items-center justify-center shadow-sm overflow-hidden p-1.5">
+                  <img src={sub.image} alt={sub.product} className="max-w-full max-h-full object-contain" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-start">

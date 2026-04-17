@@ -10,11 +10,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Search, Filter, Download, ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 
 const ORDERS = [
-  { id: "ORD-902-18X", customer: "Lei Wang 王磊", product: "Marine Collagen Peptides", date: "Oct 24, 2023", amount: "¥840.00", commission: "¥168.00", status: "Delivered", tracking: "SF1029384756" },
-  { id: "ORD-902-17X", customer: "Jing Chen 陈静", product: "Daily Greens", date: "Oct 23, 2023", amount: "¥520.00", commission: "¥104.00", status: "Shipped", tracking: "SF1029384755" },
-  { id: "ORD-902-16X", customer: "Wei Zhang 张伟", product: "Adaptogen Mushroom Blend", date: "Oct 22, 2023", amount: "¥680.00", commission: "¥136.00", status: "Paid", tracking: "Pending" },
-  { id: "ORD-902-15X", customer: "Li Li 李丽", product: "Probiotic Complete", date: "Oct 20, 2023", amount: "¥420.00", commission: "¥84.00", status: "Delivered", tracking: "SF1029384751" },
-  { id: "ORD-902-14X", customer: "Hua Liu 刘华", product: "Marine Collagen Peptides", date: "Oct 19, 2023", amount: "¥840.00", commission: "¥168.00", status: "Delivered", tracking: "SF1029384749" },
+  { id: "ORD-902-18X", customer: "Lei Wang 王磊", product: "SomaDerm Transdermal Gel", date: "Oct 24, 2023", amount: "¥1,224.00", commission: "¥244.80", status: "Delivered", tracking: "SF1029384756" },
+  { id: "ORD-902-17X", customer: "Jing Chen 陈静", product: "Revitalize Eye Cream", date: "Oct 23, 2023", amount: "¥560.00", commission: "¥112.00", status: "Shipped", tracking: "SF1029384755" },
+  { id: "ORD-902-16X", customer: "Wei Zhang 张伟", product: "Rose & Cole Luxe Set", date: "Oct 22, 2023", amount: "¥3,384.00", commission: "¥676.80", status: "Paid", tracking: "Pending" },
+  { id: "ORD-902-15X", customer: "Li Li 李丽", product: "TRi-M*LT Liquid Shot", date: "Oct 20, 2023", amount: "¥828.00", commission: "¥165.60", status: "Delivered", tracking: "SF1029384751" },
+  { id: "ORD-902-14X", customer: "Hua Liu 刘华", product: "SomaDerm Transdermal Gel", date: "Oct 19, 2023", amount: "¥1,224.00", commission: "¥244.80", status: "Delivered", tracking: "SF1029384749" },
 ];
 
 export function Orders() {

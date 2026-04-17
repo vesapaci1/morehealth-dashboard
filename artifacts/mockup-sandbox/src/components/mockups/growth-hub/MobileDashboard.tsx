@@ -102,7 +102,7 @@ export function MobileDashboard() {
           </div>
           <div className="bg-card border border-border/50 rounded-[24px] p-5 space-y-5 shadow-sm">
             {[
-              { id: 1, text: 'John bought Collagen Peptides', amount: '+¥48', time: '2h ago', icon: 'J', color: 'bg-blue-100 text-blue-700' },
+              { id: 1, text: 'John bought SomaDerm', amount: '+¥244.80', time: '2h ago', icon: 'J', color: 'bg-blue-100 text-blue-700' },
               { id: 2, text: 'Lisa subscribed monthly', time: '5h ago', icon: 'L', color: 'bg-emerald-100 text-emerald-700' },
               { id: 3, text: 'Wallet payout sent', amount: '-¥3,200', time: 'Yesterday', icon: '💰', color: 'bg-amber-100 text-amber-700' },
             ].map((item) => (
