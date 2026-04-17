@@ -7,13 +7,15 @@ export function Kpi({
   value, 
   delta, 
   trend = "up",
-  sparkline
+  sparkline,
+  compare = "vs. previous 7 days"
 }: { 
   label: string, 
   value: string, 
   delta?: string, 
   trend?: "up" | "down",
-  sparkline?: React.ReactNode 
+  sparkline?: React.ReactNode,
+  compare?: string
 }) {
   return (
     <Card className="shadow-sm border-border/50 bg-card overflow-hidden hover:shadow-md transition-all duration-300 group">
@@ -23,7 +25,7 @@ export function Kpi({
           <span className="text-2xl font-bold display-num tabular-nums tracking-tight">{value}</span>
         </div>
         
-        <div className="flex items-center justify-between mt-4 z-10">
+        <div className="flex items-center gap-2 mt-4 z-10 flex-wrap">
           {delta && (
             <div className={`flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-md ${
               trend === "up" ? "bg-primary/10 text-primary" : "bg-destructive/10 text-destructive"
@@ -32,10 +34,13 @@ export function Kpi({
               {delta}
             </div>
           )}
+          {compare && (
+            <span className="text-[11px] text-muted-foreground leading-none">{compare}</span>
+          )}
         </div>
         
         {sparkline && (
-          <div className="absolute bottom-0 right-0 w-24 h-12 opacity-50 group-hover:opacity-100 transition-opacity">
+          <div className="absolute bottom-0 right-0 w-24 h-12 opacity-40 group-hover:opacity-90 transition-opacity pointer-events-none">
             {sparkline}
           </div>
         )}

@@ -17,6 +17,10 @@ export function Storefront() {
             <h1 className="text-2xl font-display font-bold tracking-tight">My Personal Website</h1>
             <p className="text-muted-foreground text-sm">我的个人店铺</p>
           </div>
+          <div className="inline-flex items-center gap-2 bg-secondary border border-border/60 px-3 py-1.5 rounded-full text-xs font-medium text-foreground">
+            <span>Apr 11 – Apr 17, 2026</span>
+            <span className="text-muted-foreground">vs. Apr 4 – Apr 10</span>
+          </div>
         </div>
 
         {/* HERO PREVIEW CARD */}
@@ -62,10 +66,10 @@ export function Storefront() {
 
         {/* KPIS */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <Kpi label="Store Visits" value="1,248" delta="+24%" />
-          <Kpi label="Conversion Rate" value="4.2%" delta="+0.8%" />
-          <Kpi label="Store Revenue" value="¥28,400" delta="+12%" />
-          <Kpi label="Direct Commissions" value="¥5,680" delta="+12%" />
+          <Kpi label="Store Visits" value="1,248" delta="+24%" compare="vs. Apr 4 – Apr 10" />
+          <Kpi label="Conversion Rate" value="4.2%" delta="+0.8%" compare="vs. Apr 4 – Apr 10" />
+          <Kpi label="Store Revenue" value="¥28,400" delta="+12%" compare="vs. Apr 4 – Apr 10" />
+          <Kpi label="Direct Commissions" value="¥5,680" delta="+12%" compare="vs. Apr 4 – Apr 10" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
