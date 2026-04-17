@@ -64,12 +64,12 @@ export function Dashboard() {
               </div>
               <div className="w-px bg-white/20"></div>
               <div className="flex flex-col gap-1">
-                <span className="text-primary-foreground/70 text-sm font-medium">This Week</span>
+                <span className="text-primary-foreground/70 text-sm font-medium">Earnings This Week</span>
                 <span className="text-3xl font-bold display-num tabular-nums tracking-tight">¥3,248</span>
               </div>
               <div className="w-px bg-white/20"></div>
               <div className="flex flex-col gap-1">
-                <span className="text-primary-foreground/70 text-sm font-medium">Active Subs</span>
+                <span className="text-primary-foreground/70 text-sm font-medium">Orders Generated</span>
                 <span className="text-3xl font-bold display-num tabular-nums tracking-tight">142</span>
               </div>
             </div>
