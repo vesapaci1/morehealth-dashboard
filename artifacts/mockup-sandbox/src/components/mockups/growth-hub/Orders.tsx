@@ -104,7 +104,7 @@ export function Orders() {
                             <Avatar className="w-6 h-6 border border-border">
                               <AvatarFallback className="text-[10px] bg-primary/10 text-primary">{order.customer.charAt(0)}</AvatarFallback>
                             </Avatar>
-                            <span>{order.customer}</span>
+                            <span className="whitespace-nowrap">{order.customer}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4">
@@ -112,7 +112,7 @@ export function Orders() {
                             <div className="w-8 h-8 rounded-md bg-secondary border border-border/50 flex items-center justify-center">
                               <span className="text-xs opacity-50">💊</span>
                             </div>
-                            <span className="max-w-[120px] truncate block" title={order.product}>{order.product}</span>
+                            <span className="whitespace-nowrap" title={order.product}>{order.product}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4 text-right tabular-nums font-medium">{order.amount}</td>
