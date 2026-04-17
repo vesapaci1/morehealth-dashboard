@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&display=swap');
+
+:root {
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Inter Tight', sans-serif;
+
+  --background: 160 10% 98%;
+  --foreground: 160 15% 15%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 160 15% 15%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 160 15% 15%;
+
+  --primary: 156 85% 20%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 160 10% 95%;
+  --secondary-foreground: 156 85% 20%;
+
+  --muted: 160 10% 95%;
+  --muted-foreground: 160 10% 45%;
+
+  --accent: 30 95% 55%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 160 15% 92%;
+  --input: 160 15% 92%;
+  --ring: 156 85% 20%;
+
+  --radius: 1rem;
+}
+
+h1, h2, h3, h4, h5, h6, .display-num {
+  font-family: var(--font-display);
+}
