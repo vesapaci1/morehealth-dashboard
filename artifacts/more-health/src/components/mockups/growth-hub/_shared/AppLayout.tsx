@@ -9,7 +9,9 @@ export function AppLayout({ children, activeId = "dashboard" }: { children: Reac
       <div className="flex-1 ml-[248px] flex flex-col min-h-screen">
         <TopHeader />
         <main className="flex-1 p-8 overflow-x-hidden">
-          {children}
+          <div className="max-w-[1280px] mx-auto w-full">
+            {children}
+          </div>
         </main>
       </div>
     </div>
