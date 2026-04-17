@@ -12,6 +12,7 @@ import {
   BarChart3, 
   ShoppingBasket, 
   Users, 
+  Bell,
   Settings, 
   LifeBuoy 
 } from "lucide-react";
@@ -27,6 +28,7 @@ const NAV_ITEMS = [
   { icon: BarChart3, label: "Analytics", zh: "数据分析", id: "analytics" },
   { icon: ShoppingBasket, label: "Orders", zh: "订单", id: "orders" },
   { icon: Users, label: "Team Builder", zh: "团队队列", id: "team" },
+  { icon: Bell, label: "Notifications", zh: "通知", id: "notifications", badge: 3 },
   { icon: Settings, label: "Settings", zh: "设置", id: "settings" },
   { icon: LifeBuoy, label: "Support", zh: "支持", id: "support" },
 ];
@@ -68,9 +70,17 @@ export function Sidebar({ activeId = "dashboard" }: { activeId?: string }) {
                 <Icon className={`w-4 h-4 ${isActive ? "opacity-100" : "opacity-70"}`} />
                 <span>{item.label}</span>
               </div>
-              <span className={`text-[10px] ${isActive ? "text-primary-foreground/70" : "opacity-0"}`}>
-                {item.zh}
-              </span>
+              {item.badge ? (
+                <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-md ${
+                  isActive ? "bg-white/20 text-primary-foreground" : "bg-primary/10 text-primary"
+                }`}>
+                  {item.badge}
+                </span>
+              ) : (
+                <span className={`text-[10px] ${isActive ? "text-primary-foreground/70" : "opacity-0"}`}>
+                  {item.zh}
+                </span>
+              )}
             </button>
           );
         })}

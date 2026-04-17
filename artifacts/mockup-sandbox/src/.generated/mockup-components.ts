@@ -5,6 +5,7 @@ export const modules: ModuleMap = {
   "./components/mockups/growth-hub/Earnings.tsx": () => import("../components/mockups/growth-hub/Earnings.tsx"),
   "./components/mockups/growth-hub/Login.tsx": () => import("../components/mockups/growth-hub/Login.tsx"),
   "./components/mockups/growth-hub/MobileDashboard.tsx": () => import("../components/mockups/growth-hub/MobileDashboard.tsx"),
+  "./components/mockups/growth-hub/Notifications.tsx": () => import("../components/mockups/growth-hub/Notifications.tsx"),
   "./components/mockups/growth-hub/Orders.tsx": () => import("../components/mockups/growth-hub/Orders.tsx"),
   "./components/mockups/growth-hub/Settings.tsx": () => import("../components/mockups/growth-hub/Settings.tsx"),
   "./components/mockups/growth-hub/Storefront.tsx": () => import("../components/mockups/growth-hub/Storefront.tsx"),
