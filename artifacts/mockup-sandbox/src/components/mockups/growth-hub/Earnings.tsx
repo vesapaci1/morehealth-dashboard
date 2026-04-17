@@ -41,7 +41,7 @@ export function Earnings() {
 
           <div className="relative z-10 flex justify-center mt-12">
             <Button className="bg-white text-emerald-950 hover:bg-emerald-50 rounded-xl px-8 h-12 font-semibold shadow-lg text-base group">
-              View in PayVue <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              View in PayView <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>
         </div>
