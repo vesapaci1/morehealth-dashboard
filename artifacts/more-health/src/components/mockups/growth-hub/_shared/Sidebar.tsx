@@ -22,7 +22,7 @@ const NAV_ITEMS = [
   { icon: LayoutDashboard, label: "Dashboard", zh: "仪表盘", id: "dashboard", path: "/dashboard" },
   { icon: ShoppingBag, label: "Shop", zh: "商城", id: "shop", path: "https://morehealth-3.myshopify.com/collections/all", external: true },
   { icon: UserPlus, label: "Enroll", zh: "邀请伙伴", id: "enroll", path: "https://morehealth-3.myshopify.com/pages/enrollment", external: true },
-  { icon: Store, label: "My Storefront", zh: "我的店铺", id: "storefront", path: "/storefront" },
+  { icon: Store, label: "Storefront", zh: "我的店铺", id: "storefront", path: "/storefront" },
   { icon: Wallet, label: "Wallet", zh: "钱包", id: "wallet", path: "/earnings" },
   { icon: Repeat, label: "Subscriptions", zh: "订阅", id: "subscriptions", path: "/subscriptions" },
   { icon: LineChart, label: "Earnings", zh: "收入", id: "earnings", path: "/earnings" },
@@ -31,7 +31,6 @@ const NAV_ITEMS = [
   { icon: Users, label: "Team Builder", zh: "团队队列", id: "team", path: "/team" },
   { icon: Bell, label: "Notifications", zh: "通知", id: "notifications", path: "/notifications", badge: 3 },
   { icon: Settings, label: "Settings", zh: "设置", id: "settings", path: "/settings" },
-  { icon: LifeBuoy, label: "Support", zh: "支持", id: "support", path: "/support" },
 ];
 
 export function Sidebar({ activeId }: { activeId?: string }) {
@@ -102,7 +101,21 @@ export function Sidebar({ activeId }: { activeId?: string }) {
         })}
       </div>
 
-      <div className="p-4 mt-auto border-t border-border">
+      <div className="px-3 pt-2 pb-3 mt-auto border-t border-border">
+        <Link
+          href="/support"
+          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+            location === "/support"
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+          }`}
+        >
+          <LifeBuoy className="w-4 h-4 opacity-70" />
+          <span>Support</span>
+        </Link>
+      </div>
+
+      <div className="px-4 pb-4">
         <Link href="/earnings" className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground p-4 rounded-xl shadow-sm flex flex-col gap-1 relative overflow-hidden group cursor-pointer hover:shadow-md transition-all">
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none" />
           <span className="text-xs opacity-80 font-medium">Wallet Balance</span>
