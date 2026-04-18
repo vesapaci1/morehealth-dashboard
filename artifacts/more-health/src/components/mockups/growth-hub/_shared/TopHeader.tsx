@@ -16,7 +16,7 @@ export function TopHeader({ onOpenMenu }: { onOpenMenu?: () => void }) {
         >
           <Menu className="w-5 h-5" />
         </button>
-        <div className="relative flex-1 max-w-md md:w-96">
+        <div className="relative flex-1 max-w-md md:w-96 hidden md:block">
           <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"

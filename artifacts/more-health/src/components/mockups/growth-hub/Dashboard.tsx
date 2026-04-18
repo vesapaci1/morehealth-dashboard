@@ -63,15 +63,15 @@ export function Dashboard() {
 
             <div className="grid grid-cols-3 gap-3 sm:gap-6 bg-black/10 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-white/10 w-full xl:w-auto">
               <div className="flex flex-col gap-1 min-w-0">
-                <span className="text-primary-foreground/70 text-xs sm:text-sm font-medium">{t("Wallet Balance", "钱包余额")}</span>
+                <span className="text-primary-foreground/70 text-xs sm:text-sm font-medium whitespace-nowrap">{t("Wallet Balance", "钱包余额")}</span>
                 <span className="text-xl sm:text-2xl lg:text-3xl font-bold display-num tabular-nums tracking-tight">¥12,480</span>
               </div>
               <div className="flex flex-col gap-1 min-w-0 sm:border-l sm:border-white/20 sm:pl-6">
-                <span className="text-primary-foreground/70 text-xs sm:text-sm font-medium">{t("Earnings This Week", "本周收入")}</span>
+                <span className="text-primary-foreground/70 text-xs sm:text-sm font-medium whitespace-nowrap">{t("Weekly Earnings", "每周收入")}</span>
                 <span className="text-xl sm:text-2xl lg:text-3xl font-bold display-num tabular-nums tracking-tight">¥3,248</span>
               </div>
               <div className="flex flex-col gap-1 min-w-0 sm:border-l sm:border-white/20 sm:pl-6">
-                <span className="text-primary-foreground/70 text-xs sm:text-sm font-medium">{t("Orders Generated", "已产生订单")}</span>
+                <span className="text-primary-foreground/70 text-xs sm:text-sm font-medium whitespace-nowrap">{t("Orders Generated", "已产生订单")}</span>
                 <span className="text-xl sm:text-2xl lg:text-3xl font-bold display-num tabular-nums tracking-tight">142</span>
               </div>
             </div>
