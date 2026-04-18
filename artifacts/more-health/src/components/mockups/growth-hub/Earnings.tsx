@@ -37,7 +37,7 @@ export function Earnings() {
             <span className="text-emerald-100/70 font-medium tracking-wide mb-2 uppercase text-sm">
               {t("This Week Net Paid", "本周净收入")}
             </span>
-            <h1 className="text-6xl md:text-7xl font-display font-bold tabular-nums tracking-tighter mb-4">¥3,248.50</h1>
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-display font-bold tabular-nums tracking-tighter mb-4 break-all">¥3,248.50</h1>
             <div className="flex items-center gap-2 bg-emerald-500/20 text-emerald-300 px-4 py-1.5 rounded-full text-sm font-semibold border border-emerald-500/30 backdrop-blur-sm">
               <TrendingUp className="w-4 h-4" />
               {t("+18.4% vs last week", "环比上周 +18.4%")}

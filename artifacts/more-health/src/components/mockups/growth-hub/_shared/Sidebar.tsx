@@ -17,6 +17,7 @@ import {
   Bell,
   Settings,
   LifeBuoy,
+  X,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -34,13 +35,24 @@ const NAV_ITEMS = [
   { icon: Settings, en: "Settings", zh: "设置", id: "settings", path: "/settings" },
 ] as const;
 
-export function Sidebar({ activeId }: { activeId?: string }) {
+export function Sidebar({ activeId, mobileOpen = false, onClose }: { activeId?: string; mobileOpen?: boolean; onClose?: () => void }) {
   const [location] = useLocation();
   const { t } = useLang();
   return (
-    <div className="w-[248px] h-screen bg-card border-r border-border flex flex-col fixed left-0 top-0 z-20">
-      <div className="p-6">
+    <div
+      className={`w-[248px] h-screen bg-card border-r border-border flex flex-col fixed left-0 top-0 z-50 transition-transform duration-300 md:translate-x-0 md:z-20 ${
+        mobileOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"
+      }`}
+    >
+      <div className="p-6 flex items-center justify-between">
         <BrandLogo />
+        <button
+          onClick={onClose}
+          className="md:hidden text-muted-foreground hover:text-foreground p-1 -mr-1"
+          aria-label="Close menu"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       <div className="px-4 mb-6">

@@ -40,13 +40,13 @@ export function Dashboard() {
       <div className="space-y-6">
 
         {/* HERO CARD */}
-        <div className="bg-gradient-to-br from-primary via-primary to-[#064e3b] rounded-2xl p-8 text-primary-foreground shadow-lg relative overflow-hidden">
+        <div className="bg-gradient-to-br from-primary via-primary to-[#064e3b] rounded-2xl p-6 sm:p-8 text-primary-foreground shadow-lg relative overflow-hidden">
           <div className="absolute top-0 right-0 w-[600px] h-[400px] bg-accent/20 rounded-full blur-[100px] pointer-events-none -translate-y-1/2 translate-x-1/3" />
           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-white/10 rounded-full blur-[80px] pointer-events-none translate-y-1/2 -translate-x-1/4" />
 
-          <div className="relative z-10 flex flex-col md:flex-row justify-between items-start gap-8">
+          <div className="relative z-10 flex flex-col xl:flex-row justify-between items-start gap-6 xl:gap-8">
             <div className="flex flex-col gap-2">
-              <h1 className="text-3xl font-display font-bold tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-display font-bold tracking-tight">
                 {t("Welcome back, Matt", "欢迎回来，Matt")}
               </h1>
               <div className="flex flex-wrap items-center gap-2">
@@ -61,20 +61,18 @@ export function Dashboard() {
               </div>
             </div>
 
-            <div className="flex gap-8 bg-black/10 backdrop-blur-md rounded-2xl p-6 border border-white/10">
-              <div className="flex flex-col gap-1">
-                <span className="text-primary-foreground/70 text-sm font-medium">{t("Wallet Balance", "钱包余额")}</span>
-                <span className="text-3xl font-bold display-num tabular-nums tracking-tight">¥12,480</span>
+            <div className="grid grid-cols-3 gap-3 sm:gap-6 bg-black/10 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-white/10 w-full xl:w-auto">
+              <div className="flex flex-col gap-1 min-w-0">
+                <span className="text-primary-foreground/70 text-xs sm:text-sm font-medium">{t("Wallet Balance", "钱包余额")}</span>
+                <span className="text-xl sm:text-2xl lg:text-3xl font-bold display-num tabular-nums tracking-tight">¥12,480</span>
               </div>
-              <div className="w-px bg-white/20"></div>
-              <div className="flex flex-col gap-1">
-                <span className="text-primary-foreground/70 text-sm font-medium">{t("Earnings This Week", "本周收入")}</span>
-                <span className="text-3xl font-bold display-num tabular-nums tracking-tight">¥3,248</span>
+              <div className="flex flex-col gap-1 min-w-0 sm:border-l sm:border-white/20 sm:pl-6">
+                <span className="text-primary-foreground/70 text-xs sm:text-sm font-medium">{t("Earnings This Week", "本周收入")}</span>
+                <span className="text-xl sm:text-2xl lg:text-3xl font-bold display-num tabular-nums tracking-tight">¥3,248</span>
               </div>
-              <div className="w-px bg-white/20"></div>
-              <div className="flex flex-col gap-1">
-                <span className="text-primary-foreground/70 text-sm font-medium">{t("Orders Generated", "已产生订单")}</span>
-                <span className="text-3xl font-bold display-num tabular-nums tracking-tight">142</span>
+              <div className="flex flex-col gap-1 min-w-0 sm:border-l sm:border-white/20 sm:pl-6">
+                <span className="text-primary-foreground/70 text-xs sm:text-sm font-medium">{t("Orders Generated", "已产生订单")}</span>
+                <span className="text-xl sm:text-2xl lg:text-3xl font-bold display-num tabular-nums tracking-tight">142</span>
               </div>
             </div>
           </div>
