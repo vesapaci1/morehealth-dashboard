@@ -1,5 +1,6 @@
 import "./_group.css";
 import React, { useMemo, useState } from "react";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -61,6 +62,7 @@ const STRENGTH_TONE = [
 
 export function ActivateAccount() {
   const { lang, toggle, t } = useLang();
+  const [, setLocation] = useLocation();
   const [pw, setPw] = useState("");
   const [pw2, setPw2] = useState("");
   const [show, setShow] = useState(false);
@@ -241,6 +243,8 @@ export function ActivateAccount() {
                 </div>
 
                 <Button
+                  type="button"
+                  onClick={() => setLocation("/dashboard")}
                   className="w-full h-12 text-base font-semibold rounded-xl mt-2 shadow-sm flex items-center justify-center gap-2"
                   disabled={!matches || score < 2}
                 >
