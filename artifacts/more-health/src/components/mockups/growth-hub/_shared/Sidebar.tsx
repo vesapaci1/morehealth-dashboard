@@ -21,7 +21,7 @@ import {
 const NAV_ITEMS = [
   { icon: LayoutDashboard, en: "Dashboard", zh: "仪表盘", id: "dashboard", path: "/dashboard" },
   { icon: ShoppingBag, en: "Shop", zh: "商城", id: "shop", path: "https://morehealth-3.myshopify.com/collections/all?password=kwik", external: true },
-  { icon: UserPlus, en: "Enroll", zh: "邀请伙伴", id: "enroll", path: "https://morehealth-3.myshopify.com/pages/enrollment", external: true },
+  { icon: UserPlus, en: "Enroll", zh: "邀请伙伴", id: "enroll", path: "https://morehealth-3.myshopify.com/pages/enrollment?password=kwik", external: true },
   { icon: Store, en: "Storefront", zh: "我的店铺", id: "storefront", path: "/storefront" },
   { icon: Wallet, en: "Wallet", zh: "钱包", id: "wallet", path: "/earnings" },
   { icon: Repeat, en: "Subscriptions", zh: "订阅", id: "subscriptions", path: "/subscriptions" },
