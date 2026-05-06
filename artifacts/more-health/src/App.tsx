@@ -10,7 +10,6 @@ import { Dashboard } from "@/components/mockups/growth-hub/Dashboard";
 import { Orders } from "@/components/mockups/growth-hub/Orders";
 import { Earnings } from "@/components/mockups/growth-hub/Earnings";
 import { Storefront } from "@/components/mockups/growth-hub/Storefront";
-import { Subscriptions } from "@/components/mockups/growth-hub/Subscriptions";
 import { Settings } from "@/components/mockups/growth-hub/Settings";
 import { Notifications } from "@/components/mockups/growth-hub/Notifications";
 import { ActivateAccount } from "@/components/mockups/growth-hub/ActivateAccount";
@@ -27,7 +26,7 @@ function Router() {
       <Route path="/orders" component={Orders} />
       <Route path="/earnings" component={Earnings} />
       <Route path="/storefront" component={Storefront} />
-      <Route path="/subscriptions" component={Subscriptions} />
+      <Route path="/subscriptions" component={() => <Redirect to="/dashboard" />} />
       <Route path="/settings" component={Settings} />
       <Route path="/notifications" component={Notifications} />
       <Route path="/shop" component={() => <Redirect to="/dashboard" />} />

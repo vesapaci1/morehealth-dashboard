@@ -10,11 +10,10 @@ export function AppLayout({ children, activeId = "dashboard" }: { children: Reac
   useEffect(() => { setMobileOpen(false); }, [location]);
 
   useEffect(() => {
-    if (mobileOpen) {
-      const prev = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
-      return () => { document.body.style.overflow = prev; };
-    }
+    if (!mobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
   }, [mobileOpen]);
 
   return (
