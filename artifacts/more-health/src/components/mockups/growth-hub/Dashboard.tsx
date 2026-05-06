@@ -156,26 +156,49 @@ export function Dashboard() {
         {/* BOTTOM ROW */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card className="shadow-sm rounded-2xl border-border/50">
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold">{t("Traffic Sources", "流量来源")}</CardTitle>
+            <CardHeader className="flex flex-row justify-between items-center">
+              <CardTitle className="text-lg font-semibold">{t("Volume", "团队业绩")}</CardTitle>
+              <span className="text-xs text-muted-foreground">{t("This week", "本周")}</span>
             </CardHeader>
-            <CardContent className="space-y-6">
-              {[
-                { name: t("WeChat", "微信"), value: 45, color: 'bg-emerald-500' },
-                { name: t("Xiaohongshu", "小红书"), value: 30, color: 'bg-red-500' },
-                { name: t("Douyin", "抖音"), value: 15, color: 'bg-black' },
-                { name: t("Direct Link", "直接链接"), value: 10, color: 'bg-gray-400' },
-              ].map((item) => (
-                <div key={item.name} className="flex flex-col gap-2">
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="font-medium text-foreground">{item.name}</span>
-                    <span className="font-bold tabular-nums">{item.value}%</span>
+            <CardContent>
+              <div className="text-center pb-5 border-b border-border/50">
+                <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">{t("Total Volume", "总业绩")}</p>
+                <p className="text-4xl font-display font-bold tabular-nums tracking-tight mt-1">¥84,620</p>
+                <div className="inline-flex items-center gap-1 text-xs font-semibold text-primary mt-2 bg-primary/10 px-2.5 py-0.5 rounded-full">
+                  +12.4% {t("vs last week", "环比上周")}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 pt-5">
+                <div className="rounded-xl border border-border/50 bg-secondary/30 p-4">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">{t("Left Leg", "左区")}</span>
+                    <span className="text-[10px] font-semibold text-primary">{t("Pay Leg", "结算区")}</span>
                   </div>
-                  <div className="h-2 w-full bg-secondary rounded-full overflow-hidden">
-                    <div className={`h-full ${item.color} rounded-full`} style={{ width: `${item.value}%` }} />
+                  <p className="text-2xl font-display font-bold tabular-nums text-foreground">¥36,180</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">43% {t("of total", "占总业绩")}</p>
+                  <div className="h-1.5 bg-card rounded-full mt-3 overflow-hidden border border-border/50">
+                    <div className="h-full bg-primary rounded-full" style={{ width: "43%" }} />
                   </div>
                 </div>
-              ))}
+
+                <div className="rounded-xl border border-border/50 bg-secondary/30 p-4">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">{t("Right Leg", "右区")}</span>
+                    <span className="text-[10px] font-semibold text-amber-600">{t("Carry Over", "结转")}</span>
+                  </div>
+                  <p className="text-2xl font-display font-bold tabular-nums text-foreground">¥48,440</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">57% {t("of total", "占总业绩")}</p>
+                  <div className="h-1.5 bg-card rounded-full mt-3 overflow-hidden border border-border/50">
+                    <div className="h-full bg-amber-500 rounded-full" style={{ width: "57%" }} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between mt-5 pt-4 border-t border-border/50 text-xs">
+                <span className="text-muted-foreground">{t("Carry-over to next week", "结转至下周")}</span>
+                <span className="font-semibold tabular-nums text-foreground">¥12,260</span>
+              </div>
             </CardContent>
           </Card>
 
