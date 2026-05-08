@@ -32,6 +32,15 @@ type Notification = {
   actor?: { initials: string; tone: string };
 };
 
+type NotificationChannel = "push" | "email" | "sms";
+
+type NotificationPreference = {
+  id: string;
+  label: string;
+  zh: string;
+  channels: NotificationChannel[];
+};
+
 const NOTIFICATIONS: Notification[] = [
   {
     id: "n1",
@@ -134,12 +143,12 @@ const FILTERS: { id: "all" | "unread" | Notification["category"]; label: string;
   { id: "announcement", label: "Announcements", zh: "公告" },
 ];
 
-const PREFS = [
-  { id: "orders", label: "New orders", zh: "新订单", channels: ["push", "email"] as const },
-  { id: "payouts", label: "Payouts & wallet", zh: "钱包打款", channels: ["push", "email", "sms"] as const },
-  { id: "subs", label: "Subscription renewals", zh: "订阅续费", channels: ["push", "email"] as const },
-  { id: "milestones", label: "Milestones & rank ups", zh: "里程碑与升级", channels: ["push"] as const },
-  { id: "marketing", label: "Marketing campaigns", zh: "营销活动", channels: ["email"] as const },
+const PREFS: NotificationPreference[] = [
+  { id: "orders", label: "New orders", zh: "新订单", channels: ["push", "email"] },
+  { id: "payouts", label: "Payouts & wallet", zh: "钱包打款", channels: ["push", "email", "sms"] },
+  { id: "subs", label: "Subscription renewals", zh: "订阅续费", channels: ["push", "email"] },
+  { id: "milestones", label: "Milestones & rank ups", zh: "里程碑与升级", channels: ["push"] },
+  { id: "marketing", label: "Marketing campaigns", zh: "营销活动", channels: ["email"] },
 ];
 
 export function Notifications() {
