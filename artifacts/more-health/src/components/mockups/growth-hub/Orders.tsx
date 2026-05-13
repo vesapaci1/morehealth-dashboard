@@ -1,6 +1,7 @@
 import "./_group.css";
 import React from "react";
 import { AppLayout } from "./_shared/AppLayout";
+import { Sidebar } from "./_shared/Sidebar";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,7 +28,7 @@ export function Orders() {
   const trackingLabel = (tk: string) => tk === "Pending" ? t("Pending", "待发货") : tk;
 
   return (
-    <AppLayout activeId="orders">
+    <AppLayout sidebar={<Sidebar activeKey="orders" />}>
       <div className="space-y-6">
 
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
