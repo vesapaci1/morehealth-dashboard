@@ -1,36 +1,189 @@
 import "./_group.css";
-import React from "react";
+import { useCallback, useMemo } from "react";
+import { useLocation, useSearch } from "wouter";
 import { AppLayout } from "./_shared/AppLayout";
 import { Sidebar } from "./_shared/Sidebar";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Search, Filter, Download, ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Search, Download, ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 
-const ORDERS = [
-  { id: "ORD-902-18X", customer: "Lei Wang 王磊", product: "SomaDerm Transdermal Gel", date: "Oct 24, 2023", amount: "¥1,224.00", commission: "¥244.80", status: "Delivered", tracking: "SF1029384756" },
-  { id: "ORD-902-17X", customer: "Jing Chen 陈静", product: "Revitalize Eye Cream", date: "Oct 23, 2023", amount: "¥560.00", commission: "¥112.00", status: "Shipped", tracking: "SF1029384755" },
-  { id: "ORD-902-16X", customer: "Wei Zhang 张伟", product: "Rose & Cole Luxe Set", date: "Oct 22, 2023", amount: "¥3,384.00", commission: "¥676.80", status: "Paid", tracking: "Pending" },
-  { id: "ORD-902-15X", customer: "Li Li 李丽", product: "TRi-M*LT Liquid Shot", date: "Oct 20, 2023", amount: "¥828.00", commission: "¥165.60", status: "Delivered", tracking: "SF1029384751" },
-  { id: "ORD-902-14X", customer: "Hua Liu 刘华", product: "SomaDerm Transdermal Gel", date: "Oct 19, 2023", amount: "¥1,224.00", commission: "¥244.80", status: "Delivered", tracking: "SF1029384749" },
+type OrdersTab = "my-orders" | "customer-orders" | "subscription-orders";
+type OrderStatus = "delivered" | "shipped" | "paid" | "pending";
+
+type Order = {
+  id: string;
+  customer: string;
+  product: string;
+  amount: number;
+  commission: number;
+  date: string;
+  status: OrderStatus;
+  tracking: string;
+  tab: OrdersTab;
+};
+
+type OrdersUrlState = {
+  tab: OrdersTab;
+  search: string;
+  status: OrderStatus | "";
+  page: number;
+};
+
+const ORDERS_TABS: OrdersTab[] = ["my-orders", "customer-orders", "subscription-orders"];
+const ORDER_STATUSES: OrderStatus[] = ["delivered", "shipped", "paid", "pending"];
+const PAGE_SIZE = 5;
+
+const ORDERS: Order[] = [
+  {
+    id: "ORD-902-18X",
+    customer: "Lei Wang 王磊",
+    product: "SomaDerm Transdermal Gel",
+    amount: 1224,
+    commission: 244.8,
+    date: "2023-10-24",
+    status: "delivered",
+    tracking: "SF1029384756",
+    tab: "customer-orders",
+  },
+  {
+    id: "ORD-902-17X",
+    customer: "Jing Chen 陈静",
+    product: "Revitalize Eye Cream",
+    amount: 560,
+    commission: 112,
+    date: "2023-10-23",
+    status: "shipped",
+    tracking: "SF1029384755",
+    tab: "customer-orders",
+  },
+  {
+    id: "ORD-902-16X",
+    customer: "Wei Zhang 张伟",
+    product: "Rose & Cole Luxe Set",
+    amount: 3384,
+    commission: 676.8,
+    date: "2023-10-22",
+    status: "paid",
+    tracking: "Pending",
+    tab: "customer-orders",
+  },
 ];
+
+function parseOrdersParams(search: string): OrdersUrlState {
+  const params = new URLSearchParams(search);
+  const tabParam = params.get("tab") ?? "customer-orders";
+  const tab = ORDERS_TABS.includes(tabParam as OrdersTab)
+    ? (tabParam as OrdersTab)
+    : "customer-orders";
+
+  const statusParam = params.get("status") ?? "";
+  const status = ORDER_STATUSES.includes(statusParam as OrderStatus)
+    ? (statusParam as OrderStatus)
+    : "";
+
+  const page = Math.max(1, Number.parseInt(params.get("page") ?? "1", 10) || 1);
+
+  return {
+    tab,
+    search: params.get("search") ?? "",
+    status,
+    page,
+  };
+}
+
+function buildOrdersUrl(state: OrdersUrlState): string {
+  const params = new URLSearchParams();
+  if (state.tab !== "customer-orders") params.set("tab", state.tab);
+  if (state.search) params.set("search", state.search);
+  if (state.status) params.set("status", state.status);
+  if (state.page > 1) params.set("page", String(state.page));
+  const qs = params.toString();
+  return qs ? `/orders?${qs}` : "/orders";
+}
+
+function formatAmount(value: number): string {
+  const hasFraction = !Number.isInteger(value);
+  return `¥${value.toLocaleString("en-US", {
+    minimumFractionDigits: hasFraction ? 2 : 0,
+    maximumFractionDigits: hasFraction ? 2 : 0,
+  })}`;
+}
+
+function formatOrderDate(isoDate: string): string {
+  const date = new Date(`${isoDate}T00:00:00`);
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+function useOrdersUrlState() {
+  const [, setLocation] = useLocation();
+  const queryString = useSearch();
+
+  const state = useMemo(() => parseOrdersParams(queryString), [queryString]);
+
+  const setState = useCallback(
+    (updates: Partial<OrdersUrlState>, options?: { resetPage?: boolean }) => {
+      const current = parseOrdersParams(
+        typeof window !== "undefined" ? window.location.search : queryString,
+      );
+      const next: OrdersUrlState = {
+        ...current,
+        ...updates,
+        ...(options?.resetPage ? { page: 1 } : {}),
+      };
+      setLocation(buildOrdersUrl(next));
+    },
+    [queryString, setLocation],
+  );
+
+  return { state, setState };
+}
 
 export function Orders() {
   const { t } = useLang();
-  const statusLabel = (s: string) =>
-    s === "Delivered" ? t("Delivered", "已送达") :
-    s === "Shipped" ? t("Shipped", "已发货") :
-    s === "Paid" ? t("Paid", "已付款") : s;
-  const trackingLabel = (tk: string) => tk === "Pending" ? t("Pending", "待发货") : tk;
+  const { state, setState } = useOrdersUrlState();
+  const { tab, search, status, page } = state;
+
+  const statusLabel = (s: OrderStatus) =>
+    s === "delivered"
+      ? t("Delivered", "已送达")
+      : s === "shipped"
+        ? t("Shipped", "已发货")
+        : s === "paid"
+          ? t("Paid", "已付款")
+          : t("Pending", "待处理");
+
+  const trackingLabel = (tk: string) => (tk === "Pending" ? t("Pending", "待发货") : tk);
+
+  const filteredOrders = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    return ORDERS.filter((order) => {
+      if (order.tab !== tab) return false;
+      if (status && order.status !== status) return false;
+      if (!query) return true;
+      return (
+        order.id.toLowerCase().includes(query) ||
+        order.customer.toLowerCase().includes(query) ||
+        order.product.toLowerCase().includes(query)
+      );
+    });
+  }, [search, status, tab]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredOrders.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pageStart = (currentPage - 1) * PAGE_SIZE;
+  const pageOrders = filteredOrders.slice(pageStart, pageStart + PAGE_SIZE);
+  const rangeStart = filteredOrders.length === 0 ? 0 : pageStart + 1;
+  const rangeEnd = pageStart + pageOrders.length;
 
   return (
     <AppLayout sidebar={<Sidebar activeKey="orders" />}>
       <div className="space-y-6">
-
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h1 className="text-2xl font-display font-bold tracking-tight">{t("Orders", "订单")}</h1>
@@ -69,101 +222,185 @@ export function Orders() {
           </Card>
         </div>
 
-        <Tabs defaultValue="customer" className="w-full">
+        <Tabs
+          value={tab}
+          onValueChange={(value) => setState({ tab: value as OrdersTab }, { resetPage: true })}
+          className="w-full"
+        >
           <TabsList className="bg-secondary/50 border border-border/50 p-1 rounded-xl w-full sm:w-auto overflow-x-auto justify-start">
-            <TabsTrigger value="personal" className="rounded-lg text-sm px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm">{t("My Orders", "我的订单")}</TabsTrigger>
-            <TabsTrigger value="customer" className="rounded-lg text-sm px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm">{t("Customer Orders", "客户订单")}</TabsTrigger>
-            <TabsTrigger value="subscription" className="rounded-lg text-sm px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm">{t("Subscription Orders", "订阅订单")}</TabsTrigger>
+            <TabsTrigger
+              value="my-orders"
+              className="rounded-lg text-sm px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+            >
+              {t("My Orders", "我的订单")}
+            </TabsTrigger>
+            <TabsTrigger
+              value="customer-orders"
+              className="rounded-lg text-sm px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+            >
+              {t("Customer Orders", "客户订单")}
+            </TabsTrigger>
+            <TabsTrigger
+              value="subscription-orders"
+              className="rounded-lg text-sm px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+            >
+              {t("Subscription Orders", "订阅订单")}
+            </TabsTrigger>
           </TabsList>
+        </Tabs>
 
-          <TabsContent value="customer" className="mt-6 space-y-4">
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
-              <div className="relative w-full sm:w-80">
-                <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
-                <Input placeholder={t("Search by order ID, customer name...", "按订单号或客户姓名搜索…")} className="pl-9 bg-card border-border/60 rounded-xl" />
-              </div>
-              <div className="flex gap-2 w-full sm:w-auto">
-                <Button variant="outline" className="w-full sm:w-auto gap-2 bg-card rounded-xl border-border/60">
-                  <Filter className="w-4 h-4" /> {t("Filters", "筛选")}
-                </Button>
-              </div>
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
+            <div className="relative w-full sm:w-80">
+              <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
+              <Input
+                value={search}
+                onChange={(event) => setState({ search: event.target.value }, { resetPage: true })}
+                placeholder={t("Search by order ID, customer name...", "按订单号或客户姓名搜索…")}
+                className="pl-9 bg-card border-border/60 rounded-xl"
+              />
             </div>
+            <div className="flex gap-2 w-full sm:w-auto">
+              <Select
+                value={status || "all"}
+                onValueChange={(value) =>
+                  setState({ status: value === "all" ? "" : (value as OrderStatus) }, { resetPage: true })
+                }
+              >
+                <SelectTrigger className="w-full sm:w-[180px] bg-card rounded-xl border-border/60">
+                  <SelectValue placeholder={t("Status", "状态")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t("All", "全部")}</SelectItem>
+                  <SelectItem value="delivered">{t("Delivered", "已送达")}</SelectItem>
+                  <SelectItem value="shipped">{t("Shipped", "已发货")}</SelectItem>
+                  <SelectItem value="paid">{t("Paid", "已付款")}</SelectItem>
+                  <SelectItem value="pending">{t("Pending", "待处理")}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
 
-            <Card className="shadow-sm border-border/50 rounded-2xl overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left">
-                  <thead className="text-xs text-muted-foreground bg-secondary/30 uppercase">
+          <Card className="shadow-sm border-border/50 rounded-2xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm text-left">
+                <thead className="text-xs text-muted-foreground bg-secondary/30 uppercase">
+                  <tr>
+                    <th className="px-6 py-4 font-semibold">{t("Order ID", "订单号")}</th>
+                    <th className="px-6 py-4 font-semibold">{t("Customer", "客户")}</th>
+                    <th className="px-6 py-4 font-semibold">{t("Product", "产品")}</th>
+                    <th className="px-6 py-4 font-semibold text-right">{t("Amount", "金额")}</th>
+                    <th className="px-6 py-4 font-semibold text-right">{t("Commission", "佣金")}</th>
+                    <th className="px-6 py-4 font-semibold">{t("Date", "日期")}</th>
+                    <th className="px-6 py-4 font-semibold">{t("Status", "状态")}</th>
+                    <th className="px-6 py-4 font-semibold">{t("Tracking", "物流")}</th>
+                    <th className="px-6 py-4 font-semibold"></th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/50">
+                  {pageOrders.length === 0 ? (
                     <tr>
-                      <th className="px-6 py-4 font-semibold">{t("Order ID", "订单号")}</th>
-                      <th className="px-6 py-4 font-semibold">{t("Customer", "客户")}</th>
-                      <th className="px-6 py-4 font-semibold">{t("Product", "产品")}</th>
-                      <th className="px-6 py-4 font-semibold text-right">{t("Amount", "金额")}</th>
-                      <th className="px-6 py-4 font-semibold text-right">{t("Commission", "佣金")}</th>
-                      <th className="px-6 py-4 font-semibold">{t("Date", "日期")}</th>
-                      <th className="px-6 py-4 font-semibold">{t("Status", "状态")}</th>
-                      <th className="px-6 py-4 font-semibold">{t("Tracking", "物流")}</th>
-                      <th className="px-6 py-4 font-semibold"></th>
+                      <td colSpan={9} className="px-6 py-10 text-center text-muted-foreground">
+                        {t("No orders match your filters.", "没有符合筛选条件的订单。")}
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border/50">
-                    {ORDERS.map((order) => (
+                  ) : (
+                    pageOrders.map((order) => (
                       <tr key={order.id} className="hover:bg-secondary/20 transition-colors group">
-                        <td className="px-6 py-4 font-medium text-foreground whitespace-nowrap font-mono text-xs">{order.id}</td>
+                        <td className="px-6 py-4 font-medium text-foreground whitespace-nowrap font-mono text-xs">
+                          {order.id}
+                        </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             <Avatar className="w-6 h-6 border border-border">
-                              <AvatarFallback className="text-[10px] bg-primary/10 text-primary">{order.customer.charAt(0)}</AvatarFallback>
+                              <AvatarFallback className="text-[10px] bg-primary/10 text-primary">
+                                {order.customer.charAt(0)}
+                              </AvatarFallback>
                             </Avatar>
                             <span className="whitespace-nowrap">{order.customer}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <span className="whitespace-nowrap" title={order.product}>{order.product}</span>
+                          <span className="whitespace-nowrap" title={order.product}>
+                            {order.product}
+                          </span>
                         </td>
-                        <td className="px-6 py-4 text-right tabular-nums font-medium">{order.amount}</td>
-                        <td className="px-6 py-4 text-right tabular-nums font-semibold text-primary">{order.commission}</td>
-                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">{order.date}</td>
+                        <td className="px-6 py-4 text-right tabular-nums font-medium">{formatAmount(order.amount)}</td>
+                        <td className="px-6 py-4 text-right tabular-nums font-semibold text-primary">
+                          {formatAmount(order.commission)}
+                        </td>
+                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">
+                          {formatOrderDate(order.date)}
+                        </td>
                         <td className="px-6 py-4">
-                          <Badge variant={
-                            order.status === "Delivered" ? "default" :
-                            order.status === "Shipped" ? "secondary" :
-                            "outline"
-                          } className={`
-                            ${order.status === "Delivered" ? "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20" : ""}
-                            ${order.status === "Shipped" ? "bg-blue-500/10 text-blue-600 hover:bg-blue-500/20" : ""}
-                            ${order.status === "Paid" ? "bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 border-transparent" : ""}
-                          `}>
+                          <Badge
+                            variant={
+                              order.status === "delivered"
+                                ? "default"
+                                : order.status === "shipped"
+                                  ? "secondary"
+                                  : "outline"
+                            }
+                            className={`
+                            ${order.status === "delivered" ? "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20" : ""}
+                            ${order.status === "shipped" ? "bg-blue-500/10 text-blue-600 hover:bg-blue-500/20" : ""}
+                            ${order.status === "paid" ? "bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 border-transparent" : ""}
+                            ${order.status === "pending" ? "bg-secondary text-muted-foreground hover:bg-secondary" : ""}
+                          `}
+                          >
                             {statusLabel(order.status)}
                           </Badge>
                         </td>
-                        <td className="px-6 py-4 text-muted-foreground font-mono text-xs">{trackingLabel(order.tracking)}</td>
+                        <td className="px-6 py-4 text-muted-foreground font-mono text-xs">
+                          {trackingLabel(order.tracking)}
+                        </td>
                         <td className="px-6 py-4">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
                             <MoreHorizontal className="w-4 h-4" />
                           </Button>
                         </td>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+            <div className="p-4 border-t border-border/50 flex items-center justify-between bg-secondary/10">
+              <span className="text-sm text-muted-foreground">
+                {filteredOrders.length === 0
+                  ? t("No orders to show", "暂无订单")
+                  : t(
+                      `Showing ${rangeStart} to ${rangeEnd} of ${filteredOrders.length} orders`,
+                      `显示 ${filteredOrders.length} 个订单中的第 ${rangeStart} – ${rangeEnd} 个`,
+                    )}
+              </span>
+              <div className="flex gap-1">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="w-8 h-8 rounded-lg bg-card"
+                  disabled={currentPage <= 1}
+                  onClick={() => setState({ page: currentPage - 1 })}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="w-8 h-8 rounded-lg bg-card"
+                  disabled={currentPage >= totalPages}
+                  onClick={() => setState({ page: currentPage + 1 })}
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
               </div>
-              <div className="p-4 border-t border-border/50 flex items-center justify-between bg-secondary/10">
-                <span className="text-sm text-muted-foreground">{t("Showing 1 to 5 of 128 orders", "显示 128 个订单中的第 1 – 5 个")}</span>
-                <div className="flex gap-1">
-                  <Button variant="outline" size="icon" className="w-8 h-8 rounded-lg bg-card" disabled>
-                    <ChevronLeft className="w-4 h-4" />
-                  </Button>
-                  <Button variant="outline" size="icon" className="w-8 h-8 rounded-lg bg-card">
-                    <ChevronRight className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </Card>
-
-          </TabsContent>
-        </Tabs>
-
+            </div>
+          </Card>
+        </div>
       </div>
     </AppLayout>
   );
