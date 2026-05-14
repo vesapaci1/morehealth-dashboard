@@ -1,5 +1,5 @@
 import React, { useState, useEffect, isValidElement, cloneElement } from "react";
-import { useLocation } from "wouter";
+import { useLocation } from "@remix-run/react";
 import { Sidebar, type SidebarProps } from "./Sidebar";
 import { TopHeader } from "./TopHeader";
 
@@ -13,7 +13,7 @@ type AppLayoutProps = {
 
 export function AppLayout({ children, activeKey, activeId, sidebar }: AppLayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [location] = useLocation();
+  const location = useLocation().pathname;
   const resolvedActiveKey = activeKey ?? activeId ?? "dashboard";
 
   useEffect(() => { setMobileOpen(false); }, [location]);

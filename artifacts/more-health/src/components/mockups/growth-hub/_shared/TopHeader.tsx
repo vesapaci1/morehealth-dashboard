@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "wouter";
+import { Link } from "@remix-run/react";
 import { Search, Globe, Bell, Menu } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useLang } from "@/lib/i18n";
@@ -40,14 +40,14 @@ export function TopHeader({ onOpenMenu }: { onOpenMenu?: () => void }) {
           </span>
         </button>
 
-        <Link href="/notifications" className="relative text-muted-foreground hover:text-foreground transition-colors">
+        <Link to="/notifications" className="relative text-muted-foreground hover:text-foreground transition-colors">
           <Bell className="w-5 h-5" />
           <span className="absolute -top-1 -right-1 w-2 h-2 bg-accent rounded-full border-2 border-card" />
         </Link>
 
         <div className="h-5 w-px bg-border hidden sm:block" />
 
-        <Link href="/settings" className="block">
+        <Link to="/settings" className="block">
           <Avatar className="w-8 h-8 cursor-pointer border border-border hover:opacity-80 transition-opacity">
             <AvatarFallback className="bg-primary/10 text-primary text-xs">MB</AvatarFallback>
             <AvatarImage src="/images/matt-baros.jpeg" />
