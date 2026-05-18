@@ -1,6 +1,6 @@
 import "./_group.css";
 import React from "react";
-import { useLocation } from "wouter";
+import { useNavigate } from "@remix-run/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,9 +9,9 @@ import { BrandLogo } from "./_shared/BrandLogo";
 import { useLang } from "@/lib/i18n";
 
 export function Login() {
-  const [, setLocation] = useLocation();
+  const navigate = useNavigate();
   const { lang, toggle, t } = useLang();
-  const goDashboard = (e?: React.FormEvent) => { e?.preventDefault(); setLocation("/dashboard"); };
+  const goDashboard = (e?: React.FormEvent) => { e?.preventDefault(); navigate("/dashboard"); };
   return (
     <div className="min-h-screen flex font-sans bg-background">
       {/* Left Panel */}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "wouter";
+import { Link, useLocation } from "@remix-run/react";
 import { LifeBuoy, X } from "lucide-react";
 import { BrandLogo } from "./BrandLogo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -18,7 +18,7 @@ export type SidebarProps = {
 };
 
 export function Sidebar({ activeKey, mobileOpen = false, onClose }: SidebarProps) {
-  const [location] = useLocation();
+  const location = useLocation().pathname;
   const { t } = useLang();
 
   return (
@@ -95,7 +95,7 @@ export function Sidebar({ activeKey, mobileOpen = false, onClose }: SidebarProps
           }
 
           return (
-            <Link key={item.key} href={item.path} className={className}>
+            <Link key={item.key} to={item.path} className={className}>
               {inner}
             </Link>
           );
@@ -104,7 +104,7 @@ export function Sidebar({ activeKey, mobileOpen = false, onClose }: SidebarProps
 
       <div className="px-3 pt-2 pb-3 mt-auto border-t border-border">
         <Link
-          href={SIDEBAR_FOOTER.support.path}
+          to={SIDEBAR_FOOTER.support.path}
           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
             location === SIDEBAR_FOOTER.support.path
               ? "bg-primary text-primary-foreground shadow-sm"
@@ -118,7 +118,7 @@ export function Sidebar({ activeKey, mobileOpen = false, onClose }: SidebarProps
 
       <div className="px-4 pb-4">
         <Link
-          href={SIDEBAR_FOOTER.wallet.path}
+          to={SIDEBAR_FOOTER.wallet.path}
           className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground p-4 rounded-xl shadow-sm flex flex-col gap-1 relative overflow-hidden group cursor-pointer hover:shadow-md transition-all"
         >
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none" />

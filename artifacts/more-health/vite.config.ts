@@ -1,75 +1,95 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import { vitePlugin as remix } from "@remix-run/dev";
+import { cartographer } from "@replit/vite-plugin-cartographer";
+import { devBanner } from "@replit/vite-plugin-dev-banner";
+import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
-import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
+import { defineConfig } from "vite";
 
-const rawPort = process.env.PORT;
+function resolveBasePathConfig(raw: string): {
+  viteBase: string;
+  remixBasename: string | undefined;
+} {
+  if (raw === "/") {
+    return { viteBase: "/", remixBasename: undefined };
+  }
 
-if (!rawPort) {
-  throw new Error(
-    "PORT environment variable is required but was not provided.",
-  );
+  const withoutTrailingSlash = raw.replace(/\/$/, "");
+  return {
+    viteBase: `${withoutTrailingSlash}/`,
+    remixBasename: withoutTrailingSlash,
+  };
 }
 
-const port = Number(rawPort);
+function resolveDevPort(): number {
+  const rawPort = process.env.PORT;
 
-if (Number.isNaN(port) || port <= 0) {
-  throw new Error(`Invalid PORT value: "${rawPort}"`);
+  if (!rawPort) {
+    throw new Error(
+      "PORT environment variable is required but was not provided.",
+    );
+  }
+
+  const port = Number(rawPort);
+
+  if (Number.isNaN(port) || port <= 0) {
+    throw new Error(`Invalid PORT value: "${rawPort}"`);
+  }
+
+  return port;
 }
 
-const basePath = process.env.BASE_PATH;
+function getReplitPlugins() {
+  if (process.env.NODE_ENV === "production" || process.env.REPL_ID === undefined) {
+    return [];
+  }
 
-if (!basePath) {
-  throw new Error(
-    "BASE_PATH environment variable is required but was not provided.",
-  );
+  return [
+    cartographer({
+      root: path.resolve(import.meta.dirname, ".."),
+    }),
+    devBanner(),
+  ];
 }
 
-export default defineConfig({
-  base: basePath,
-  plugins: [
-    react(),
-    tailwindcss(),
-    runtimeErrorOverlay(),
-    ...(process.env.NODE_ENV !== "production" &&
-    process.env.REPL_ID !== undefined
-      ? [
-          await import("@replit/vite-plugin-cartographer").then((m) =>
-            m.cartographer({
-              root: path.resolve(import.meta.dirname, ".."),
-            }),
-          ),
-          await import("@replit/vite-plugin-dev-banner").then((m) =>
-            m.devBanner(),
-          ),
-        ]
-      : []),
-  ],
-  resolve: {
-    alias: {
-      "@": path.resolve(import.meta.dirname, "src"),
-      "@assets": path.resolve(import.meta.dirname, "..", "..", "attached_assets"),
+export default defineConfig(({ command }) => {
+  const basePath = process.env.BASE_PATH ?? "/";
+  const { viteBase, remixBasename } = resolveBasePathConfig(basePath);
+  const port = command === "serve" ? resolveDevPort() : undefined;
+
+  return {
+    base: viteBase,
+    plugins: [
+      remix({
+        ...(remixBasename !== undefined ? { basename: remixBasename } : {}),
+        ssr: false,
+        buildDirectory: "dist",
+      }),
+      tailwindcss(),
+      runtimeErrorOverlay(),
+      ...getReplitPlugins(),
+    ],
+    resolve: {
+      alias: {
+        "@": path.resolve(import.meta.dirname, "src"),
+        "@assets": path.resolve(import.meta.dirname, "..", "..", "attached_assets"),
+      },
+      dedupe: ["react", "react-dom"],
     },
-    dedupe: ["react", "react-dom"],
-  },
-  root: path.resolve(import.meta.dirname),
-  build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
-    emptyOutDir: true,
-  },
-  server: {
-    port,
-    host: "0.0.0.0",
-    allowedHosts: true,
-    fs: {
-      strict: true,
-      deny: ["**/.*"],
+    root: path.resolve(import.meta.dirname),
+    server: {
+      ...(port !== undefined ? { port } : {}),
+      host: "0.0.0.0",
+      allowedHosts: true,
+      fs: {
+        strict: true,
+        deny: ["**/.*"],
+      },
     },
-  },
-  preview: {
-    port,
-    host: "0.0.0.0",
-    allowedHosts: true,
-  },
+    preview: {
+      ...(port !== undefined ? { port } : {}),
+      host: "0.0.0.0",
+      allowedHosts: true,
+    },
+  };
 });

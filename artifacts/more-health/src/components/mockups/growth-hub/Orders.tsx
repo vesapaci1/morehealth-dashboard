@@ -1,6 +1,6 @@
 import "./_group.css";
 import { useCallback, useMemo } from "react";
-import { useLocation, useSearch } from "wouter";
+import { useNavigate, useSearchParams } from "@remix-run/react";
 import { AppLayout } from "./_shared/AppLayout";
 import { Sidebar } from "./_shared/Sidebar";
 import { Card } from "@/components/ui/card";
@@ -121,24 +121,23 @@ function formatOrderDate(isoDate: string): string {
 }
 
 function useOrdersUrlState() {
-  const [, setLocation] = useLocation();
-  const queryString = useSearch();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const queryString = searchParams.toString();
 
   const state = useMemo(() => parseOrdersParams(queryString), [queryString]);
 
   const setState = useCallback(
     (updates: Partial<OrdersUrlState>, options?: { resetPage?: boolean }) => {
-      const current = parseOrdersParams(
-        typeof window !== "undefined" ? window.location.search : queryString,
-      );
+      const current = parseOrdersParams(searchParams.toString());
       const next: OrdersUrlState = {
         ...current,
         ...updates,
         ...(options?.resetPage ? { page: 1 } : {}),
       };
-      setLocation(buildOrdersUrl(next));
+      navigate(buildOrdersUrl(next));
     },
-    [queryString, setLocation],
+    [navigate, searchParams],
   );
 
   return { state, setState };
