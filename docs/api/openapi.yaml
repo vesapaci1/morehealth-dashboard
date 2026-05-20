@@ -1,0 +1,2270 @@
+openapi: 3.0.3
+info:
+  title: MoreHealth Partner Dashboard API
+  version: 0.1.0
+  description: |
+    Initial OpenAPI contract for the MoreHealth partner dashboard.
+    Derived from dashboard UI requirements in `openapi-notes.md`.
+    Money amounts use decimal yuan (CNY) unless noted otherwise.
+servers:
+  - url: /api/v1
+    description: Partner dashboard API (v1)
+tags:
+  - name: health
+    description: Service health
+  - name: auth
+    description: Authentication (public)
+  - name: activation
+    description: Partner account activation (public, token-gated)
+  - name: partner
+    description: Authenticated partner context
+  - name: dashboard
+    description: Dashboard metrics and activity
+  - name: orders
+    description: Order management
+  - name: earnings
+    description: Earnings, statements, and payouts
+  - name: storefront
+    description: Partner storefront
+  - name: notifications
+    description: Notifications and preferences
+  - name: settings
+    description: Partner settings
+  - name: subscriptions
+    description: Subscription management (planned)
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      security: []
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Sign in with email or phone and password
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthTokensResponse"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /auth/otp/request:
+    post:
+      operationId: requestOtp
+      tags: [auth]
+      summary: Request SMS one-time password
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OtpRequest"
+      responses:
+        "200":
+          description: OTP sent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OtpSentResponse"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /auth/otp/verify:
+    post:
+      operationId: verifyOtp
+      tags: [auth]
+      summary: Verify SMS code and sign in
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OtpVerifyRequest"
+      responses:
+        "200":
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthTokensResponse"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /auth/password-reset/request:
+    post:
+      operationId: requestPasswordReset
+      tags: [auth]
+      summary: Request password reset
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PasswordResetRequest"
+      responses:
+        "200":
+          description: Reset initiated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SentResponse"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: End session
+      responses:
+        "204":
+          description: Logged out
+        default:
+          $ref: "#/components/responses/Error"
+
+  /auth/session:
+    get:
+      operationId: getSession
+      tags: [auth]
+      summary: Get current session
+      responses:
+        "200":
+          description: Active session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /activation/{token}:
+    parameters:
+      - $ref: "#/components/parameters/ActivationToken"
+    get:
+      operationId: getActivationEnrollment
+      tags: [activation]
+      summary: Load enrollment for activation link
+      security: []
+      responses:
+        "200":
+          description: Enrollment details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActivationEnrollment"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+    patch:
+      operationId: updateActivationEnrollment
+      tags: [activation]
+      summary: Update verified enrollment fields before account creation
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActivationEnrollmentUpdate"
+      responses:
+        "200":
+          description: Updated enrollment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActivationEnrollment"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /activation/{token}/complete:
+    parameters:
+      - $ref: "#/components/parameters/ActivationToken"
+    post:
+      operationId: completeActivation
+      tags: [activation]
+      summary: Create partner account and complete activation
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActivationCompleteRequest"
+      responses:
+        "200":
+          description: Account created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthTokensResponse"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/me:
+    get:
+      operationId: getPartnerMe
+      tags: [partner]
+      summary: Get authenticated partner profile
+      parameters:
+        - $ref: "#/components/parameters/Locale"
+      responses:
+        "200":
+          description: Partner profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PartnerProfile"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/wallet/summary:
+    get:
+      operationId: getWalletSummary
+      tags: [partner]
+      summary: Get wallet balance summary
+      responses:
+        "200":
+          description: Wallet summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WalletSummary"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/search:
+    get:
+      operationId: searchPartnerResources
+      tags: [partner]
+      summary: Global search across orders, partners, and products
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+        - name: types
+          in: query
+          description: Resource types to include (repeat param or comma-separated per server convention)
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/SearchResourceType"
+          style: form
+          explode: true
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResults"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Dashboard hero summary metrics
+      parameters:
+        - $ref: "#/components/parameters/Period"
+        - $ref: "#/components/parameters/ComparePeriod"
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/dashboard/kpis:
+    get:
+      operationId: getDashboardKpis
+      tags: [dashboard]
+      summary: Dashboard KPI tiles
+      parameters:
+        - $ref: "#/components/parameters/Period"
+        - $ref: "#/components/parameters/ComparePeriod"
+      responses:
+        "200":
+          description: KPI list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardKpisResponse"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/dashboard/sales-trend:
+    get:
+      operationId: getDashboardSalesTrend
+      tags: [dashboard]
+      summary: Sales trend time series
+      parameters:
+        - name: days
+          in: query
+          schema:
+            $ref: "#/components/schemas/SalesTrendDays"
+      responses:
+        "200":
+          description: Sales trend
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeSeries"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/dashboard/earnings-trend:
+    get:
+      operationId: getDashboardEarningsTrend
+      tags: [dashboard]
+      summary: Earnings growth time series (weekly buckets)
+      parameters:
+        - name: weeks
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 52
+            default: 4
+      responses:
+        "200":
+          description: Earnings trend
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeSeries"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/dashboard/volume:
+    get:
+      operationId: getDashboardVolume
+      tags: [dashboard]
+      summary: Team volume and leg breakdown
+      parameters:
+        - $ref: "#/components/parameters/Period"
+      responses:
+        "200":
+          description: Volume summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VolumeSummary"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/dashboard/activity:
+    get:
+      operationId: getDashboardActivity
+      tags: [dashboard]
+      summary: Recent activity feed
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+      responses:
+        "200":
+          description: Activity items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActivityItem"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/orders/summary:
+    get:
+      operationId: getOrdersSummary
+      tags: [orders]
+      summary: Orders page summary cards
+      parameters:
+        - name: month
+          in: query
+          description: Calendar month (YYYY-MM)
+          schema:
+            type: string
+            pattern: '^\d{4}-\d{2}$'
+      responses:
+        "200":
+          description: Orders summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrdersSummary"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/orders:
+    get:
+      operationId: listOrders
+      tags: [orders]
+      summary: List orders with filters and pagination
+      parameters:
+        - name: tab
+          in: query
+          schema:
+            $ref: "#/components/schemas/OrderTab"
+        - name: status
+          in: query
+          schema:
+            $ref: "#/components/schemas/OrderStatus"
+        - name: search
+          in: query
+          schema:
+            type: string
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/PageSize"
+      responses:
+        "200":
+          description: Paginated orders
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedOrders"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/orders/export:
+    get:
+      operationId: exportOrders
+      tags: [orders]
+      summary: Export filtered orders as CSV
+      parameters:
+        - name: tab
+          in: query
+          schema:
+            $ref: "#/components/schemas/OrderTab"
+        - name: status
+          in: query
+          schema:
+            $ref: "#/components/schemas/OrderStatus"
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: CSV export
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/orders/{orderId}:
+    parameters:
+      - $ref: "#/components/parameters/OrderId"
+    get:
+      operationId: getOrder
+      tags: [orders]
+      summary: Get order detail
+      responses:
+        "200":
+          description: Order detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/earnings/current:
+    get:
+      operationId: getCurrentEarnings
+      tags: [earnings]
+      summary: Current week net earnings hero
+      responses:
+        "200":
+          description: Current earnings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrentEarnings"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/earnings/statements:
+    get:
+      operationId: listEarningsStatements
+      tags: [earnings]
+      summary: List weekly earnings statements
+      parameters:
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/PageSize"
+        - name: from
+          in: query
+          description: Filter statements ending on or after this date
+          schema:
+            type: string
+            format: date
+        - name: to
+          in: query
+          description: Filter statements ending on or before this date
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: Paginated statements
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedEarningsStatements"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/earnings/statements/{statementId}/fapiao:
+    parameters:
+      - $ref: "#/components/parameters/StatementId"
+    get:
+      operationId: getStatementFapiao
+      tags: [earnings]
+      summary: Get fapiao (VAT invoice) for a statement
+      responses:
+        "200":
+          description: Fapiao document
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Fapiao"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/earnings/statements/{statementId}/performance-report:
+    parameters:
+      - $ref: "#/components/parameters/StatementId"
+    get:
+      operationId: getStatementPerformanceReport
+      tags: [earnings]
+      summary: Get weekly performance report for a statement
+      responses:
+        "200":
+          description: Performance report
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PerformanceReport"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/earnings/trajectory:
+    get:
+      operationId: getEarningsTrajectory
+      tags: [earnings]
+      summary: Net earnings trajectory chart
+      parameters:
+        - name: weeks
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 52
+            default: 4
+      responses:
+        "200":
+          description: Earnings trajectory
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeSeries"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/earnings/records:
+    get:
+      operationId: getEarningsRecords
+      tags: [earnings]
+      summary: Best-month and record earnings highlights
+      responses:
+        "200":
+          description: Earnings records
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EarningsRecords"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/earnings/leaderboard:
+    get:
+      operationId: getEarningsLeaderboard
+      tags: [earnings]
+      summary: Partner earnings percentile vs active partners
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: string
+            default: current_month
+            example: current_month
+      responses:
+        "200":
+          description: Leaderboard position
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeaderboardPosition"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/earnings/payview-url:
+    get:
+      operationId: getPayviewUrl
+      tags: [earnings]
+      summary: Get PayView deep link URL
+      parameters:
+        - name: statementId
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: PayView URL
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RedirectUrl"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/storefront:
+    get:
+      operationId: getStorefront
+      tags: [storefront]
+      summary: Get partner storefront identity
+      responses:
+        "200":
+          description: Storefront
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Storefront"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/storefront/metrics:
+    get:
+      operationId: getStorefrontMetrics
+      tags: [storefront]
+      summary: Storefront KPI metrics for a period
+      parameters:
+        - $ref: "#/components/parameters/Period"
+        - $ref: "#/components/parameters/ComparePeriod"
+      responses:
+        "200":
+          description: Storefront metrics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StorefrontMetrics"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/storefront/top-products:
+    get:
+      operationId: getStorefrontTopProducts
+      tags: [storefront]
+      summary: Best-selling products for the storefront
+      parameters:
+        - $ref: "#/components/parameters/Period"
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+      responses:
+        "200":
+          description: Top products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TopProduct"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/storefront/qr:
+    get:
+      operationId: getStorefrontQr
+      tags: [storefront]
+      summary: Get storefront QR code image or URL
+      parameters:
+        - name: format
+          in: query
+          schema:
+            $ref: "#/components/schemas/QrFormat"
+      responses:
+        "200":
+          description: QR code
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QrCodeResponse"
+            image/png:
+              schema:
+                type: string
+                format: binary
+            image/svg+xml:
+              schema:
+                type: string
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/notifications/summary:
+    get:
+      operationId: getNotificationsSummary
+      tags: [notifications]
+      summary: Unread notification count
+      responses:
+        "200":
+          description: Notification summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationSummary"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/notifications:
+    get:
+      operationId: listNotifications
+      tags: [notifications]
+      summary: List notifications
+      parameters:
+        - name: filter
+          in: query
+          description: Filter by all, unread, or notification category
+          schema:
+            $ref: "#/components/schemas/NotificationListFilter"
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/PageSize"
+      responses:
+        "200":
+          description: Paginated notifications
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedNotifications"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/notifications/mark-all-read:
+    post:
+      operationId: markAllNotificationsRead
+      tags: [notifications]
+      summary: Mark all notifications as read
+      responses:
+        "200":
+          description: Updated count
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarkAllReadResponse"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/notifications/{notificationId}:
+    parameters:
+      - $ref: "#/components/parameters/NotificationId"
+    patch:
+      operationId: updateNotification
+      tags: [notifications]
+      summary: Update notification read state
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NotificationUpdate"
+      responses:
+        "200":
+          description: Updated notification
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notification"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/notifications/preferences:
+    get:
+      operationId: getNotificationPreferences
+      tags: [notifications]
+      summary: Get notification delivery preferences
+      responses:
+        "200":
+          description: Preferences
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NotificationPreference"
+        default:
+          $ref: "#/components/responses/Error"
+    put:
+      operationId: updateNotificationPreferences
+      tags: [notifications]
+      summary: Replace notification delivery preferences
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/NotificationPreference"
+      responses:
+        "200":
+          description: Updated preferences
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NotificationPreference"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/settings/profile:
+    get:
+      operationId: getProfileSettings
+      tags: [settings]
+      summary: Get profile settings
+      responses:
+        "200":
+          description: Profile settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PartnerProfileSettings"
+        default:
+          $ref: "#/components/responses/Error"
+    patch:
+      operationId: updateProfileSettings
+      tags: [settings]
+      summary: Update profile settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PartnerProfileSettingsUpdate"
+      responses:
+        "200":
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PartnerProfileSettings"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/settings/profile/avatar:
+    post:
+      operationId: uploadProfileAvatar
+      tags: [settings]
+      summary: Upload profile avatar image
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Avatar uploaded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AvatarUploadResponse"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/subscriptions/summary:
+    get:
+      operationId: getSubscriptionsSummary
+      tags: [subscriptions]
+      summary: Active subscriptions summary
+      responses:
+        "200":
+          description: Subscription summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionSummary"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/subscriptions:
+    get:
+      operationId: listSubscriptions
+      tags: [subscriptions]
+      summary: List subscriptions
+      parameters:
+        - name: status
+          in: query
+          schema:
+            $ref: "#/components/schemas/SubscriptionStatus"
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/PageSize"
+      responses:
+        "200":
+          description: Paginated subscriptions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedSubscriptions"
+        default:
+          $ref: "#/components/responses/Error"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Partner session access token
+
+  parameters:
+    Page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    PageSize:
+      name: pageSize
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+    Locale:
+      name: locale
+      in: query
+      schema:
+        $ref: "#/components/schemas/Locale"
+    Period:
+      name: period
+      in: query
+      description: Reporting period preset or token understood by the server
+      schema:
+        type: string
+        default: current_week
+        example: current_week
+    ComparePeriod:
+      name: comparePeriod
+      in: query
+      description: Comparison period preset (e.g. prior week)
+      schema:
+        type: string
+        example: prior_week
+    OrderId:
+      name: orderId
+      in: path
+      required: true
+      schema:
+        type: string
+    StatementId:
+      name: statementId
+      in: path
+      required: true
+      schema:
+        type: string
+    NotificationId:
+      name: notificationId
+      in: path
+      required: true
+      schema:
+        type: string
+    ActivationToken:
+      name: token
+      in: path
+      required: true
+      schema:
+        type: string
+
+  responses:
+    Error:
+      description: Error response (RFC 9457 problem details)
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+    Unauthorized:
+      description: Missing or invalid authentication
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+    NotFound:
+      description: Resource not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+
+  schemas:
+    # --- Common ---
+    HealthStatus:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          example: ok
+
+    ProblemDetails:
+      type: object
+      description: RFC 9457 Problem Details for HTTP APIs
+      required: [type, title, status]
+      properties:
+        type:
+          type: string
+          format: uri
+          example: https://api.morehealth.com/problems/validation-error
+        title:
+          type: string
+          example: Validation Error
+        status:
+          type: integer
+          example: 400
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        errors:
+          type: array
+          description: Field-level validation errors
+          items:
+            $ref: "#/components/schemas/FieldError"
+
+    FieldError:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+
+    PaginationMeta:
+      type: object
+      required: [page, pageSize, total, totalPages]
+      properties:
+        page:
+          type: integer
+          minimum: 1
+        pageSize:
+          type: integer
+          minimum: 1
+        total:
+          type: integer
+          minimum: 0
+        totalPages:
+          type: integer
+          minimum: 0
+
+    Currency:
+      type: string
+      enum: [CNY]
+      default: CNY
+
+    Locale:
+      type: string
+      enum: [en, zh]
+
+    MoneyAmount:
+      type: number
+      format: double
+      description: Amount in yuan (CNY), two decimal places in UI
+
+    PeriodRange:
+      type: object
+      properties:
+        label:
+          type: string
+          description: Human-readable period label for display
+        labelZh:
+          type: string
+        start:
+          type: string
+          format: date
+        end:
+          type: string
+          format: date
+
+    LocalizedText:
+      type: object
+      properties:
+        en:
+          type: string
+        zh:
+          type: string
+
+    RedirectUrl:
+      type: object
+      required: [url]
+      properties:
+        url:
+          type: string
+          format: uri
+
+    SentResponse:
+      type: object
+      required: [sent]
+      properties:
+        sent:
+          type: boolean
+          example: true
+
+    # --- Enums ---
+    SalesTrendDays:
+      type: integer
+      enum: [7, 30, 90]
+      default: 7
+
+    OrderTab:
+      type: string
+      enum: [my-orders, customer-orders, subscription-orders]
+      default: customer-orders
+
+    OrderStatus:
+      type: string
+      enum: [delivered, shipped, paid, pending]
+
+    OrderType:
+      type: string
+      enum: [my-orders, customer-orders, subscription-orders]
+      description: Backend order classification aligned with list tab filter
+
+    ActivityType:
+      type: string
+      enum: [purchase, subscription, payout]
+
+    NotificationCategory:
+      type: string
+      enum: [order, payout, subscription, milestone, announcement]
+
+    NotificationListFilter:
+      type: string
+      description: all, unread, or a notification category value
+      enum:
+        - all
+        - unread
+        - order
+        - payout
+        - subscription
+        - milestone
+        - announcement
+      default: all
+
+    NotificationChannel:
+      type: string
+      enum: [push, email, sms]
+
+    KpiTrend:
+      type: string
+      enum: [up, down]
+
+    DashboardKpiKey:
+      type: string
+      enum: [totalOrders, referredOrders, personalOrders, repeatCustomers]
+
+    EarningsRank:
+      type: string
+      enum: [gold, silver, bronze]
+
+    SocialPlatform:
+      type: string
+      enum: [wechat, xhs, douyin]
+
+    StorefrontStatus:
+      type: string
+      enum: [live, draft, suspended]
+
+    SubscriptionStatus:
+      type: string
+      enum: [active, paused, cancelled]
+
+    SearchResourceType:
+      type: string
+      enum: [order, partner, product]
+
+    QrFormat:
+      type: string
+      enum: [png, svg]
+      default: png
+
+    # --- Auth ---
+    LoginRequest:
+      type: object
+      required: [identifier, password]
+      properties:
+        identifier:
+          type: string
+          description: Email address or phone number (E.164 or local format per region)
+        password:
+          type: string
+          format: password
+
+    OtpRequest:
+      type: object
+      required: [phone]
+      properties:
+        phone:
+          type: string
+
+    OtpVerifyRequest:
+      type: object
+      required: [phone, code]
+      properties:
+        phone:
+          type: string
+        code:
+          type: string
+          minLength: 4
+          maxLength: 8
+
+    OtpSentResponse:
+      type: object
+      required: [sent]
+      properties:
+        sent:
+          type: boolean
+        expiresInSeconds:
+          type: integer
+
+    PasswordResetRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+      description: Provide email or phone
+
+    AuthTokensResponse:
+      type: object
+      required: [accessToken, partner]
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+          nullable: true
+        expiresIn:
+          type: integer
+          description: Access token lifetime in seconds
+        partner:
+          $ref: "#/components/schemas/PartnerProfile"
+
+    SessionResponse:
+      type: object
+      required: [authenticated, partner]
+      properties:
+        authenticated:
+          type: boolean
+        partner:
+          $ref: "#/components/schemas/PartnerProfile"
+
+    # --- Partner profile ---
+    PartnerTier:
+      type: object
+      required: [code, label]
+      properties:
+        code:
+          type: string
+          example: elite_influencer
+        label:
+          type: string
+        labelZh:
+          type: string
+
+    PartnerProfile:
+      type: object
+      required: [id, displayName, tier, initials]
+      properties:
+        id:
+          type: string
+        displayName:
+          type: string
+        tier:
+          $ref: "#/components/schemas/PartnerTier"
+        avatarUrl:
+          type: string
+          format: uri
+          nullable: true
+        initials:
+          type: string
+          maxLength: 4
+
+    WalletSummary:
+      type: object
+      required: [balance, currency]
+      properties:
+        balance:
+          $ref: "#/components/schemas/MoneyAmount"
+        currency:
+          $ref: "#/components/schemas/Currency"
+
+    # --- Dashboard ---
+    DashboardSummary:
+      type: object
+      required:
+        - partner
+        - period
+        - comparePeriod
+        - walletBalance
+        - weeklyEarnings
+        - ordersGenerated
+        - currency
+      properties:
+        partner:
+          $ref: "#/components/schemas/PartnerProfile"
+        period:
+          $ref: "#/components/schemas/PeriodRange"
+        comparePeriod:
+          $ref: "#/components/schemas/PeriodRange"
+        walletBalance:
+          $ref: "#/components/schemas/MoneyAmount"
+        weeklyEarnings:
+          $ref: "#/components/schemas/MoneyAmount"
+        ordersGenerated:
+          type: integer
+          minimum: 0
+        currency:
+          $ref: "#/components/schemas/Currency"
+
+    DashboardKpi:
+      type: object
+      required: [key, value, deltaPercent, trend, sparkline]
+      properties:
+        key:
+          $ref: "#/components/schemas/DashboardKpiKey"
+        value:
+          oneOf:
+            - type: number
+            - type: string
+          description: Numeric count or formatted percent string for repeatCustomers
+        deltaPercent:
+          type: number
+          description: Period-over-period change (e.g. 12.4 for +12.4%)
+        trend:
+          $ref: "#/components/schemas/KpiTrend"
+        sparkline:
+          type: array
+          items:
+            type: number
+
+    DashboardKpisResponse:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/DashboardKpi"
+
+    TimeSeriesPoint:
+      type: object
+      required: [label, value]
+      properties:
+        label:
+          type: string
+        value:
+          type: number
+        periodStart:
+          type: string
+          format: date
+        periodEnd:
+          type: string
+          format: date
+
+    TimeSeries:
+      type: object
+      required: [points, currency]
+      properties:
+        points:
+          type: array
+          items:
+            $ref: "#/components/schemas/TimeSeriesPoint"
+        currency:
+          $ref: "#/components/schemas/Currency"
+
+    VolumeLeg:
+      type: object
+      required: [amount, percentOfTotal]
+      properties:
+        amount:
+          $ref: "#/components/schemas/MoneyAmount"
+        percentOfTotal:
+          type: number
+          minimum: 0
+          maximum: 100
+        isPayLeg:
+          type: boolean
+        isCarryOver:
+          type: boolean
+
+    VolumeSummary:
+      type: object
+      required: [total, deltaPercent, leftLeg, rightLeg, carryOverAmount, currency]
+      properties:
+        total:
+          $ref: "#/components/schemas/MoneyAmount"
+        deltaPercent:
+          type: number
+        leftLeg:
+          $ref: "#/components/schemas/VolumeLeg"
+        rightLeg:
+          $ref: "#/components/schemas/VolumeLeg"
+        carryOverAmount:
+          $ref: "#/components/schemas/MoneyAmount"
+        currency:
+          $ref: "#/components/schemas/Currency"
+
+    ActivityItem:
+      type: object
+      required: [id, type, title, occurredAt]
+      properties:
+        id:
+          type: string
+        type:
+          $ref: "#/components/schemas/ActivityType"
+        title:
+          type: string
+        titleZh:
+          type: string
+        subtitle:
+          type: string
+        subtitleZh:
+          type: string
+        amount:
+          $ref: "#/components/schemas/MoneyAmount"
+          nullable: true
+        amountDisplay:
+          type: string
+          description: Pre-formatted amount for UI (e.g. "+¥244.80")
+          nullable: true
+        occurredAt:
+          type: string
+          format: date-time
+        actorInitials:
+          type: string
+          nullable: true
+
+    # --- Search ---
+    SearchResultItem:
+      type: object
+      required: [type, id, title]
+      properties:
+        type:
+          $ref: "#/components/schemas/SearchResourceType"
+        id:
+          type: string
+        title:
+          type: string
+        subtitle:
+          type: string
+        url:
+          type: string
+          format: uri
+
+    SearchResults:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/SearchResultItem"
+
+    # --- Orders ---
+    OrdersSummary:
+      type: object
+      required: [ordersThisMonth, commissionEarned, avgOrderValue, currency]
+      properties:
+        ordersThisMonth:
+          type: integer
+          minimum: 0
+        commissionEarned:
+          $ref: "#/components/schemas/MoneyAmount"
+        avgOrderValue:
+          $ref: "#/components/schemas/MoneyAmount"
+        currency:
+          $ref: "#/components/schemas/Currency"
+
+    Order:
+      type: object
+      required:
+        - id
+        - customerName
+        - productName
+        - amount
+        - commission
+        - orderedAt
+        - status
+        - orderType
+      properties:
+        id:
+          type: string
+          example: ORD-902-18X
+        customerName:
+          type: string
+        productName:
+          type: string
+        amount:
+          $ref: "#/components/schemas/MoneyAmount"
+        commission:
+          $ref: "#/components/schemas/MoneyAmount"
+        orderedAt:
+          type: string
+          format: date
+        status:
+          $ref: "#/components/schemas/OrderStatus"
+        trackingNumber:
+          type: string
+          nullable: true
+          description: Null or sentinel when tracking is not yet assigned
+        orderType:
+          $ref: "#/components/schemas/OrderType"
+        currency:
+          $ref: "#/components/schemas/Currency"
+
+    PaginatedOrders:
+      type: object
+      required: [items, pagination]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Order"
+        pagination:
+          $ref: "#/components/schemas/PaginationMeta"
+
+    # --- Earnings ---
+    CurrentEarnings:
+      type: object
+      required: [netPaid, deltaPercent, week, rank, currency]
+      properties:
+        netPaid:
+          $ref: "#/components/schemas/MoneyAmount"
+        deltaPercent:
+          type: number
+          description: Fractional change vs prior week (e.g. 0.184 = +18.4%)
+        week:
+          $ref: "#/components/schemas/PeriodRange"
+        rank:
+          $ref: "#/components/schemas/EarningsRank"
+        currency:
+          $ref: "#/components/schemas/Currency"
+
+    EarningsStatement:
+      type: object
+      required: [id, statementDate, week, gross, net, rank, currency]
+      properties:
+        id:
+          type: string
+        statementDate:
+          type: string
+          format: date
+        week:
+          $ref: "#/components/schemas/PeriodRange"
+        gross:
+          $ref: "#/components/schemas/MoneyAmount"
+        net:
+          $ref: "#/components/schemas/MoneyAmount"
+        rank:
+          $ref: "#/components/schemas/EarningsRank"
+        currency:
+          $ref: "#/components/schemas/Currency"
+
+    PaginatedEarningsStatements:
+      type: object
+      required: [items, pagination]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/EarningsStatement"
+        pagination:
+          $ref: "#/components/schemas/PaginationMeta"
+
+    EarningsRecords:
+      type: object
+      required: [bestMonthAmount, yoyGrowthPercent, currency]
+      properties:
+        bestMonthAmount:
+          $ref: "#/components/schemas/MoneyAmount"
+        yoyGrowthPercent:
+          type: number
+        projectionCopy:
+          type: string
+          nullable: true
+        projectionCopyZh:
+          type: string
+          nullable: true
+        currency:
+          $ref: "#/components/schemas/Currency"
+
+    LeaderboardPosition:
+      type: object
+      required: [percentile]
+      properties:
+        percentile:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Partner earnings percentile among active partners
+        nextTierHint:
+          type: string
+          nullable: true
+        nextTierHintZh:
+          type: string
+          nullable: true
+
+    FapiaoParty:
+      type: object
+      properties:
+        name:
+          type: string
+        nameZh:
+          type: string
+        taxId:
+          type: string
+        address:
+          type: string
+        addressZh:
+          type: string
+        bankAccount:
+          type: string
+
+    Fapiao:
+      type: object
+      required:
+        - code
+        - number
+        - date
+        - checkCode
+        - taxableAmount
+        - taxAmount
+        - taxRate
+        - net
+        - weekLabel
+        - currency
+      properties:
+        code:
+          type: string
+        number:
+          type: string
+        date:
+          type: string
+          format: date
+        checkCode:
+          type: string
+        taxableAmount:
+          $ref: "#/components/schemas/MoneyAmount"
+        taxAmount:
+          $ref: "#/components/schemas/MoneyAmount"
+        taxRate:
+          type: number
+          description: Tax rate as decimal (e.g. 0.06)
+        net:
+          $ref: "#/components/schemas/MoneyAmount"
+        weekLabel:
+          type: string
+        buyer:
+          $ref: "#/components/schemas/FapiaoParty"
+        seller:
+          $ref: "#/components/schemas/FapiaoParty"
+        pdfUrl:
+          type: string
+          format: uri
+          nullable: true
+        currency:
+          $ref: "#/components/schemas/Currency"
+
+    SocialMetrics:
+      type: object
+      required: [wechat, xhs, douyin]
+      properties:
+        wechat:
+          type: integer
+          minimum: 0
+        xhs:
+          type: integer
+          minimum: 0
+        douyin:
+          type: integer
+          minimum: 0
+
+    TopContentItem:
+      type: object
+      required: [title, platform, views, orders, revenue]
+      properties:
+        title:
+          type: string
+        titleZh:
+          type: string
+        platform:
+          $ref: "#/components/schemas/SocialPlatform"
+        views:
+          type: integer
+          minimum: 0
+        orders:
+          type: integer
+          minimum: 0
+        revenue:
+          $ref: "#/components/schemas/MoneyAmount"
+
+    EarningsBreakdown:
+      type: object
+      required: [direct, referred, bonus]
+      properties:
+        direct:
+          $ref: "#/components/schemas/MoneyAmount"
+        referred:
+          $ref: "#/components/schemas/MoneyAmount"
+        bonus:
+          $ref: "#/components/schemas/MoneyAmount"
+
+    PerformanceReport:
+      type: object
+      required:
+        - weekLabel
+        - net
+        - gross
+        - storeViews
+        - uniqueVisitors
+        - avgSessionSeconds
+        - reviews
+        - rating
+        - orders
+        - conversion
+        - social
+        - topContent
+        - breakdown
+        - vsLast
+        - currency
+      properties:
+        weekLabel:
+          type: string
+        weekLabelZh:
+          type: string
+        net:
+          $ref: "#/components/schemas/MoneyAmount"
+        gross:
+          $ref: "#/components/schemas/MoneyAmount"
+        storeViews:
+          type: integer
+          minimum: 0
+        uniqueVisitors:
+          type: integer
+          minimum: 0
+        avgSessionSeconds:
+          type: integer
+          minimum: 0
+          description: Average session duration in seconds (UI formats as mm:ss)
+        reviews:
+          type: integer
+          minimum: 0
+        rating:
+          type: number
+          minimum: 0
+          maximum: 5
+        orders:
+          type: integer
+          minimum: 0
+        conversion:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Conversion rate as fraction (0.042 = 4.2%)
+        social:
+          $ref: "#/components/schemas/SocialMetrics"
+        topContent:
+          type: array
+          items:
+            $ref: "#/components/schemas/TopContentItem"
+        breakdown:
+          $ref: "#/components/schemas/EarningsBreakdown"
+        vsLast:
+          type: number
+          description: Fractional change vs prior week
+        reportId:
+          type: string
+        currency:
+          $ref: "#/components/schemas/Currency"
+
+    # --- Storefront ---
+    Storefront:
+      type: object
+      required: [slug, publicUrl, status]
+      properties:
+        slug:
+          type: string
+          example: brady
+        publicUrl:
+          type: string
+          format: uri
+          example: https://morehealth.com/brady
+        status:
+          $ref: "#/components/schemas/StorefrontStatus"
+        qrCodePayload:
+          type: string
+          description: Optional payload for client-side QR generation
+
+    MetricWithDelta:
+      type: object
+      required: [value, deltaPercent]
+      properties:
+        value:
+          oneOf:
+            - type: number
+            - type: string
+        deltaPercent:
+          type: number
+
+    StorefrontMetrics:
+      type: object
+      required:
+        - period
+        - comparePeriod
+        - storeVisits
+        - conversionRate
+        - storeRevenue
+        - directCommissions
+        - currency
+      properties:
+        period:
+          $ref: "#/components/schemas/PeriodRange"
+        comparePeriod:
+          $ref: "#/components/schemas/PeriodRange"
+        storeVisits:
+          $ref: "#/components/schemas/MetricWithDelta"
+        conversionRate:
+          $ref: "#/components/schemas/MetricWithDelta"
+        storeRevenue:
+          $ref: "#/components/schemas/MetricWithDelta"
+        directCommissions:
+          $ref: "#/components/schemas/MetricWithDelta"
+        currency:
+          $ref: "#/components/schemas/Currency"
+
+    TopProduct:
+      type: object
+      required: [productId, name, imageUrl, unitsSold, revenue, currency]
+      properties:
+        productId:
+          type: string
+        name:
+          type: string
+        imageUrl:
+          type: string
+          format: uri
+        unitsSold:
+          type: integer
+          minimum: 0
+        revenue:
+          $ref: "#/components/schemas/MoneyAmount"
+        currency:
+          $ref: "#/components/schemas/Currency"
+
+    QrCodeResponse:
+      type: object
+      properties:
+        imageUrl:
+          type: string
+          format: uri
+        format:
+          $ref: "#/components/schemas/QrFormat"
+
+    # --- Notifications ---
+    NotificationSummary:
+      type: object
+      required: [unreadCount]
+      properties:
+        unreadCount:
+          type: integer
+          minimum: 0
+
+    NotificationActor:
+      type: object
+      required: [initials]
+      properties:
+        initials:
+          type: string
+        tone:
+          type: string
+          description: Optional UI hint; may be omitted and derived client-side
+
+    Notification:
+      type: object
+      required: [id, category, title, detail, occurredAt, unread]
+      properties:
+        id:
+          type: string
+        category:
+          $ref: "#/components/schemas/NotificationCategory"
+        title:
+          type: string
+        titleZh:
+          type: string
+        detail:
+          type: string
+        detailZh:
+          type: string
+        occurredAt:
+          type: string
+          format: date-time
+        unread:
+          type: boolean
+        amount:
+          type: string
+          description: Pre-formatted amount (e.g. +¥244.80)
+          nullable: true
+        actor:
+          $ref: "#/components/schemas/NotificationActor"
+          nullable: true
+
+    PaginatedNotifications:
+      type: object
+      required: [items, pagination]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Notification"
+        pagination:
+          $ref: "#/components/schemas/PaginationMeta"
+
+    NotificationUpdate:
+      type: object
+      required: [read]
+      properties:
+        read:
+          type: boolean
+
+    MarkAllReadResponse:
+      type: object
+      required: [updatedCount]
+      properties:
+        updatedCount:
+          type: integer
+          minimum: 0
+
+    NotificationPreference:
+      type: object
+      required: [id, label, channels]
+      properties:
+        id:
+          type: string
+          example: orders
+        label:
+          type: string
+        labelZh:
+          type: string
+        channels:
+          type: array
+          items:
+            $ref: "#/components/schemas/NotificationChannel"
+        enabled:
+          type: object
+          additionalProperties:
+            type: boolean
+          description: Channel id to enabled flag (push, email, sms)
+
+    # --- Settings ---
+    PartnerProfileSettings:
+      type: object
+      required: [firstName, lastName, email, preferredLanguage]
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          nullable: true
+        dateOfBirth:
+          type: string
+          format: date
+          nullable: true
+        preferredLanguage:
+          $ref: "#/components/schemas/Locale"
+        avatarUrl:
+          type: string
+          format: uri
+          nullable: true
+
+    PartnerProfileSettingsUpdate:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        dateOfBirth:
+          type: string
+          format: date
+        preferredLanguage:
+          $ref: "#/components/schemas/Locale"
+
+    AvatarUploadResponse:
+      type: object
+      required: [avatarUrl]
+      properties:
+        avatarUrl:
+          type: string
+          format: uri
+
+    # --- Activation ---
+    ActivationAddress:
+      type: object
+      properties:
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postal:
+          type: string
+        country:
+          type: string
+
+    ActivationSponsor:
+      type: object
+      properties:
+        displayName:
+          type: string
+        partnerId:
+          type: string
+
+    ActivationEnrollment:
+      type: object
+      required:
+        - customerId
+        - orderId
+        - sku
+        - sponsor
+        - placedAt
+        - firstName
+        - lastName
+        - email
+        - phone
+        - totalPaid
+        - currency
+        - expiresAt
+      properties:
+        customerId:
+          type: string
+        orderId:
+          type: string
+        sku:
+          type: string
+        sponsor:
+          oneOf:
+            - type: string
+            - $ref: "#/components/schemas/ActivationSponsor"
+        placedAt:
+          type: string
+          format: date-time
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        address:
+          $ref: "#/components/schemas/ActivationAddress"
+        totalPaid:
+          $ref: "#/components/schemas/MoneyAmount"
+        currency:
+          $ref: "#/components/schemas/Currency"
+        expiresAt:
+          type: string
+          format: date-time
+        usedAt:
+          type: string
+          format: date-time
+          nullable: true
+        productName:
+          type: string
+          nullable: true
+
+    ActivationEnrollmentUpdate:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        address:
+          $ref: "#/components/schemas/ActivationAddress"
+
+    ActivationCompleteRequest:
+      type: object
+      required: [password]
+      properties:
+        password:
+          type: string
+          format: password
+          minLength: 8
+
+    # --- Subscriptions ---
+    SubscriptionSummary:
+      type: object
+      required: [activeCount, estimatedMrr, currency]
+      properties:
+        activeCount:
+          type: integer
+          minimum: 0
+        estimatedMrr:
+          $ref: "#/components/schemas/MoneyAmount"
+        currency:
+          $ref: "#/components/schemas/Currency"
+
+    Subscription:
+      type: object
+      required:
+        - id
+        - productName
+        - frequency
+        - nextShipDate
+        - amount
+        - paymentMethod
+        - shippingCity
+        - status
+      properties:
+        id:
+          type: string
+        productName:
+          type: string
+        frequency:
+          type: string
+          description: Billing/shipping frequency label
+        nextShipDate:
+          type: string
+          format: date
+        amount:
+          $ref: "#/components/schemas/MoneyAmount"
+        paymentMethod:
+          type: string
+        shippingCity:
+          type: string
+        status:
+          $ref: "#/components/schemas/SubscriptionStatus"
+        imageUrl:
+          type: string
+          format: uri
+          nullable: true
+        currency:
+          $ref: "#/components/schemas/Currency"
+
+    PaginatedSubscriptions:
+      type: object
+      required: [items, pagination]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Subscription"
+        pagination:
+          $ref: "#/components/schemas/PaginationMeta"
+
+security:
+  - bearerAuth: []
