@@ -4,11 +4,23 @@ info:
   version: 0.1.0
   description: |
     Initial OpenAPI contract for the MoreHealth partner dashboard.
-    Derived from dashboard UI requirements in `openapi-notes.md`.
-    Money amounts use decimal yuan (CNY) unless noted otherwise.
+    Mapped from Remix routes in `artifacts/more-health` (UI uses inline mocks; no loaders yet).
+    See `openapi-notes.md` for source traceability.
+
+    Conventions:
+    - Money: decimal CNY yuan (`MoneyAmount`), displayed with ¥ in UI.
+    - Dates: ISO 8601 (`date`, `date-time`); UI may also consume pre-formatted `*Display` strings.
+    - Pagination: offset `page` / `pageSize` (Orders UI default page size is 5).
+    - i18n: bilingual `*Zh` fields; optional `locale` query or `Accept-Language` header.
+
+    TODO(product): Confirm wallet balance parity across sidebar, dashboard hero, and earnings.
+    TODO(product): Global header search scope and ranking.
+    TODO(product): Subscription management actions (pause/cancel) when `/subscriptions` route ships.
 servers:
   - url: /api/v1
     description: Partner dashboard API (v1)
+  - url: /api
+    description: Legacy API base (existing api-server health route only)
 tags:
   - name: health
     description: Service health
@@ -69,6 +81,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AuthTokensResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
         default:
           $ref: "#/components/responses/Error"
 
@@ -146,6 +160,8 @@ paths:
       responses:
         "204":
           description: Logged out
+        "401":
+          $ref: "#/components/responses/Unauthorized"
         default:
           $ref: "#/components/responses/Error"
 
@@ -183,6 +199,12 @@ paths:
                 $ref: "#/components/schemas/ActivationEnrollment"
         "404":
           $ref: "#/components/responses/NotFound"
+        "410":
+          description: Activation link expired or already used
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
         default:
           $ref: "#/components/responses/Error"
     patch:
@@ -203,6 +225,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActivationEnrollment"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "410":
+          description: Activation link expired or already used
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
         default:
           $ref: "#/components/responses/Error"
 
@@ -227,6 +257,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AuthTokensResponse"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "410":
+          description: Activation link expired or already used
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
         default:
           $ref: "#/components/responses/Error"
 
@@ -237,6 +275,7 @@ paths:
       summary: Get authenticated partner profile
       parameters:
         - $ref: "#/components/parameters/Locale"
+        - $ref: "#/components/parameters/AcceptLanguage"
       responses:
         "200":
           description: Partner profile
@@ -244,6 +283,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PartnerProfile"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -259,6 +302,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/WalletSummary"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -267,6 +314,9 @@ paths:
       operationId: searchPartnerResources
       tags: [partner]
       summary: Global search across orders, partners, and products
+      description: |
+        TopHeader search box (desktop). UI placeholder only today; contract for future wiring.
+        TODO(product): Define ranking, minimum query length, and empty-state behavior.
       parameters:
         - name: q
           in: query
@@ -297,6 +347,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SearchResults"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -315,6 +369,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DashboardSummary"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -333,6 +391,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DashboardKpisResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -353,6 +415,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TimeSeries"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -376,6 +442,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TimeSeries"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -393,6 +463,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VolumeSummary"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -401,6 +475,7 @@ paths:
       operationId: getDashboardActivity
       tags: [dashboard]
       summary: Recent activity feed
+      description: Recent Activity card. "View All" button in UI is not wired; use GET /partner/notifications for full feed.
       parameters:
         - name: limit
           in: query
@@ -415,9 +490,11 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ActivityItem"
+                $ref: "#/components/schemas/ActivityFeedResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -440,6 +517,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/OrdersSummary"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -462,7 +543,14 @@ paths:
           schema:
             type: string
         - $ref: "#/components/parameters/Page"
-        - $ref: "#/components/parameters/PageSize"
+        - name: pageSize
+          in: query
+          description: Page size (Orders UI uses 5 per page)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 5
       responses:
         "200":
           description: Paginated orders
@@ -470,6 +558,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PaginatedOrders"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -499,6 +591,10 @@ paths:
               schema:
                 type: string
                 format: binary
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -518,6 +614,10 @@ paths:
                 $ref: "#/components/schemas/Order"
         "404":
           $ref: "#/components/responses/NotFound"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -533,6 +633,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CurrentEarnings"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -563,6 +667,33 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PaginatedEarningsStatements"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /partner/earnings/statements/{statementId}:
+    parameters:
+      - $ref: "#/components/parameters/StatementId"
+    get:
+      operationId: getEarningsStatement
+      tags: [earnings]
+      summary: Get weekly statement detail (Earnings "Statement detail" action)
+      responses:
+        "200":
+          description: Statement detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EarningsStatementDetail"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -582,6 +713,10 @@ paths:
                 $ref: "#/components/schemas/Fapiao"
         "404":
           $ref: "#/components/responses/NotFound"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -601,6 +736,10 @@ paths:
                 $ref: "#/components/schemas/PerformanceReport"
         "404":
           $ref: "#/components/responses/NotFound"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -624,6 +763,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TimeSeries"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -639,6 +782,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/EarningsRecords"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -661,6 +808,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LeaderboardPosition"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -681,6 +832,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/RedirectUrl"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -696,6 +851,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Storefront"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -714,6 +873,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/StorefrontMetrics"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -740,6 +903,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/TopProduct"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -767,6 +934,10 @@ paths:
             image/svg+xml:
               schema:
                 type: string
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -782,6 +953,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/NotificationSummary"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -805,6 +980,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PaginatedNotifications"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -820,6 +999,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MarkAllReadResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -845,6 +1028,10 @@ paths:
                 $ref: "#/components/schemas/Notification"
         "404":
           $ref: "#/components/responses/NotFound"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -862,6 +1049,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/NotificationPreference"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
     put:
@@ -885,6 +1076,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/NotificationPreference"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -900,6 +1095,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PartnerProfileSettings"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
     patch:
@@ -919,6 +1118,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PartnerProfileSettings"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -945,6 +1148,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AvatarUploadResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -960,6 +1167,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SubscriptionSummary"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -968,6 +1179,9 @@ paths:
       operationId: listSubscriptions
       tags: [subscriptions]
       summary: List subscriptions
+      description: |
+        Subscriptions nav exists in sidebar; Remix route `/subscriptions` redirects to `/dashboard`.
+        UI mock lives in `mockup-sandbox` only. Action endpoints (pause/cancel) are not specified yet.
       parameters:
         - name: status
           in: query
@@ -982,6 +1196,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PaginatedSubscriptions"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
 
@@ -991,7 +1209,9 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: Partner session access token
+      description: |
+        Partner session access token from POST /auth/login or POST /activation/{token}/complete.
+        Public routes set `security: []`. Remix web may alternatively use session cookies (out of band).
 
   parameters:
     Page:
@@ -1014,21 +1234,25 @@ components:
       in: query
       schema:
         $ref: "#/components/schemas/Locale"
+    AcceptLanguage:
+      name: Accept-Language
+      in: header
+      description: Preferred language (`en` or `zh`). Overrides `locale` when both are sent.
+      schema:
+        $ref: "#/components/schemas/Locale"
     Period:
       name: period
       in: query
-      description: Reporting period preset or token understood by the server
+      description: Reporting period preset
       schema:
-        type: string
-        default: current_week
-        example: current_week
+        $ref: "#/components/schemas/ReportingPeriodPreset"
     ComparePeriod:
       name: comparePeriod
       in: query
-      description: Comparison period preset (e.g. prior week)
+      description: Comparison period preset
       schema:
-        type: string
-        example: prior_week
+        $ref: "#/components/schemas/ReportingPeriodPreset"
+      example: prior_week
     OrderId:
       name: orderId
       in: path
@@ -1065,11 +1289,27 @@ components:
           schema:
             $ref: "#/components/schemas/ProblemDetails"
     Unauthorized:
-      description: Missing or invalid authentication
+      description: Missing or invalid Bearer token (global `bearerAuth`)
       content:
         application/problem+json:
           schema:
             $ref: "#/components/schemas/ProblemDetails"
+          example:
+            type: https://api.morehealth.com/problems/unauthorized
+            title: Unauthorized
+            status: 401
+            detail: Access token is missing, expired, or invalid.
+    Forbidden:
+      description: Authenticated but not permitted to access the resource
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+          example:
+            type: https://api.morehealth.com/problems/forbidden
+            title: Forbidden
+            status: 403
+            detail: Partner account cannot access this resource.
     NotFound:
       description: Resource not found
       content:
@@ -1137,6 +1377,14 @@ components:
         totalPages:
           type: integer
           minimum: 0
+        rangeStart:
+          type: integer
+          minimum: 0
+          description: 1-based index of first item on this page (Orders UI "Showing X to Y")
+        rangeEnd:
+          type: integer
+          minimum: 0
+          description: 1-based index of last item on this page
 
     Currency:
       type: string
@@ -1150,22 +1398,34 @@ components:
     MoneyAmount:
       type: number
       format: double
-      description: Amount in yuan (CNY), two decimal places in UI
+      minimum: 0
+      description: Amount in yuan (CNY). UI formats with ¥ and up to 2 decimal places.
+      example: 3248.5
 
     PeriodRange:
       type: object
+      description: Reporting window shown in dashboard/storefront period chips
       properties:
         label:
           type: string
           description: Human-readable period label for display
+          example: Apr 11 – Apr 17, 2026
         labelZh:
           type: string
+          example: 2026年4月11日 – 4月17日
         start:
           type: string
           format: date
         end:
           type: string
           format: date
+
+    ReportingPeriodPreset:
+      type: string
+      description: Server-defined period token (query `period` / `comparePeriod`)
+      enum: [current_week, prior_week, current_month, prior_month]
+      default: current_week
+      example: current_week
 
     LocalizedText:
       type: object
@@ -1246,7 +1506,13 @@ components:
 
     EarningsRank:
       type: string
+      description: Weekly statement rank badge (UI displays Gold/Silver/Bronze)
       enum: [gold, silver, bronze]
+
+    NotificationPreferenceId:
+      type: string
+      description: Matches Notifications UI preference rows
+      enum: [orders, payouts, subs, milestones, marketing]
 
     SocialPlatform:
       type: string
@@ -1258,6 +1524,7 @@ components:
 
     SubscriptionStatus:
       type: string
+      description: Normalized status (mock UI uses Active/Paused)
       enum: [active, paused, cancelled]
 
     SearchResourceType:
@@ -1310,13 +1577,16 @@ components:
 
     PasswordResetRequest:
       type: object
+      description: Provide at least one of email or phone (same identifier rules as login)
       properties:
         email:
           type: string
           format: email
+          nullable: true
         phone:
           type: string
-      description: Provide email or phone
+          nullable: true
+      minProperties: 1
 
     AuthTokensResponse:
       type: object
@@ -1446,6 +1716,11 @@ components:
       properties:
         label:
           type: string
+          description: Chart bucket label (UI mock uses `name`; map to `label` in clients)
+        name:
+          type: string
+          deprecated: true
+          description: Alias for `label` for chart libraries expecting `name`
         value:
           type: number
         periodStart:
@@ -1524,9 +1799,25 @@ components:
         occurredAt:
           type: string
           format: date-time
+        occurredAtDisplay:
+          type: string
+          description: Pre-formatted relative time (e.g. "Today, 2:14 PM · 2h ago")
+          nullable: true
+        occurredAtDisplayZh:
+          type: string
+          nullable: true
         actorInitials:
           type: string
           nullable: true
+
+    ActivityFeedResponse:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActivityItem"
 
     # --- Search ---
     SearchResultItem:
@@ -1586,6 +1877,11 @@ components:
           example: ORD-902-18X
         customerName:
           type: string
+          example: Lei Wang 王磊
+        customerInitials:
+          type: string
+          description: Avatar fallback (first character of customer name in UI)
+          maxLength: 4
         productName:
           type: string
         amount:
@@ -1600,7 +1896,11 @@ components:
         trackingNumber:
           type: string
           nullable: true
-          description: Null or sentinel when tracking is not yet assigned
+          description: Carrier tracking number when assigned
+        trackingPending:
+          type: boolean
+          description: When true, UI shows localized "Pending" instead of a tracking number
+          default: false
         orderType:
           $ref: "#/components/schemas/OrderType"
         currency:
@@ -1653,6 +1953,21 @@ components:
           $ref: "#/components/schemas/EarningsRank"
         currency:
           $ref: "#/components/schemas/Currency"
+
+    EarningsStatementDetail:
+      allOf:
+        - $ref: "#/components/schemas/EarningsStatement"
+        - type: object
+          properties:
+            hasFapiao:
+              type: boolean
+            hasPerformanceReport:
+              type: boolean
+            payviewUrl:
+              type: string
+              format: uri
+              nullable: true
+              description: Optional deep link (see GET /partner/earnings/payview-url)
 
     PaginatedEarningsStatements:
       type: object
@@ -1752,6 +2067,11 @@ components:
           $ref: "#/components/schemas/FapiaoParty"
         seller:
           $ref: "#/components/schemas/FapiaoParty"
+        withholdingReference:
+          type: string
+          nullable: true
+          description: PayView withholding voucher id (UI shows PV-WT-{invoiceNumber})
+          example: PV-WT-00498372
         pdfUrl:
           type: string
           format: uri
@@ -1868,6 +2188,13 @@ components:
           description: Fractional change vs prior week
         reportId:
           type: string
+          example: PV-PR-Apr11Apr172026
+        partnerDisplayName:
+          type: string
+          description: Report header (UI hardcodes partner name today)
+        partnerTierCode:
+          type: string
+          nullable: true
         currency:
           $ref: "#/components/schemas/Currency"
 
@@ -1885,9 +2212,15 @@ components:
           example: https://morehealth.com/brady
         status:
           $ref: "#/components/schemas/StorefrontStatus"
+        statusLabel:
+          type: string
+          example: Live Storefront
+        statusLabelZh:
+          type: string
+          example: 店铺已上线
         qrCodePayload:
           type: string
-          description: Optional payload for client-side QR generation
+          description: Optional payload for client-side QR generation (UI uses publicUrl)
 
     MetricWithDelta:
       type: object
@@ -1897,8 +2230,10 @@ components:
           oneOf:
             - type: number
             - type: string
+          description: Count or amount; conversion rate may be percent points (4.2 = 4.2%)
         deltaPercent:
           type: number
+          description: Period-over-period change in percent points (e.g. 12 = +12%)
 
     StorefrontMetrics:
       type: object
@@ -2033,21 +2368,24 @@ components:
       required: [id, label, channels]
       properties:
         id:
-          type: string
-          example: orders
+          $ref: "#/components/schemas/NotificationPreferenceId"
         label:
           type: string
         labelZh:
           type: string
         channels:
           type: array
+          description: Channels available for this preference (UI shows icons for subset)
           items:
             $ref: "#/components/schemas/NotificationChannel"
         enabled:
           type: object
           additionalProperties:
             type: boolean
-          description: Channel id to enabled flag (push, email, sms)
+          description: Channel id to enabled flag (`push`, `email`, `sms`)
+          example:
+            push: true
+            email: true
 
     # --- Settings ---
     PartnerProfileSettings:
@@ -2141,20 +2479,29 @@ components:
         - totalPaid
         - currency
         - expiresAt
+        - productName
       properties:
         customerId:
           type: string
+          example: SHP-CUST-44219
         orderId:
           type: string
+          example: "#MH-10482"
         sku:
           type: string
+          example: ENROLL-STARTER-KIT
         sponsor:
           oneOf:
             - type: string
+              description: Legacy display string (e.g. "Lisa Wang · ID 880214")
             - $ref: "#/components/schemas/ActivationSponsor"
         placedAt:
           type: string
           format: date-time
+        placedAtDisplay:
+          type: string
+          description: Pre-formatted placed timestamp for UI
+          example: Apr 17, 2026 · 14:08 CST
         firstName:
           type: string
         lastName:
@@ -2179,7 +2526,7 @@ components:
           nullable: true
         productName:
           type: string
-          nullable: true
+          example: Partner Starter Kit
 
     ActivationEnrollmentUpdate:
       type: object
@@ -2204,6 +2551,11 @@ components:
           type: string
           format: password
           minLength: 8
+        confirmPassword:
+          type: string
+          format: password
+          minLength: 8
+          description: Optional; server should reject when it does not match `password`
 
     # --- Subscriptions ---
     SubscriptionSummary:
@@ -2236,7 +2588,12 @@ components:
           type: string
         frequency:
           type: string
-          description: Billing/shipping frequency label
+          description: Billing/shipping frequency code or short label
+        frequencyLabel:
+          type: string
+          description: Bilingual display label (mock uses e.g. "Monthly / 月度")
+        frequencyLabelZh:
+          type: string
         nextShipDate:
           type: string
           format: date
