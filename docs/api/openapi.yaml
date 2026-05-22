@@ -1,49 +1,35 @@
 openapi: 3.0.3
 info:
   title: MoreHealth Partner Dashboard API
-  version: 0.1.0
+  version: 1.0.0
   description: |
-    Initial OpenAPI contract for the MoreHealth partner dashboard.
-    Mapped from Remix routes in `artifacts/more-health` (UI uses inline mocks; no loaders yet).
-    See `openapi-notes.md` for source traceability.
+    Production partner dashboard API (v1).
 
-    Conventions:
-    - Money: decimal CNY yuan (`MoneyAmount`), displayed with ¥ in UI.
-    - Dates: ISO 8601 (`date`, `date-time`); UI may also consume pre-formatted `*Display` strings.
-    - Pagination: offset `page` / `pageSize` (Orders UI default page size is 5).
-    - i18n: bilingual `*Zh` fields; optional `locale` query or `Accept-Language` header.
+    Design principles:
+    - One aggregate GET per page or shell context; avoid widget-level endpoints.
+    - Money in decimal CNY yuan (`MoneyAmount`); dates ISO 8601.
+    - Pagination: offset `page` / `pageSize` (orders default page size 5).
+    - i18n: bilingual `*Zh` fields; `locale` query or `Accept-Language` header.
 
-    TODO(product): Confirm wallet balance parity across sidebar, dashboard hero, and earnings.
-    TODO(product): Global header search scope and ranking.
-    TODO(product): Subscription management actions (pause/cancel) when `/subscriptions` route ships.
+    Migration from v0.1.0: see `openapi-migration.md`.
+
 servers:
   - url: /api/v1
     description: Partner dashboard API (v1)
   - url: /api
-    description: Legacy API base (existing api-server health route only)
+    description: Infrastructure (health check only)
+
 tags:
   - name: health
-    description: Service health
   - name: auth
-    description: Authentication (public)
   - name: activation
-    description: Partner account activation (public, token-gated)
   - name: partner
-    description: Authenticated partner context
   - name: dashboard
-    description: Dashboard metrics and activity
   - name: orders
-    description: Order management
   - name: earnings
-    description: Earnings, statements, and payouts
   - name: storefront
-    description: Partner storefront
   - name: notifications
-    description: Notifications and preferences
   - name: settings
-    description: Partner settings
-  - name: subscriptions
-    description: Subscription management (planned)
 
 paths:
   /healthz:
@@ -200,11 +186,7 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
         "410":
-          description: Activation link expired or already used
-          content:
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/ProblemDetails"
+          $ref: "#/components/responses/Gone"
         default:
           $ref: "#/components/responses/Error"
     patch:
@@ -228,11 +210,7 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
         "410":
-          description: Activation link expired or already used
-          content:
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/ProblemDetails"
+          $ref: "#/components/responses/Gone"
         default:
           $ref: "#/components/responses/Error"
 
@@ -260,11 +238,7 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
         "410":
-          description: Activation link expired or already used
-          content:
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/ProblemDetails"
+          $ref: "#/components/responses/Gone"
         default:
           $ref: "#/components/responses/Error"
 
@@ -272,13 +246,16 @@ paths:
     get:
       operationId: getPartnerMe
       tags: [partner]
-      summary: Get authenticated partner profile
+      summary: Authenticated partner identity
+      description: |
+        Lightweight profile for avatars and display name. For shell context (wallet, periods, badges),
+        use `GET /partner/overview`.
       parameters:
         - $ref: "#/components/parameters/Locale"
         - $ref: "#/components/parameters/AcceptLanguage"
       responses:
         "200":
-          description: Partner profile
+          description: Partner identity
           content:
             application/json:
               schema:
@@ -290,85 +267,26 @@ paths:
         default:
           $ref: "#/components/responses/Error"
 
-  /partner/wallet/summary:
+  /partner/overview:
     get:
-      operationId: getWalletSummary
+      operationId: getPartnerOverview
       tags: [partner]
-      summary: Get wallet balance summary
-      responses:
-        "200":
-          description: Wallet summary
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/WalletSummary"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/search:
-    get:
-      operationId: searchPartnerResources
-      tags: [partner]
-      summary: Global search across orders, partners, and products
+      summary: Partner shell context
       description: |
-        TopHeader search box (desktop). UI placeholder only today; contract for future wiring.
-        TODO(product): Define ranking, minimum query length, and empty-state behavior.
+        Aggregates sidebar/header context: profile, wallet balance, reporting periods,
+        dashboard hero metrics, and unread notification count.
       parameters:
-        - name: q
-          in: query
-          required: true
-          schema:
-            type: string
-            minLength: 1
-        - name: limit
-          in: query
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 50
-            default: 10
-        - name: types
-          in: query
-          description: Resource types to include (repeat param or comma-separated per server convention)
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/SearchResourceType"
-          style: form
-          explode: true
-      responses:
-        "200":
-          description: Search results
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SearchResults"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/dashboard/summary:
-    get:
-      operationId: getDashboardSummary
-      tags: [dashboard]
-      summary: Dashboard hero summary metrics
-      parameters:
+        - $ref: "#/components/parameters/Locale"
+        - $ref: "#/components/parameters/AcceptLanguage"
         - $ref: "#/components/parameters/Period"
         - $ref: "#/components/parameters/ComparePeriod"
       responses:
         "200":
-          description: Dashboard summary
+          description: Partner overview
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DashboardSummary"
+                $ref: "#/components/schemas/PartnerOverview"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -376,108 +294,30 @@ paths:
         default:
           $ref: "#/components/responses/Error"
 
-  /partner/dashboard/kpis:
+  /partner/dashboard:
     get:
-      operationId: getDashboardKpis
+      operationId: getPartnerDashboard
       tags: [dashboard]
-      summary: Dashboard KPI tiles
+      summary: Dashboard page data
+      description: |
+        Single payload for the dashboard route: KPIs, charts, volume, and recent activity.
       parameters:
         - $ref: "#/components/parameters/Period"
         - $ref: "#/components/parameters/ComparePeriod"
-      responses:
-        "200":
-          description: KPI list
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DashboardKpisResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/dashboard/sales-trend:
-    get:
-      operationId: getDashboardSalesTrend
-      tags: [dashboard]
-      summary: Sales trend time series
-      parameters:
-        - name: days
+        - name: salesDays
           in: query
+          description: Sales trend window (days)
           schema:
             $ref: "#/components/schemas/SalesTrendDays"
-      responses:
-        "200":
-          description: Sales trend
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/TimeSeries"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/dashboard/earnings-trend:
-    get:
-      operationId: getDashboardEarningsTrend
-      tags: [dashboard]
-      summary: Earnings growth time series (weekly buckets)
-      parameters:
-        - name: weeks
+        - name: earningsWeeks
           in: query
+          description: Earnings trend window (weeks)
           schema:
             type: integer
             minimum: 1
             maximum: 52
             default: 4
-      responses:
-        "200":
-          description: Earnings trend
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/TimeSeries"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/dashboard/volume:
-    get:
-      operationId: getDashboardVolume
-      tags: [dashboard]
-      summary: Team volume and leg breakdown
-      parameters:
-        - $ref: "#/components/parameters/Period"
-      responses:
-        "200":
-          description: Volume summary
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/VolumeSummary"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/dashboard/activity:
-    get:
-      operationId: getDashboardActivity
-      tags: [dashboard]
-      summary: Recent activity feed
-      description: Recent Activity card. "View All" button in UI is not wired; use GET /partner/notifications for full feed.
-      parameters:
-        - name: limit
+        - name: activityLimit
           in: query
           schema:
             type: integer
@@ -486,37 +326,11 @@ paths:
             default: 10
       responses:
         "200":
-          description: Activity items
+          description: Dashboard aggregate
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ActivityFeedResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/orders/summary:
-    get:
-      operationId: getOrdersSummary
-      tags: [orders]
-      summary: Orders page summary cards
-      parameters:
-        - name: month
-          in: query
-          description: Calendar month (YYYY-MM)
-          schema:
-            type: string
-            pattern: '^\d{4}-\d{2}$'
-      responses:
-        "200":
-          description: Orders summary
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/OrdersSummary"
+                $ref: "#/components/schemas/PartnerDashboard"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -526,9 +340,10 @@ paths:
 
   /partner/orders:
     get:
-      operationId: listOrders
+      operationId: listPartnerOrders
       tags: [orders]
-      summary: List orders with filters and pagination
+      summary: Orders page data
+      description: Summary cards and paginated order list for the orders route.
       parameters:
         - name: tab
           in: query
@@ -542,10 +357,16 @@ paths:
           in: query
           schema:
             type: string
+        - name: month
+          in: query
+          description: Summary month (YYYY-MM); defaults to current month
+          schema:
+            type: string
+            pattern: '^\d{4}-\d{2}$'
         - $ref: "#/components/parameters/Page"
         - name: pageSize
           in: query
-          description: Page size (Orders UI uses 5 per page)
+          description: Page size (orders UI default 5)
           schema:
             type: integer
             minimum: 1
@@ -553,11 +374,11 @@ paths:
             default: 5
       responses:
         "200":
-          description: Paginated orders
+          description: Orders page aggregate
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PaginatedOrders"
+                $ref: "#/components/schemas/PartnerOrdersPage"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -567,7 +388,7 @@ paths:
 
   /partner/orders/export:
     get:
-      operationId: exportOrders
+      operationId: exportPartnerOrders
       tags: [orders]
       summary: Export filtered orders as CSV
       parameters:
@@ -598,216 +419,40 @@ paths:
         default:
           $ref: "#/components/responses/Error"
 
-  /partner/orders/{orderId}:
-    parameters:
-      - $ref: "#/components/parameters/OrderId"
+  /partner/earnings/summary:
     get:
-      operationId: getOrder
-      tags: [orders]
-      summary: Get order detail
-      responses:
-        "200":
-          description: Order detail
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Order"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/earnings/current:
-    get:
-      operationId: getCurrentEarnings
+      operationId: getEarningsSummary
       tags: [earnings]
-      summary: Current week net earnings hero
-      responses:
-        "200":
-          description: Current earnings
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CurrentEarnings"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/earnings/statements:
-    get:
-      operationId: listEarningsStatements
-      tags: [earnings]
-      summary: List weekly earnings statements
+      summary: Earnings page summary
+      description: |
+        Current week hero, trajectory chart, record highlights, leaderboard position,
+        and PayView deep link.
       parameters:
-        - $ref: "#/components/parameters/Page"
-        - $ref: "#/components/parameters/PageSize"
-        - name: from
-          in: query
-          description: Filter statements ending on or after this date
-          schema:
-            type: string
-            format: date
-        - name: to
-          in: query
-          description: Filter statements ending on or before this date
-          schema:
-            type: string
-            format: date
-      responses:
-        "200":
-          description: Paginated statements
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PaginatedEarningsStatements"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/earnings/statements/{statementId}:
-    parameters:
-      - $ref: "#/components/parameters/StatementId"
-    get:
-      operationId: getEarningsStatement
-      tags: [earnings]
-      summary: Get weekly statement detail (Earnings "Statement detail" action)
-      responses:
-        "200":
-          description: Statement detail
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/EarningsStatementDetail"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/earnings/statements/{statementId}/fapiao:
-    parameters:
-      - $ref: "#/components/parameters/StatementId"
-    get:
-      operationId: getStatementFapiao
-      tags: [earnings]
-      summary: Get fapiao (VAT invoice) for a statement
-      responses:
-        "200":
-          description: Fapiao document
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Fapiao"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/earnings/statements/{statementId}/performance-report:
-    parameters:
-      - $ref: "#/components/parameters/StatementId"
-    get:
-      operationId: getStatementPerformanceReport
-      tags: [earnings]
-      summary: Get weekly performance report for a statement
-      responses:
-        "200":
-          description: Performance report
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PerformanceReport"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/earnings/trajectory:
-    get:
-      operationId: getEarningsTrajectory
-      tags: [earnings]
-      summary: Net earnings trajectory chart
-      parameters:
-        - name: weeks
+        - name: trajectoryWeeks
           in: query
           schema:
             type: integer
             minimum: 1
             maximum: 52
             default: 4
-      responses:
-        "200":
-          description: Earnings trajectory
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/TimeSeries"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/earnings/records:
-    get:
-      operationId: getEarningsRecords
-      tags: [earnings]
-      summary: Best-month and record earnings highlights
-      responses:
-        "200":
-          description: Earnings records
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/EarningsRecords"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/earnings/leaderboard:
-    get:
-      operationId: getEarningsLeaderboard
-      tags: [earnings]
-      summary: Partner earnings percentile vs active partners
-      parameters:
-        - name: period
+        - name: leaderboardPeriod
           in: query
           schema:
             type: string
             default: current_month
             example: current_month
+        - name: statementId
+          in: query
+          description: Optional statement for PayView URL context
+          schema:
+            type: string
       responses:
         "200":
-          description: Leaderboard position
+          description: Earnings summary
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LeaderboardPosition"
+                $ref: "#/components/schemas/EarningsSummary"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -815,23 +460,48 @@ paths:
         default:
           $ref: "#/components/responses/Error"
 
-  /partner/earnings/payview-url:
+  /partner/earnings/history:
     get:
-      operationId: getPayviewUrl
+      operationId: getEarningsHistory
       tags: [earnings]
-      summary: Get PayView deep link URL
+      summary: Weekly earnings statements and documents
+      description: |
+        Paginated statement history. Each item may include fapiao and performance report
+        when `include=documents` (default). Use `statementId` to fetch a single statement.
       parameters:
-        - name: statementId
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/PageSize"
+        - name: from
           in: query
           schema:
             type: string
+            format: date
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: statementId
+          in: query
+          description: When set, returns a single-statement page (pagination omitted)
+          schema:
+            type: string
+        - name: include
+          in: query
+          description: Comma-separated expansions
+          schema:
+            type: string
+            default: documents
+            example: documents
       responses:
         "200":
-          description: PayView URL
+          description: Earnings history
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RedirectUrl"
+                $ref: "#/components/schemas/EarningsHistory"
+        "404":
+          $ref: "#/components/responses/NotFound"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -841,118 +511,31 @@ paths:
 
   /partner/storefront:
     get:
-      operationId: getStorefront
+      operationId: getPartnerStorefront
       tags: [storefront]
-      summary: Get partner storefront identity
-      responses:
-        "200":
-          description: Storefront
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Storefront"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/storefront/metrics:
-    get:
-      operationId: getStorefrontMetrics
-      tags: [storefront]
-      summary: Storefront KPI metrics for a period
+      summary: Storefront page data
+      description: Store identity, period metrics, top products, and QR asset.
       parameters:
         - $ref: "#/components/parameters/Period"
         - $ref: "#/components/parameters/ComparePeriod"
-      responses:
-        "200":
-          description: Storefront metrics
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/StorefrontMetrics"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/storefront/top-products:
-    get:
-      operationId: getStorefrontTopProducts
-      tags: [storefront]
-      summary: Best-selling products for the storefront
-      parameters:
-        - $ref: "#/components/parameters/Period"
-        - name: limit
+        - name: topProductsLimit
           in: query
           schema:
             type: integer
             minimum: 1
             maximum: 50
             default: 10
-      responses:
-        "200":
-          description: Top products
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/TopProduct"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/storefront/qr:
-    get:
-      operationId: getStorefrontQr
-      tags: [storefront]
-      summary: Get storefront QR code image or URL
-      parameters:
-        - name: format
+        - name: qrFormat
           in: query
           schema:
             $ref: "#/components/schemas/QrFormat"
       responses:
         "200":
-          description: QR code
+          description: Storefront aggregate
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/QrCodeResponse"
-            image/png:
-              schema:
-                type: string
-                format: binary
-            image/svg+xml:
-              schema:
-                type: string
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/notifications/summary:
-    get:
-      operationId: getNotificationsSummary
-      tags: [notifications]
-      summary: Unread notification count
-      responses:
-        "200":
-          description: Notification summary
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotificationSummary"
+                $ref: "#/components/schemas/PartnerStorefront"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -962,43 +545,24 @@ paths:
 
   /partner/notifications:
     get:
-      operationId: listNotifications
+      operationId: getPartnerNotifications
       tags: [notifications]
-      summary: List notifications
+      summary: Notifications page data
+      description: Unread count, paginated feed, and delivery preferences.
       parameters:
         - name: filter
           in: query
-          description: Filter by all, unread, or notification category
           schema:
             $ref: "#/components/schemas/NotificationListFilter"
         - $ref: "#/components/parameters/Page"
         - $ref: "#/components/parameters/PageSize"
       responses:
         "200":
-          description: Paginated notifications
+          description: Notifications aggregate
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PaginatedNotifications"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/notifications/mark-all-read:
-    post:
-      operationId: markAllNotificationsRead
-      tags: [notifications]
-      summary: Mark all notifications as read
-      responses:
-        "200":
-          description: Updated count
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MarkAllReadResponse"
+                $ref: "#/components/schemas/PartnerNotificationsPage"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -1010,7 +574,7 @@ paths:
     parameters:
       - $ref: "#/components/parameters/NotificationId"
     patch:
-      operationId: updateNotification
+      operationId: updatePartnerNotification
       tags: [notifications]
       summary: Update notification read state
       requestBody:
@@ -1035,28 +599,28 @@ paths:
         default:
           $ref: "#/components/responses/Error"
 
-  /partner/notifications/preferences:
-    get:
-      operationId: getNotificationPreferences
+  /partner/notifications/mark-all-read:
+    post:
+      operationId: markAllPartnerNotificationsRead
       tags: [notifications]
-      summary: Get notification delivery preferences
+      summary: Mark all notifications as read
       responses:
         "200":
-          description: Preferences
+          description: Updated count
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/NotificationPreference"
+                $ref: "#/components/schemas/MarkAllReadResponse"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
           $ref: "#/components/responses/Forbidden"
         default:
           $ref: "#/components/responses/Error"
+
+  /partner/notifications/preferences:
     put:
-      operationId: updateNotificationPreferences
+      operationId: updatePartnerNotificationPreferences
       tags: [notifications]
       summary: Replace notification delivery preferences
       requestBody:
@@ -1064,9 +628,7 @@ paths:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/NotificationPreference"
+              $ref: "#/components/schemas/NotificationPreferencesUpdate"
       responses:
         "200":
           description: Updated preferences
@@ -1085,7 +647,7 @@ paths:
 
   /partner/settings/profile:
     get:
-      operationId: getProfileSettings
+      operationId: getPartnerProfileSettings
       tags: [settings]
       summary: Get profile settings
       responses:
@@ -1102,15 +664,39 @@ paths:
         default:
           $ref: "#/components/responses/Error"
     patch:
-      operationId: updateProfileSettings
+      operationId: updatePartnerProfileSettings
       tags: [settings]
       summary: Update profile settings
+      description: |
+        JSON fields for text profile data. Upload a new avatar with `multipart/form-data`
+        and field `avatar` (image file); other fields may be sent as form fields.
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/PartnerProfileSettingsUpdate"
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                phone:
+                  type: string
+                dateOfBirth:
+                  type: string
+                  format: date
+                preferredLanguage:
+                  $ref: "#/components/schemas/Locale"
       responses:
         "200":
           description: Updated profile
@@ -1125,84 +711,6 @@ paths:
         default:
           $ref: "#/components/responses/Error"
 
-  /partner/settings/profile/avatar:
-    post:
-      operationId: uploadProfileAvatar
-      tags: [settings]
-      summary: Upload profile avatar image
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              required: [file]
-              properties:
-                file:
-                  type: string
-                  format: binary
-      responses:
-        "200":
-          description: Avatar uploaded
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AvatarUploadResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/subscriptions/summary:
-    get:
-      operationId: getSubscriptionsSummary
-      tags: [subscriptions]
-      summary: Active subscriptions summary
-      responses:
-        "200":
-          description: Subscription summary
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SubscriptionSummary"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
-  /partner/subscriptions:
-    get:
-      operationId: listSubscriptions
-      tags: [subscriptions]
-      summary: List subscriptions
-      description: |
-        Subscriptions nav exists in sidebar; Remix route `/subscriptions` redirects to `/dashboard`.
-        UI mock lives in `mockup-sandbox` only. Action endpoints (pause/cancel) are not specified yet.
-      parameters:
-        - name: status
-          in: query
-          schema:
-            $ref: "#/components/schemas/SubscriptionStatus"
-        - $ref: "#/components/parameters/Page"
-        - $ref: "#/components/parameters/PageSize"
-      responses:
-        "200":
-          description: Paginated subscriptions
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PaginatedSubscriptions"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        default:
-          $ref: "#/components/responses/Error"
-
 components:
   securitySchemes:
     bearerAuth:
@@ -1210,8 +718,8 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: |
-        Partner session access token from POST /auth/login or POST /activation/{token}/complete.
-        Public routes set `security: []`. Remix web may alternatively use session cookies (out of band).
+        Partner session from POST /auth/login, POST /auth/otp/verify, or POST /activation/{token}/complete.
+        Web clients may use session cookies instead (out of band).
 
   parameters:
     Page:
@@ -1237,30 +745,21 @@ components:
     AcceptLanguage:
       name: Accept-Language
       in: header
-      description: Preferred language (`en` or `zh`). Overrides `locale` when both are sent.
       schema:
         $ref: "#/components/schemas/Locale"
     Period:
       name: period
       in: query
-      description: Reporting period preset
       schema:
         $ref: "#/components/schemas/ReportingPeriodPreset"
     ComparePeriod:
       name: comparePeriod
       in: query
-      description: Comparison period preset
       schema:
         $ref: "#/components/schemas/ReportingPeriodPreset"
-      example: prior_week
-    OrderId:
-      name: orderId
-      in: path
-      required: true
-      schema:
-        type: string
-    StatementId:
-      name: statementId
+        example: prior_week
+    ActivationToken:
+      name: token
       in: path
       required: true
       schema:
@@ -1271,54 +770,40 @@ components:
       required: true
       schema:
         type: string
-    ActivationToken:
-      name: token
-      in: path
-      required: true
-      schema:
-        type: string
 
   responses:
     Error:
-      description: Error response (RFC 9457 problem details)
+      description: Error (RFC 9457 problem details)
       content:
         application/problem+json:
-          schema:
-            $ref: "#/components/schemas/ProblemDetails"
-        application/json:
           schema:
             $ref: "#/components/schemas/ProblemDetails"
     Unauthorized:
-      description: Missing or invalid Bearer token (global `bearerAuth`)
+      description: Missing or invalid credentials
       content:
         application/problem+json:
           schema:
             $ref: "#/components/schemas/ProblemDetails"
-          example:
-            type: https://api.morehealth.com/problems/unauthorized
-            title: Unauthorized
-            status: 401
-            detail: Access token is missing, expired, or invalid.
     Forbidden:
-      description: Authenticated but not permitted to access the resource
+      description: Authenticated but not permitted
       content:
         application/problem+json:
           schema:
             $ref: "#/components/schemas/ProblemDetails"
-          example:
-            type: https://api.morehealth.com/problems/forbidden
-            title: Forbidden
-            status: 403
-            detail: Partner account cannot access this resource.
     NotFound:
       description: Resource not found
       content:
         application/problem+json:
           schema:
             $ref: "#/components/schemas/ProblemDetails"
+    Gone:
+      description: Activation link expired or already used
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
 
   schemas:
-    # --- Common ---
     HealthStatus:
       type: object
       required: [status]
@@ -1329,19 +814,15 @@ components:
 
     ProblemDetails:
       type: object
-      description: RFC 9457 Problem Details for HTTP APIs
       required: [type, title, status]
       properties:
         type:
           type: string
           format: uri
-          example: https://api.morehealth.com/problems/validation-error
         title:
           type: string
-          example: Validation Error
         status:
           type: integer
-          example: 400
         detail:
           type: string
         instance:
@@ -1349,7 +830,6 @@ components:
           format: uri
         errors:
           type: array
-          description: Field-level validation errors
           items:
             $ref: "#/components/schemas/FieldError"
 
@@ -1380,11 +860,9 @@ components:
         rangeStart:
           type: integer
           minimum: 0
-          description: 1-based index of first item on this page (Orders UI "Showing X to Y")
         rangeEnd:
           type: integer
           minimum: 0
-          description: 1-based index of last item on this page
 
     Currency:
       type: string
@@ -1399,20 +877,15 @@ components:
       type: number
       format: double
       minimum: 0
-      description: Amount in yuan (CNY). UI formats with ¥ and up to 2 decimal places.
-      example: 3248.5
+      description: Amount in yuan (CNY)
 
     PeriodRange:
       type: object
-      description: Reporting window shown in dashboard/storefront period chips
       properties:
         label:
           type: string
-          description: Human-readable period label for display
-          example: Apr 11 – Apr 17, 2026
         labelZh:
           type: string
-          example: 2026年4月11日 – 4月17日
         start:
           type: string
           format: date
@@ -1422,26 +895,8 @@ components:
 
     ReportingPeriodPreset:
       type: string
-      description: Server-defined period token (query `period` / `comparePeriod`)
       enum: [current_week, prior_week, current_month, prior_month]
       default: current_week
-      example: current_week
-
-    LocalizedText:
-      type: object
-      properties:
-        en:
-          type: string
-        zh:
-          type: string
-
-    RedirectUrl:
-      type: object
-      required: [url]
-      properties:
-        url:
-          type: string
-          format: uri
 
     SentResponse:
       type: object
@@ -1449,9 +904,7 @@ components:
       properties:
         sent:
           type: boolean
-          example: true
 
-    # --- Enums ---
     SalesTrendDays:
       type: integer
       enum: [7, 30, 90]
@@ -1469,7 +922,6 @@ components:
     OrderType:
       type: string
       enum: [my-orders, customer-orders, subscription-orders]
-      description: Backend order classification aligned with list tab filter
 
     ActivityType:
       type: string
@@ -1481,20 +933,16 @@ components:
 
     NotificationListFilter:
       type: string
-      description: all, unread, or a notification category value
-      enum:
-        - all
-        - unread
-        - order
-        - payout
-        - subscription
-        - milestone
-        - announcement
+      enum: [all, unread, order, payout, subscription, milestone, announcement]
       default: all
 
     NotificationChannel:
       type: string
       enum: [push, email, sms]
+
+    NotificationPreferenceId:
+      type: string
+      enum: [orders, payouts, subs, milestones, marketing]
 
     KpiTrend:
       type: string
@@ -1506,13 +954,7 @@ components:
 
     EarningsRank:
       type: string
-      description: Weekly statement rank badge (UI displays Gold/Silver/Bronze)
       enum: [gold, silver, bronze]
-
-    NotificationPreferenceId:
-      type: string
-      description: Matches Notifications UI preference rows
-      enum: [orders, payouts, subs, milestones, marketing]
 
     SocialPlatform:
       type: string
@@ -1522,28 +964,17 @@ components:
       type: string
       enum: [live, draft, suspended]
 
-    SubscriptionStatus:
-      type: string
-      description: Normalized status (mock UI uses Active/Paused)
-      enum: [active, paused, cancelled]
-
-    SearchResourceType:
-      type: string
-      enum: [order, partner, product]
-
     QrFormat:
       type: string
       enum: [png, svg]
       default: png
 
-    # --- Auth ---
     LoginRequest:
       type: object
       required: [identifier, password]
       properties:
         identifier:
           type: string
-          description: Email address or phone number (E.164 or local format per region)
         password:
           type: string
           format: password
@@ -1577,7 +1008,6 @@ components:
 
     PasswordResetRequest:
       type: object
-      description: Provide at least one of email or phone (same identifier rules as login)
       properties:
         email:
           type: string
@@ -1599,7 +1029,6 @@ components:
           nullable: true
         expiresIn:
           type: integer
-          description: Access token lifetime in seconds
         partner:
           $ref: "#/components/schemas/PartnerProfile"
 
@@ -1612,14 +1041,12 @@ components:
         partner:
           $ref: "#/components/schemas/PartnerProfile"
 
-    # --- Partner profile ---
     PartnerTier:
       type: object
       required: [code, label]
       properties:
         code:
           type: string
-          example: elite_influencer
         label:
           type: string
         labelZh:
@@ -1652,29 +1079,32 @@ components:
         currency:
           $ref: "#/components/schemas/Currency"
 
-    # --- Dashboard ---
-    DashboardSummary:
+    PartnerOverview:
       type: object
       required:
         - partner
+        - wallet
         - period
         - comparePeriod
-        - walletBalance
         - weeklyEarnings
         - ordersGenerated
+        - unreadNotificationCount
         - currency
       properties:
         partner:
           $ref: "#/components/schemas/PartnerProfile"
+        wallet:
+          $ref: "#/components/schemas/WalletSummary"
         period:
           $ref: "#/components/schemas/PeriodRange"
         comparePeriod:
           $ref: "#/components/schemas/PeriodRange"
-        walletBalance:
-          $ref: "#/components/schemas/MoneyAmount"
         weeklyEarnings:
           $ref: "#/components/schemas/MoneyAmount"
         ordersGenerated:
+          type: integer
+          minimum: 0
+        unreadNotificationCount:
           type: integer
           minimum: 0
         currency:
@@ -1690,10 +1120,8 @@ components:
           oneOf:
             - type: number
             - type: string
-          description: Numeric count or formatted percent string for repeatCustomers
         deltaPercent:
           type: number
-          description: Period-over-period change (e.g. 12.4 for +12.4%)
         trend:
           $ref: "#/components/schemas/KpiTrend"
         sparkline:
@@ -1701,26 +1129,12 @@ components:
           items:
             type: number
 
-    DashboardKpisResponse:
-      type: object
-      required: [items]
-      properties:
-        items:
-          type: array
-          items:
-            $ref: "#/components/schemas/DashboardKpi"
-
     TimeSeriesPoint:
       type: object
       required: [label, value]
       properties:
         label:
           type: string
-          description: Chart bucket label (UI mock uses `name`; map to `label` in clients)
-        name:
-          type: string
-          deprecated: true
-          description: Alias for `label` for chart libraries expecting `name`
         value:
           type: number
         periodStart:
@@ -1794,14 +1208,12 @@ components:
           nullable: true
         amountDisplay:
           type: string
-          description: Pre-formatted amount for UI (e.g. "+¥244.80")
           nullable: true
         occurredAt:
           type: string
           format: date-time
         occurredAtDisplay:
           type: string
-          description: Pre-formatted relative time (e.g. "Today, 2:14 PM · 2h ago")
           nullable: true
         occurredAtDisplayZh:
           type: string
@@ -1810,42 +1222,39 @@ components:
           type: string
           nullable: true
 
-    ActivityFeedResponse:
+    PartnerDashboard:
       type: object
-      required: [items]
+      required:
+        - period
+        - comparePeriod
+        - kpis
+        - salesTrend
+        - earningsTrend
+        - volume
+        - activity
+        - currency
       properties:
-        items:
+        period:
+          $ref: "#/components/schemas/PeriodRange"
+        comparePeriod:
+          $ref: "#/components/schemas/PeriodRange"
+        kpis:
+          type: array
+          items:
+            $ref: "#/components/schemas/DashboardKpi"
+        salesTrend:
+          $ref: "#/components/schemas/TimeSeries"
+        earningsTrend:
+          $ref: "#/components/schemas/TimeSeries"
+        volume:
+          $ref: "#/components/schemas/VolumeSummary"
+        activity:
           type: array
           items:
             $ref: "#/components/schemas/ActivityItem"
+        currency:
+          $ref: "#/components/schemas/Currency"
 
-    # --- Search ---
-    SearchResultItem:
-      type: object
-      required: [type, id, title]
-      properties:
-        type:
-          $ref: "#/components/schemas/SearchResourceType"
-        id:
-          type: string
-        title:
-          type: string
-        subtitle:
-          type: string
-        url:
-          type: string
-          format: uri
-
-    SearchResults:
-      type: object
-      required: [items]
-      properties:
-        items:
-          type: array
-          items:
-            $ref: "#/components/schemas/SearchResultItem"
-
-    # --- Orders ---
     OrdersSummary:
       type: object
       required: [ordersThisMonth, commissionEarned, avgOrderValue, currency]
@@ -1874,13 +1283,10 @@ components:
       properties:
         id:
           type: string
-          example: ORD-902-18X
         customerName:
           type: string
-          example: Lei Wang 王磊
         customerInitials:
           type: string
-          description: Avatar fallback (first character of customer name in UI)
           maxLength: 4
         productName:
           type: string
@@ -1896,20 +1302,20 @@ components:
         trackingNumber:
           type: string
           nullable: true
-          description: Carrier tracking number when assigned
         trackingPending:
           type: boolean
-          description: When true, UI shows localized "Pending" instead of a tracking number
           default: false
         orderType:
           $ref: "#/components/schemas/OrderType"
         currency:
           $ref: "#/components/schemas/Currency"
 
-    PaginatedOrders:
+    PartnerOrdersPage:
       type: object
-      required: [items, pagination]
+      required: [summary, items, pagination]
       properties:
+        summary:
+          $ref: "#/components/schemas/OrdersSummary"
         items:
           type: array
           items:
@@ -1917,7 +1323,6 @@ components:
         pagination:
           $ref: "#/components/schemas/PaginationMeta"
 
-    # --- Earnings ---
     CurrentEarnings:
       type: object
       required: [netPaid, deltaPercent, week, rank, currency]
@@ -1926,59 +1331,12 @@ components:
           $ref: "#/components/schemas/MoneyAmount"
         deltaPercent:
           type: number
-          description: Fractional change vs prior week (e.g. 0.184 = +18.4%)
         week:
           $ref: "#/components/schemas/PeriodRange"
         rank:
           $ref: "#/components/schemas/EarningsRank"
         currency:
           $ref: "#/components/schemas/Currency"
-
-    EarningsStatement:
-      type: object
-      required: [id, statementDate, week, gross, net, rank, currency]
-      properties:
-        id:
-          type: string
-        statementDate:
-          type: string
-          format: date
-        week:
-          $ref: "#/components/schemas/PeriodRange"
-        gross:
-          $ref: "#/components/schemas/MoneyAmount"
-        net:
-          $ref: "#/components/schemas/MoneyAmount"
-        rank:
-          $ref: "#/components/schemas/EarningsRank"
-        currency:
-          $ref: "#/components/schemas/Currency"
-
-    EarningsStatementDetail:
-      allOf:
-        - $ref: "#/components/schemas/EarningsStatement"
-        - type: object
-          properties:
-            hasFapiao:
-              type: boolean
-            hasPerformanceReport:
-              type: boolean
-            payviewUrl:
-              type: string
-              format: uri
-              nullable: true
-              description: Optional deep link (see GET /partner/earnings/payview-url)
-
-    PaginatedEarningsStatements:
-      type: object
-      required: [items, pagination]
-      properties:
-        items:
-          type: array
-          items:
-            $ref: "#/components/schemas/EarningsStatement"
-        pagination:
-          $ref: "#/components/schemas/PaginationMeta"
 
     EarningsRecords:
       type: object
@@ -2005,13 +1363,57 @@ components:
           type: number
           minimum: 0
           maximum: 100
-          description: Partner earnings percentile among active partners
         nextTierHint:
           type: string
           nullable: true
         nextTierHintZh:
           type: string
           nullable: true
+
+    EarningsSummary:
+      type: object
+      required:
+        - current
+        - trajectory
+        - records
+        - leaderboard
+        - payviewUrl
+        - currency
+      properties:
+        current:
+          $ref: "#/components/schemas/CurrentEarnings"
+        trajectory:
+          $ref: "#/components/schemas/TimeSeries"
+        records:
+          $ref: "#/components/schemas/EarningsRecords"
+        leaderboard:
+          $ref: "#/components/schemas/LeaderboardPosition"
+        payviewUrl:
+          type: string
+          format: uri
+          nullable: true
+        currency:
+          $ref: "#/components/schemas/Currency"
+
+    EarningsStatement:
+      type: object
+      required: [id, statementDate, week, gross, net, rank, currency]
+      properties:
+        id:
+          type: string
+        statementDate:
+          type: string
+          format: date
+        week:
+          $ref: "#/components/schemas/PeriodRange"
+        gross:
+          $ref: "#/components/schemas/MoneyAmount"
+        net:
+          $ref: "#/components/schemas/MoneyAmount"
+        rank:
+          $ref: "#/components/schemas/EarningsRank"
+        currency:
+          $ref: "#/components/schemas/Currency"
 
     FapiaoParty:
       type: object
@@ -2058,7 +1460,6 @@ components:
           $ref: "#/components/schemas/MoneyAmount"
         taxRate:
           type: number
-          description: Tax rate as decimal (e.g. 0.06)
         net:
           $ref: "#/components/schemas/MoneyAmount"
         weekLabel:
@@ -2070,8 +1471,6 @@ components:
         withholdingReference:
           type: string
           nullable: true
-          description: PayView withholding voucher id (UI shows PV-WT-{invoiceNumber})
-          example: PV-WT-00498372
         pdfUrl:
           type: string
           format: uri
@@ -2159,7 +1558,6 @@ components:
         avgSessionSeconds:
           type: integer
           minimum: 0
-          description: Average session duration in seconds (UI formats as mm:ss)
         reviews:
           type: integer
           minimum: 0
@@ -2174,7 +1572,6 @@ components:
           type: number
           minimum: 0
           maximum: 1
-          description: Conversion rate as fraction (0.042 = 4.2%)
         social:
           $ref: "#/components/schemas/SocialMetrics"
         topContent:
@@ -2185,42 +1582,44 @@ components:
           $ref: "#/components/schemas/EarningsBreakdown"
         vsLast:
           type: number
-          description: Fractional change vs prior week
         reportId:
           type: string
-          example: PV-PR-Apr11Apr172026
         partnerDisplayName:
           type: string
-          description: Report header (UI hardcodes partner name today)
         partnerTierCode:
           type: string
           nullable: true
         currency:
           $ref: "#/components/schemas/Currency"
 
-    # --- Storefront ---
-    Storefront:
+    EarningsHistoryItem:
+      allOf:
+        - $ref: "#/components/schemas/EarningsStatement"
+        - type: object
+          properties:
+            fapiao:
+              $ref: "#/components/schemas/Fapiao"
+              nullable: true
+            performanceReport:
+              $ref: "#/components/schemas/PerformanceReport"
+              nullable: true
+            payviewUrl:
+              type: string
+              format: uri
+              nullable: true
+
+    EarningsHistory:
       type: object
-      required: [slug, publicUrl, status]
+      required: [items]
       properties:
-        slug:
-          type: string
-          example: brady
-        publicUrl:
-          type: string
-          format: uri
-          example: https://morehealth.com/brady
-        status:
-          $ref: "#/components/schemas/StorefrontStatus"
-        statusLabel:
-          type: string
-          example: Live Storefront
-        statusLabelZh:
-          type: string
-          example: 店铺已上线
-        qrCodePayload:
-          type: string
-          description: Optional payload for client-side QR generation (UI uses publicUrl)
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/EarningsHistoryItem"
+        pagination:
+          $ref: "#/components/schemas/PaginationMeta"
+          nullable: true
+          description: Omitted when `statementId` returns a single item
 
     MetricWithDelta:
       type: object
@@ -2230,36 +1629,8 @@ components:
           oneOf:
             - type: number
             - type: string
-          description: Count or amount; conversion rate may be percent points (4.2 = 4.2%)
         deltaPercent:
           type: number
-          description: Period-over-period change in percent points (e.g. 12 = +12%)
-
-    StorefrontMetrics:
-      type: object
-      required:
-        - period
-        - comparePeriod
-        - storeVisits
-        - conversionRate
-        - storeRevenue
-        - directCommissions
-        - currency
-      properties:
-        period:
-          $ref: "#/components/schemas/PeriodRange"
-        comparePeriod:
-          $ref: "#/components/schemas/PeriodRange"
-        storeVisits:
-          $ref: "#/components/schemas/MetricWithDelta"
-        conversionRate:
-          $ref: "#/components/schemas/MetricWithDelta"
-        storeRevenue:
-          $ref: "#/components/schemas/MetricWithDelta"
-        directCommissions:
-          $ref: "#/components/schemas/MetricWithDelta"
-        currency:
-          $ref: "#/components/schemas/Currency"
 
     TopProduct:
       type: object
@@ -2280,23 +1651,67 @@ components:
         currency:
           $ref: "#/components/schemas/Currency"
 
-    QrCodeResponse:
+    StorefrontQr:
       type: object
       properties:
         imageUrl:
           type: string
           format: uri
+          nullable: true
         format:
           $ref: "#/components/schemas/QrFormat"
+        payload:
+          type: string
+          description: Data encoded in QR (typically public store URL)
 
-    # --- Notifications ---
-    NotificationSummary:
+    PartnerStorefront:
       type: object
-      required: [unreadCount]
+      required:
+        - slug
+        - publicUrl
+        - status
+        - period
+        - comparePeriod
+        - metrics
+        - topProducts
+        - qr
+        - currency
       properties:
-        unreadCount:
-          type: integer
-          minimum: 0
+        slug:
+          type: string
+        publicUrl:
+          type: string
+          format: uri
+        status:
+          $ref: "#/components/schemas/StorefrontStatus"
+        statusLabel:
+          type: string
+        statusLabelZh:
+          type: string
+        period:
+          $ref: "#/components/schemas/PeriodRange"
+        comparePeriod:
+          $ref: "#/components/schemas/PeriodRange"
+        metrics:
+          type: object
+          required: [storeVisits, conversionRate, storeRevenue, directCommissions]
+          properties:
+            storeVisits:
+              $ref: "#/components/schemas/MetricWithDelta"
+            conversionRate:
+              $ref: "#/components/schemas/MetricWithDelta"
+            storeRevenue:
+              $ref: "#/components/schemas/MetricWithDelta"
+            directCommissions:
+              $ref: "#/components/schemas/MetricWithDelta"
+        topProducts:
+          type: array
+          items:
+            $ref: "#/components/schemas/TopProduct"
+        qr:
+          $ref: "#/components/schemas/StorefrontQr"
+        currency:
+          $ref: "#/components/schemas/Currency"
 
     NotificationActor:
       type: object
@@ -2306,7 +1721,7 @@ components:
           type: string
         tone:
           type: string
-          description: Optional UI hint; may be omitted and derived client-side
+          nullable: true
 
     Notification:
       type: object
@@ -2331,22 +1746,38 @@ components:
           type: boolean
         amount:
           type: string
-          description: Pre-formatted amount (e.g. +¥244.80)
           nullable: true
         actor:
           $ref: "#/components/schemas/NotificationActor"
           nullable: true
 
-    PaginatedNotifications:
+    NotificationPreference:
       type: object
-      required: [items, pagination]
+      required: [id, label, channels]
       properties:
-        items:
+        id:
+          $ref: "#/components/schemas/NotificationPreferenceId"
+        label:
+          type: string
+        labelZh:
+          type: string
+        channels:
           type: array
           items:
-            $ref: "#/components/schemas/Notification"
-        pagination:
-          $ref: "#/components/schemas/PaginationMeta"
+            $ref: "#/components/schemas/NotificationChannel"
+        enabled:
+          type: object
+          additionalProperties:
+            type: boolean
+
+    NotificationPreferencesUpdate:
+      type: object
+      required: [preferences]
+      properties:
+        preferences:
+          type: array
+          items:
+            $ref: "#/components/schemas/NotificationPreference"
 
     NotificationUpdate:
       type: object
@@ -2363,31 +1794,24 @@ components:
           type: integer
           minimum: 0
 
-    NotificationPreference:
+    PartnerNotificationsPage:
       type: object
-      required: [id, label, channels]
+      required: [unreadCount, items, preferences]
       properties:
-        id:
-          $ref: "#/components/schemas/NotificationPreferenceId"
-        label:
-          type: string
-        labelZh:
-          type: string
-        channels:
+        unreadCount:
+          type: integer
+          minimum: 0
+        items:
           type: array
-          description: Channels available for this preference (UI shows icons for subset)
           items:
-            $ref: "#/components/schemas/NotificationChannel"
-        enabled:
-          type: object
-          additionalProperties:
-            type: boolean
-          description: Channel id to enabled flag (`push`, `email`, `sms`)
-          example:
-            push: true
-            email: true
+            $ref: "#/components/schemas/Notification"
+        pagination:
+          $ref: "#/components/schemas/PaginationMeta"
+        preferences:
+          type: array
+          items:
+            $ref: "#/components/schemas/NotificationPreference"
 
-    # --- Settings ---
     PartnerProfileSettings:
       type: object
       required: [firstName, lastName, email, preferredLanguage]
@@ -2431,15 +1855,6 @@ components:
         preferredLanguage:
           $ref: "#/components/schemas/Locale"
 
-    AvatarUploadResponse:
-      type: object
-      required: [avatarUrl]
-      properties:
-        avatarUrl:
-          type: string
-          format: uri
-
-    # --- Activation ---
     ActivationAddress:
       type: object
       properties:
@@ -2483,25 +1898,19 @@ components:
       properties:
         customerId:
           type: string
-          example: SHP-CUST-44219
         orderId:
           type: string
-          example: "#MH-10482"
         sku:
           type: string
-          example: ENROLL-STARTER-KIT
         sponsor:
           oneOf:
             - type: string
-              description: Legacy display string (e.g. "Lisa Wang · ID 880214")
             - $ref: "#/components/schemas/ActivationSponsor"
         placedAt:
           type: string
           format: date-time
         placedAtDisplay:
           type: string
-          description: Pre-formatted placed timestamp for UI
-          example: Apr 17, 2026 · 14:08 CST
         firstName:
           type: string
         lastName:
@@ -2526,7 +1935,6 @@ components:
           nullable: true
         productName:
           type: string
-          example: Partner Starter Kit
 
     ActivationEnrollmentUpdate:
       type: object
@@ -2555,73 +1963,6 @@ components:
           type: string
           format: password
           minLength: 8
-          description: Optional; server should reject when it does not match `password`
-
-    # --- Subscriptions ---
-    SubscriptionSummary:
-      type: object
-      required: [activeCount, estimatedMrr, currency]
-      properties:
-        activeCount:
-          type: integer
-          minimum: 0
-        estimatedMrr:
-          $ref: "#/components/schemas/MoneyAmount"
-        currency:
-          $ref: "#/components/schemas/Currency"
-
-    Subscription:
-      type: object
-      required:
-        - id
-        - productName
-        - frequency
-        - nextShipDate
-        - amount
-        - paymentMethod
-        - shippingCity
-        - status
-      properties:
-        id:
-          type: string
-        productName:
-          type: string
-        frequency:
-          type: string
-          description: Billing/shipping frequency code or short label
-        frequencyLabel:
-          type: string
-          description: Bilingual display label (mock uses e.g. "Monthly / 月度")
-        frequencyLabelZh:
-          type: string
-        nextShipDate:
-          type: string
-          format: date
-        amount:
-          $ref: "#/components/schemas/MoneyAmount"
-        paymentMethod:
-          type: string
-        shippingCity:
-          type: string
-        status:
-          $ref: "#/components/schemas/SubscriptionStatus"
-        imageUrl:
-          type: string
-          format: uri
-          nullable: true
-        currency:
-          $ref: "#/components/schemas/Currency"
-
-    PaginatedSubscriptions:
-      type: object
-      required: [items, pagination]
-      properties:
-        items:
-          type: array
-          items:
-            $ref: "#/components/schemas/Subscription"
-        pagination:
-          $ref: "#/components/schemas/PaginationMeta"
 
 security:
   - bearerAuth: []
