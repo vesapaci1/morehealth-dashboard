@@ -1,0 +1,44 @@
+# Deploy from monorepo root (recommended):
+#   fly deploy --config artifacts/api-server/fly.toml
+#
+# Or from this directory:
+#   pnpm run deploy
+#
+# Plain `fly deploy` here uses only this folder as context and will fail
+# (no pnpm-workspace.yaml / lib/*). Use the commands above.
+
+app = "api-server-restless-smoke-4999"
+primary_region = "ams"
+
+[build]
+# Paths relative to this fly.toml directory.
+dockerfile = "Dockerfile"
+# Intended monorepo root; flyctl 0.4.x ignores this — use deploy from repo root
+# (`fly deploy --config artifacts/api-server/fly.toml`) or `pnpm run deploy`.
+build-context = "../.."
+
+[env]
+NODE_ENV = "production"
+HOST = "0.0.0.0"
+LOG_LEVEL = "info"
+
+[http_service]
+internal_port = 8080
+force_https = true
+auto_stop_machines = "stop"
+auto_start_machines = true
+min_machines_running = 0
+processes = ["app"]
+
+[[http_service.checks]]
+grace_period = "10s"
+interval = "30s"
+method = "GET"
+path = "/api/healthz"
+timeout = "5s"
+
+[[vm]]
+memory = "1gb"
+cpu_kind = "shared"
+cpus = 1
+memory_mb = 1024

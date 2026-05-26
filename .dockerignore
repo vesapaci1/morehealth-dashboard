@@ -1,0 +1,24 @@
+# Monorepo Docker build context (api-server on Fly.io).
+# Keep: lib/, artifacts/api-server/, pnpm-workspace.yaml, pnpm-lock.yaml, package.json
+
+**/node_modules
+**/.git
+**/.cursor
+**/.turbo
+**/.cache
+
+# Exclude other artifacts; api-server is included via COPY paths in Dockerfile
+artifacts/more-health
+artifacts/mockup-sandbox
+
+attached_assets
+scripts
+
+*.md
+!artifacts/api-server/DEPLOY.md
+
+.env
+.env.*
+
+# Rebuild in image; do not send local bundles
+artifacts/api-server/dist
