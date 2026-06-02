@@ -1,0 +1,22 @@
+# Monorepo Docker build context (dashboard on Fly.io).
+# Keep: dashboard/, lib/, pnpm-workspace.yaml, pnpm-lock.yaml, package.json, .npmrc
+
+**/node_modules
+**/.git
+**/.cursor
+**/.turbo
+**/.cache
+
+attached_assets
+scripts
+replit.md
+
+*.md
+
+.env
+.env.*
+fly.toml
+
+# Rebuild in image; do not send local bundles
+dashboard/dist
+lib/*/dist
