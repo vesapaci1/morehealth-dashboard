@@ -33,9 +33,12 @@ minimumReleaseAgeExclude:
   # this setting guards against does not apply to our own packages.
   - '@replit/*'
   - stripe-replit-sync
+  # @radix-ui internal packages (e.g. react-menu) omit the registry "time" field,
+  # causing pnpm's age check to fail despite being a well-established trusted library.
+  - '@radix-ui/*'
 
 packages:
-  - artifacts/*
+  - dashboard
   - lib/*
   - lib/integrations/*
   - scripts
@@ -157,3 +160,6 @@ overrides:
   # drizzle-kit uses esbuild internally on an older version that's vulnerable, this overrides it
   "@esbuild-kit/esm-loader": "npm:tsx@^4.21.0"
   esbuild: "0.27.3"
+
+allowBuilds:
+  esbuild: true
