@@ -56,14 +56,6 @@ export type SidebarFooter = {
   };
 };
 
-export const SIDEBAR_USER: SidebarUser = {
-  name: "Matt Baros",
-  roleEn: "Elite Influencer",
-  roleZh: "精英影响者",
-  avatar: "/mock/avatar.png",
-  initials: "MB",
-};
-
 export const SIDEBAR_NAV: SidebarNavItem[] = [
   { key: "dashboard", labelEn: "Dashboard", labelZh: "仪表盘", path: "/dashboard", icon: LayoutDashboard },
   {
@@ -90,17 +82,3 @@ export const SIDEBAR_NAV: SidebarNavItem[] = [
   { key: "notifications", labelEn: "Notifications", labelZh: "通知", path: "/notifications", icon: Bell, badge: 3 },
   { key: "settings", labelEn: "Settings", labelZh: "设置", path: "/settings", icon: Settings },
 ];
-
-export const SIDEBAR_FOOTER: SidebarFooter = {
-  support: {
-    labelEn: "Support",
-    labelZh: "客服支持",
-    path: "/support",
-  },
-  wallet: {
-    labelEn: "Wallet Balance",
-    labelZh: "钱包余额",
-    amount: "¥12,480.00",
-    path: "/earnings",
-  },
-};

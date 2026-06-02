@@ -6,8 +6,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageProvider } from "@/lib/i18n";
 import stylesheet from "../src/index.css?url";
+import sidebarData from "@/data/sidebar.json";
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: stylesheet }];
+
+export function loader() {
+  return sidebarData;
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

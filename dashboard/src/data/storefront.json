@@ -1,0 +1,8 @@
+{
+  "products": [
+    { "name": "SomaDerm Transdermal Gel", "units": 42, "rev": "¥51,408", "thumb": "/images/somaderm.png" },
+    { "name": "Rose & Cole Luxe Set", "units": 15, "rev": "¥50,760", "thumb": "/images/rose-cole-luxe.png" },
+    { "name": "TRi-M*LT Liquid Shot", "units": 22, "rev": "¥18,216", "thumb": "/images/tri-mlt.png" },
+    { "name": "Revitalize Eye Cream", "units": 28, "rev": "¥15,680", "thumb": "/images/revitalize-eye-cream.png" }
+  ]
+}

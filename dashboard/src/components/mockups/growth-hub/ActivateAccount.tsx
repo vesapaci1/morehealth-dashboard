@@ -1,6 +1,6 @@
 import "./_group.css";
 import React, { useMemo, useState } from "react";
-import { useNavigate } from "@remix-run/react";
+import { useNavigate, useLoaderData } from "@remix-run/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,23 +24,25 @@ import {
 import { BrandLogo } from "./_shared/BrandLogo";
 import { useLang } from "@/lib/i18n";
 
-const ORDER = {
-  customerId: "SHP-CUST-44219",
-  orderId: "#MH-10482",
-  sku: "ENROLL-STARTER-KIT",
-  sponsor: "Lisa Wang · ID 880214",
-  timestamp: "Apr 17, 2026 · 14:08 CST",
-  firstName: "Matt",
-  lastName: "Barros",
-  email: "matt.barros@newulife.com",
-  phone: "+86 138 0011 8826",
-  address1: "1188 Nanjing West Road, Apt 2204",
-  address2: "Jing'an District",
-  city: "Shanghai",
-  state: "Shanghai",
-  postal: "200040",
-  country: "China",
+type Order = {
+  customerId: string;
+  orderId: string;
+  sku: string;
+  sponsor: string;
+  timestamp: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  address1: string;
+  address2: string;
+  city: string;
+  state: string;
+  postal: string;
+  country: string;
 };
+
+type LoaderData = { order: Order };
 
 function strengthScore(pw: string) {
   let s = 0;
@@ -61,6 +63,7 @@ const STRENGTH_TONE = [
 ];
 
 export function ActivateAccount() {
+  const { order: ORDER } = useLoaderData<LoaderData>();
   const { lang, toggle, t } = useLang();
   const navigate = useNavigate();
   const [pw, setPw] = useState("");
