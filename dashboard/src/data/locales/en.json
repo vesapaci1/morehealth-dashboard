@@ -1,0 +1,334 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "saveChanges": "Save Changes",
+    "viewAll": "View All",
+    "all": "All",
+    "or": "Or",
+    "and": "and",
+    "days": "Days",
+    "thisWeek": "This week",
+    "vsLastWeek": "vs last week",
+    "edit": "Edit",
+    "password": "Password",
+    "email": "Email",
+    "phone": "Phone",
+    "recommended": "recommended",
+    "earnings": "Earnings"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "shop": "Shop",
+    "enroll": "Enroll",
+    "storefront": "Storefront",
+    "wallet": "Wallet",
+    "subscriptions": "Subscriptions",
+    "earnings": "Earnings",
+    "orders": "Orders",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "support": "Support",
+    "walletBalance": "Wallet Balance"
+  },
+  "login": {
+    "hero": {
+      "tagline": "The Partner platform for More Health creators.",
+      "testimonial": "\"The tools here made running my wellness business seamless. I spend less time managing and more time growing my community.\"",
+      "testimonialRole": "Platinum Partner"
+    },
+    "form": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to your Partner dashboard",
+      "identifier": "Email or Phone Number",
+      "identifierPlaceholder": "name@example.com or +86...",
+      "forgot": "Forgot?",
+      "signIn": "Sign In",
+      "smsLogin": "Login with SMS Code",
+      "newUser": "New to More Health?",
+      "becomePartner": "Become a Partner"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account preferences and information.",
+    "nav": {
+      "profile": "Profile",
+      "addresses": "Addresses",
+      "security": "Security",
+      "accountRecords": "Account Records",
+      "placement": "Placement",
+      "language": "Language"
+    },
+    "profile": {
+      "title": "Profile Information",
+      "subtitle": "Update your personal details and public profile.",
+      "uploadPhoto": "Upload new photo",
+      "photoHint": "Recommended: Square JPG, PNG. Max 2MB.",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "emailAddress": "Email Address",
+      "phoneNumber": "Phone Number",
+      "dateOfBirth": "Date of Birth",
+      "preferredLanguage": "Preferred Language"
+    }
+  },
+  "dashboard": {
+    "hero": {
+      "welcome": "Welcome back, {name}",
+      "rank": "Elite Influencer",
+      "walletBalance": "Wallet Balance",
+      "weeklyEarnings": "Weekly Earnings",
+      "ordersGenerated": "Orders Generated"
+    },
+    "kpi": {
+      "totalOrders": "Total Orders",
+      "referredOrders": "Referred Orders",
+      "personalOrders": "Personal Orders",
+      "repeatCustomers": "Repeat Customers"
+    },
+    "charts": {
+      "salesTrend": "Sales Trend",
+      "sales": "Sales",
+      "earningsGrowth": "Earnings Growth",
+      "weekOf": "Week of {label}"
+    },
+    "volume": {
+      "title": "Volume",
+      "totalVolume": "Total Volume",
+      "vsLastWeek": "+12.4% vs last week",
+      "leftLeg": "Left Leg",
+      "payLeg": "Pay Leg",
+      "rightLeg": "Right Leg",
+      "carryOver": "Carry Over",
+      "ofTotal": "of total",
+      "carryOverToNext": "Carry-over to next week"
+    },
+    "activity": {
+      "title": "Recent Activity"
+    }
+  },
+  "earnings": {
+    "hero": {
+      "thisWeekNetPaid": "This Week Net Paid",
+      "vsLastWeek": "{delta} vs last week",
+      "viewInPayView": "View in PayView"
+    },
+    "rank": {
+      "gold": "Gold",
+      "silver": "Silver"
+    },
+    "statements": {
+      "title": "Weekly Statements",
+      "weekOf": "Week of {date}",
+      "gross": "Gross: ¥{amount}",
+      "netPaid": "Net Paid",
+      "fapiao": "Fapiao 发票",
+      "performanceReport": "Performance Report",
+      "detail": "Statement detail",
+      "viewPast": "View Past Statements"
+    },
+    "chart": {
+      "trajectory": "Earnings Trajectory",
+      "net": "Net"
+    },
+    "bestMonth": {
+      "title": "Best Month Ever",
+      "yoyGrowth": "+42% YoY Growth",
+      "body": "April is tracking to be your highest earning month since joining."
+    },
+    "progress": {
+      "title": "You earned more than {pct}% of active partners this month",
+      "subtitle": "Keep going — Platinum tier is just a few referrals away."
+    }
+  },
+  "storefront": {
+    "title": "My Personal Website",
+    "subtitle": "Your storefront link is your business card.",
+    "badge": "Live Storefront",
+    "description": "Share this link to earn commission on all purchases made through your store.",
+    "actions": {
+      "copyLink": "Copy Link",
+      "openStore": "Open Store",
+      "downloadQr": "Download QR Code"
+    },
+    "kpi": {
+      "storeVisits": "Store Visits",
+      "conversionRate": "Conversion Rate",
+      "storeRevenue": "Store Revenue",
+      "directCommissions": "Direct Commissions"
+    },
+    "products": {
+      "title": "Best Products Sold",
+      "unitsSold": "{units} units sold"
+    },
+    "share": {
+      "title": "Quick Share",
+      "subtitle": "Share directly to social platforms",
+      "wechat": "WeChat",
+      "xiaohongshu": "Xiaohongshu",
+      "douyin": "Douyin",
+      "link": "Link",
+      "qr": "QR"
+    }
+  },
+  "orders": {
+    "title": "Orders",
+    "subtitle": "Manage and track your customer and personal orders.",
+    "actions": {
+      "exportCsv": "Export CSV",
+      "newOrder": "New Order"
+    },
+    "kpi": {
+      "thisMonth": "Orders this month",
+      "commission": "Commission earned",
+      "avgValue": "Avg order value"
+    },
+    "tabs": {
+      "myOrders": "My Orders",
+      "customerOrders": "Customer Orders",
+      "subscriptionOrders": "Subscription Orders"
+    },
+    "search": {
+      "placeholder": "Search by order ID, customer name..."
+    },
+    "filter": {
+      "status": "Status"
+    },
+    "status": {
+      "delivered": "Delivered",
+      "shipped": "Shipped",
+      "paid": "Paid",
+      "pending": "Pending",
+      "pendingShipment": "Pending"
+    },
+    "table": {
+      "orderId": "Order ID",
+      "customer": "Customer",
+      "product": "Product",
+      "amount": "Amount",
+      "commission": "Commission",
+      "date": "Date",
+      "tracking": "Tracking"
+    },
+    "empty": {
+      "noMatch": "No orders match your filters.",
+      "noOrders": "No orders to show"
+    },
+    "pagination": {
+      "showing": "Showing {start} to {end} of {total} orders"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "updatedJustNow": "Updated just now",
+    "allCaughtUp": "You're all caught up",
+    "unreadCount": "{count} unread",
+    "empty": "Nothing here yet",
+    "loadOlder": "Load older",
+    "showing": "Showing {visible} of {total}",
+    "actions": {
+      "filters": "Filters",
+      "markAllRead": "Mark all read",
+      "settings": "Notification settings"
+    },
+    "filters": {
+      "unread": "Unread"
+    },
+    "categories": {
+      "orders": "Orders",
+      "payouts": "Payouts",
+      "subscriptions": "Subscriptions",
+      "milestones": "Milestones",
+      "announcements": "Announcements"
+    },
+    "prefs": {
+      "title": "Delivery preferences",
+      "subtitle": "Choose how you'd like to be reached.",
+      "newOrders": "New orders",
+      "payoutsWallet": "Payouts & wallet",
+      "subscriptionRenewals": "Subscription renewals",
+      "milestonesRankUps": "Milestones & rank ups",
+      "marketingCampaigns": "Marketing campaigns",
+      "openSettings": "Open full settings"
+    },
+    "channels": {
+      "push": "Push",
+      "email": "Email",
+      "sms": "SMS"
+    }
+  },
+  "header": {
+    "searchPlaceholder": "Search orders, partners, products..."
+  },
+  "activate": {
+    "header": {
+      "needHelp": "Need help?",
+      "contactSupport": "Contact support"
+    },
+    "badge": {
+      "orderConfirmed": "Order Confirmed"
+    },
+    "hero": {
+      "welcome": "Welcome to More Health, {name}.",
+      "subtitle": "Your enrollment is complete. Let's activate your account."
+    },
+    "steps": {
+      "purchase": "Purchase",
+      "activate": "Activate",
+      "dashboard": "Dashboard"
+    },
+    "verifiedInfo": {
+      "title": "Verified information",
+      "subtitle": "Imported from your order",
+      "fullName": "Full name",
+      "verified": "Verified",
+      "shippingAddress": "Shipping address",
+      "securityNote": "Securely transferred from your checkout. We'll never share your details."
+    },
+    "password": {
+      "title": "Create your password",
+      "subtitle": "Last step before your dashboard",
+      "minCharsPlaceholder": "Minimum 8 characters",
+      "strength": {
+        "label": "Strength",
+        "tooWeak": "Too weak",
+        "weak": "Weak",
+        "fair": "Fair",
+        "strong": "Strong",
+        "excellent": "Excellent"
+      },
+      "confirmPassword": "Confirm password",
+      "reenterPlaceholder": "Re-enter password",
+      "mismatch": "Passwords do not match",
+      "rules": {
+        "minChars": "8+ characters",
+        "uppercase": "1 uppercase",
+        "number": "1 number"
+      },
+      "createAccount": "Create my account"
+    },
+    "terms": {
+      "prefix": "By continuing you agree to the",
+      "partnerAgreement": "Partner Agreement",
+      "privacyPolicy": "Privacy Policy"
+    },
+    "enrollment": {
+      "title": "Your enrollment",
+      "productName": "Partner Starter Kit",
+      "orderLabel": "Order",
+      "sku": "SKU",
+      "placed": "Placed",
+      "sponsor": "Sponsor",
+      "totalPaid": "Total paid"
+    },
+    "security": {
+      "title": "Secure activation",
+      "subtitle": "One-time link"
+    },
+    "footer": {
+      "alreadyActivated": "Already activated?",
+      "signIn": "Sign in",
+      "resetPassword": "Reset password"
+    }
+  }
+}

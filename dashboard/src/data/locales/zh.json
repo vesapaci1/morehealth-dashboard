@@ -1,0 +1,334 @@
+{
+  "common": {
+    "cancel": "取消",
+    "saveChanges": "保存修改",
+    "viewAll": "查看全部",
+    "all": "全部",
+    "or": "或",
+    "and": "及",
+    "days": "天",
+    "thisWeek": "本周",
+    "vsLastWeek": "环比上周",
+    "edit": "编辑",
+    "password": "密码",
+    "email": "邮箱",
+    "phone": "手机号",
+    "recommended": "推荐",
+    "earnings": "收入"
+  },
+  "nav": {
+    "dashboard": "仪表盘",
+    "shop": "商城",
+    "enroll": "邀请伙伴",
+    "storefront": "我的店铺",
+    "wallet": "钱包",
+    "subscriptions": "订阅",
+    "earnings": "收入",
+    "orders": "订单",
+    "notifications": "通知",
+    "settings": "设置",
+    "support": "客服支持",
+    "walletBalance": "钱包余额"
+  },
+  "login": {
+    "hero": {
+      "tagline": "More Health 创作者的合作伙伴平台。",
+      "testimonial": "「这里的工具让我的健康事业运营得游刃有余。我花在管理上的时间更少，花在社群成长上的时间更多。」",
+      "testimonialRole": "白金合作伙伴"
+    },
+    "form": {
+      "title": "欢迎回来",
+      "subtitle": "登录你的合作伙伴后台",
+      "identifier": "邮箱或手机号",
+      "identifierPlaceholder": "name@example.com 或 +86…",
+      "forgot": "忘记密码？",
+      "signIn": "登录",
+      "smsLogin": "使用短信验证码登录",
+      "newUser": "首次加入 More Health？",
+      "becomePartner": "成为合作伙伴"
+    }
+  },
+  "settings": {
+    "title": "设置",
+    "subtitle": "管理你的账户偏好与信息。",
+    "nav": {
+      "profile": "个人资料",
+      "addresses": "地址簿",
+      "security": "安全",
+      "accountRecords": "账户记录",
+      "placement": "团队归属",
+      "language": "语言"
+    },
+    "profile": {
+      "title": "个人资料",
+      "subtitle": "更新你的个人信息与公开资料。",
+      "uploadPhoto": "上传新照片",
+      "photoHint": "建议：方形 JPG、PNG，最大 2MB。",
+      "firstName": "名",
+      "lastName": "姓",
+      "emailAddress": "邮箱地址",
+      "phoneNumber": "手机号",
+      "dateOfBirth": "出生日期",
+      "preferredLanguage": "偏好语言"
+    }
+  },
+  "dashboard": {
+    "hero": {
+      "welcome": "欢迎回来，{name}",
+      "rank": "精英影响者",
+      "walletBalance": "钱包余额",
+      "weeklyEarnings": "每周收入",
+      "ordersGenerated": "已产生订单"
+    },
+    "kpi": {
+      "totalOrders": "订单总数",
+      "referredOrders": "推荐订单",
+      "personalOrders": "个人订单",
+      "repeatCustomers": "复购客户"
+    },
+    "charts": {
+      "salesTrend": "销售趋势",
+      "sales": "销售",
+      "earningsGrowth": "收入增长",
+      "weekOf": "{label} 当周"
+    },
+    "volume": {
+      "title": "团队业绩",
+      "totalVolume": "总业绩",
+      "vsLastWeek": "环比上周 +12.4%",
+      "leftLeg": "左区",
+      "payLeg": "结算区",
+      "rightLeg": "右区",
+      "carryOver": "结转",
+      "ofTotal": "占总业绩",
+      "carryOverToNext": "结转至下周"
+    },
+    "activity": {
+      "title": "最近动态"
+    }
+  },
+  "earnings": {
+    "hero": {
+      "thisWeekNetPaid": "本周净收入",
+      "vsLastWeek": "环比上周 {delta}",
+      "viewInPayView": "在 PayView 查看"
+    },
+    "rank": {
+      "gold": "金牌",
+      "silver": "银牌"
+    },
+    "statements": {
+      "title": "每周对账单",
+      "weekOf": "{date} 当周",
+      "gross": "毛收入：¥{amount}",
+      "netPaid": "净到账",
+      "fapiao": "查看发票 Fapiao",
+      "performanceReport": "绩效报告",
+      "detail": "对账详情",
+      "viewPast": "查看历史对账单"
+    },
+    "chart": {
+      "trajectory": "收入走势",
+      "net": "净额"
+    },
+    "bestMonth": {
+      "title": "史上最佳月份",
+      "yoyGrowth": "同比增长 +42%",
+      "body": "4月有望成为你入驻以来收入最高的月份。"
+    },
+    "progress": {
+      "title": "你的收入超过本月 {pct}% 的活跃伙伴",
+      "subtitle": "再接再厉 — 距离白金等级仅差几位推荐。"
+    }
+  },
+  "storefront": {
+    "title": "我的个人店铺",
+    "subtitle": "你的店铺链接就是你的名片。",
+    "badge": "店铺已上线",
+    "description": "分享此链接，凡通过你的店铺产生的订单，你都将获得佣金。",
+    "actions": {
+      "copyLink": "复制链接",
+      "openStore": "打开店铺",
+      "downloadQr": "下载二维码"
+    },
+    "kpi": {
+      "storeVisits": "店铺访问",
+      "conversionRate": "转化率",
+      "storeRevenue": "店铺营收",
+      "directCommissions": "直接佣金"
+    },
+    "products": {
+      "title": "热销产品",
+      "unitsSold": "已售出 {units} 件"
+    },
+    "share": {
+      "title": "一键分享",
+      "subtitle": "直接分享到社交平台",
+      "wechat": "微信",
+      "xiaohongshu": "小红书",
+      "douyin": "抖音",
+      "link": "链接",
+      "qr": "二维码"
+    }
+  },
+  "orders": {
+    "title": "订单",
+    "subtitle": "管理并追踪你的客户订单与个人订单。",
+    "actions": {
+      "exportCsv": "导出 CSV",
+      "newOrder": "新建订单"
+    },
+    "kpi": {
+      "thisMonth": "本月订单",
+      "commission": "已赚佣金",
+      "avgValue": "平均订单金额"
+    },
+    "tabs": {
+      "myOrders": "我的订单",
+      "customerOrders": "客户订单",
+      "subscriptionOrders": "订阅订单"
+    },
+    "search": {
+      "placeholder": "按订单号或客户姓名搜索…"
+    },
+    "filter": {
+      "status": "状态"
+    },
+    "status": {
+      "delivered": "已送达",
+      "shipped": "已发货",
+      "paid": "已付款",
+      "pending": "待处理",
+      "pendingShipment": "待发货"
+    },
+    "table": {
+      "orderId": "订单号",
+      "customer": "客户",
+      "product": "产品",
+      "amount": "金额",
+      "commission": "佣金",
+      "date": "日期",
+      "tracking": "物流"
+    },
+    "empty": {
+      "noMatch": "没有符合筛选条件的订单。",
+      "noOrders": "暂无订单"
+    },
+    "pagination": {
+      "showing": "显示 {total} 个订单中的第 {start} – {end} 个"
+    }
+  },
+  "notifications": {
+    "title": "通知中心",
+    "updatedJustNow": "刚刚更新",
+    "allCaughtUp": "全部已读",
+    "unreadCount": "{count} 条未读",
+    "empty": "暂无通知",
+    "loadOlder": "加载更早",
+    "showing": "显示 {total} 条中的 {visible} 条",
+    "actions": {
+      "filters": "筛选",
+      "markAllRead": "全部标为已读",
+      "settings": "通知设置"
+    },
+    "filters": {
+      "unread": "未读"
+    },
+    "categories": {
+      "orders": "订单",
+      "payouts": "打款",
+      "subscriptions": "订阅",
+      "milestones": "里程碑",
+      "announcements": "公告"
+    },
+    "prefs": {
+      "title": "通知接收方式",
+      "subtitle": "选择你希望接收通知的渠道。",
+      "newOrders": "新订单",
+      "payoutsWallet": "钱包与打款",
+      "subscriptionRenewals": "订阅续费",
+      "milestonesRankUps": "里程碑与升级",
+      "marketingCampaigns": "营销活动",
+      "openSettings": "打开完整设置"
+    },
+    "channels": {
+      "push": "推送",
+      "email": "邮件",
+      "sms": "短信"
+    }
+  },
+  "header": {
+    "searchPlaceholder": "搜索订单、伙伴、产品…"
+  },
+  "activate": {
+    "header": {
+      "needHelp": "需要帮助？",
+      "contactSupport": "联系客服"
+    },
+    "badge": {
+      "orderConfirmed": "订单已确认"
+    },
+    "hero": {
+      "welcome": "欢迎加入 More Health，{name}。",
+      "subtitle": "你的注册已完成，让我们激活你的账户。"
+    },
+    "steps": {
+      "purchase": "购买",
+      "activate": "激活",
+      "dashboard": "进入后台"
+    },
+    "verifiedInfo": {
+      "title": "已验证信息",
+      "subtitle": "已从你的订单同步",
+      "fullName": "姓名",
+      "verified": "已验证",
+      "shippingAddress": "收货地址",
+      "securityNote": "所有信息已从结账过程中加密同步，绝不外泄。"
+    },
+    "password": {
+      "title": "设置登录密码",
+      "subtitle": "进入后台前的最后一步",
+      "minCharsPlaceholder": "至少 8 个字符",
+      "strength": {
+        "label": "强度",
+        "tooWeak": "太弱",
+        "weak": "较弱",
+        "fair": "中等",
+        "strong": "较强",
+        "excellent": "极强"
+      },
+      "confirmPassword": "确认密码",
+      "reenterPlaceholder": "再次输入密码",
+      "mismatch": "两次输入不一致",
+      "rules": {
+        "minChars": "8 个以上字符",
+        "uppercase": "1 个大写字母",
+        "number": "1 个数字"
+      },
+      "createAccount": "创建我的账户"
+    },
+    "terms": {
+      "prefix": "继续即表示你同意",
+      "partnerAgreement": "合作伙伴协议",
+      "privacyPolicy": "隐私政策"
+    },
+    "enrollment": {
+      "title": "你的注册",
+      "productName": "合作伙伴启动套装",
+      "orderLabel": "订单",
+      "sku": "SKU",
+      "placed": "下单时间",
+      "sponsor": "推荐人",
+      "totalPaid": "已支付"
+    },
+    "security": {
+      "title": "安全激活",
+      "subtitle": "一次性链接"
+    },
+    "footer": {
+      "alreadyActivated": "已激活账户？",
+      "signIn": "登录",
+      "resetPassword": "重置密码"
+    }
+  }
+}
