@@ -1,5 +1,6 @@
 import "./_group.css";
 import React, { useState } from "react";
+import { useLoaderData } from "@remix-run/react";
 import { AppLayout } from "./_shared/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -21,182 +22,16 @@ type WeeklyEarning = {
   metrics: PerformanceData;
 };
 
-const WEEKLY_EARNINGS: WeeklyEarning[] = [
-  {
-    date: "Apr 17, 2026",
-    dateZh: "2026年4月17日",
-    weekRange: "Apr 11 – Apr 17, 2026",
-    weekRangeZh: "2026年4月11日 – 4月17日",
-    gross: 3456.91,
-    net: 3248.50,
-    rank: "Gold",
-    fapiao: {
-      code: "144032500110",
-      number: "00498372",
-      date: "2026-04-18",
-      checkCode: "9 4823 7912 8345 0917",
-      taxableAmount: 3064.62,
-      taxAmount: 183.88,
-      taxRate: 0.06,
-      net: 3248.50,
-      weekLabel: "2026年4月11日 – 4月17日",
-    },
-    metrics: {
-      weekLabel: "Apr 11 – Apr 17, 2026",
-      weekLabelZh: "2026年4月11日 – 4月17日",
-      net: 3248.50,
-      gross: 3456.91,
-      storeViews: 4280,
-      uniqueVisitors: 2812,
-      avgSession: "2:48",
-      reviews: 38,
-      rating: 4.8,
-      orders: 18,
-      conversion: 0.042,
-      social: { wechat: 124000, xhs: 86400, douyin: 192000 },
-      topContent: [
-        { title: "How SomaDerm transformed my morning ritual", titleZh: "SomaDerm 如何改变我的早晨仪式", platform: "wechat", views: 48200, orders: 9, revenue: 1284.40 },
-        { title: "30-day Revitalize Eye Cream review", titleZh: "焕颜眼霜 30 天测评", platform: "xhs", views: 32100, orders: 5, revenue: 826.00 },
-        { title: "Quick wellness routine before work", titleZh: "上班前的快速健康仪式", platform: "douyin", views: 78400, orders: 4, revenue: 1138.10 },
-      ],
-      breakdown: { direct: 1846.30, referred: 1280.61, bonus: 330.00 },
-      vsLast: 0.184,
-    },
-  },
-  {
-    date: "Apr 10, 2026",
-    dateZh: "2026年4月10日",
-    weekRange: "Apr 4 – Apr 10, 2026",
-    weekRangeZh: "2026年4月4日 – 4月10日",
-    gross: 2918.09,
-    net: 2743.00,
-    rank: "Gold",
-    fapiao: {
-      code: "144032500110",
-      number: "00498141",
-      date: "2026-04-11",
-      checkCode: "8 1730 4612 9982 4413",
-      taxableAmount: 2587.74,
-      taxAmount: 155.26,
-      taxRate: 0.06,
-      net: 2743.00,
-      weekLabel: "2026年4月4日 – 4月10日",
-    },
-    metrics: {
-      weekLabel: "Apr 4 – Apr 10, 2026",
-      weekLabelZh: "2026年4月4日 – 4月10日",
-      net: 2743.00,
-      gross: 2918.09,
-      storeViews: 3680,
-      uniqueVisitors: 2410,
-      avgSession: "2:32",
-      reviews: 31,
-      rating: 4.7,
-      orders: 15,
-      conversion: 0.041,
-      social: { wechat: 98000, xhs: 71200, douyin: 154800 },
-      topContent: [
-        { title: "Why I switched to TRi-M*LT", titleZh: "为什么我换成了 TRi-M*LT", platform: "douyin", views: 62100, orders: 6, revenue: 992.40 },
-        { title: "Self-care Sunday haul", titleZh: "周日护理好物分享", platform: "xhs", views: 41800, orders: 4, revenue: 738.20 },
-        { title: "Office wellness essentials", titleZh: "办公室必备健康好物", platform: "wechat", views: 36400, orders: 5, revenue: 1012.40 },
-      ],
-      breakdown: { direct: 1532.10, referred: 1146.99, bonus: 239.00 },
-      vsLast: 0.106,
-    },
-  },
-  {
-    date: "Apr 03, 2026",
-    dateZh: "2026年4月3日",
-    weekRange: "Mar 28 – Apr 3, 2026",
-    weekRangeZh: "2026年3月28日 – 4月3日",
-    gross: 2638.30,
-    net: 2480.00,
-    rank: "Silver",
-    fapiao: {
-      code: "144032500110",
-      number: "00497908",
-      date: "2026-04-04",
-      checkCode: "7 0291 6634 5128 8801",
-      taxableAmount: 2339.62,
-      taxAmount: 140.38,
-      taxRate: 0.06,
-      net: 2480.00,
-      weekLabel: "2026年3月28日 – 4月3日",
-    },
-    metrics: {
-      weekLabel: "Mar 28 – Apr 3, 2026",
-      weekLabelZh: "2026年3月28日 – 4月3日",
-      net: 2480.00,
-      gross: 2638.30,
-      storeViews: 3320,
-      uniqueVisitors: 2188,
-      avgSession: "2:18",
-      reviews: 24,
-      rating: 4.7,
-      orders: 13,
-      conversion: 0.039,
-      social: { wechat: 84200, xhs: 64100, douyin: 138900 },
-      topContent: [
-        { title: "Spring wellness reset routine", titleZh: "春季健康重启计划", platform: "xhs", views: 38900, orders: 5, revenue: 942.00 },
-        { title: "Rose & Cole unboxing", titleZh: "Rose & Cole 开箱体验", platform: "wechat", views: 28100, orders: 3, revenue: 768.00 },
-        { title: "Quick before/after", titleZh: "30 秒前后对比", platform: "douyin", views: 54200, orders: 5, revenue: 770.00 },
-      ],
-      breakdown: { direct: 1420.00, referred: 990.30, bonus: 228.00 },
-      vsLast: 0.234,
-    },
-  },
-  {
-    date: "Mar 27, 2026",
-    dateZh: "2026年3月27日",
-    weekRange: "Mar 21 – Mar 27, 2026",
-    weekRangeZh: "2026年3月21日 – 3月27日",
-    gross: 2138.30,
-    net: 2010.00,
-    rank: "Silver",
-    fapiao: {
-      code: "144032500110",
-      number: "00497682",
-      date: "2026-03-28",
-      checkCode: "6 5104 8217 3360 0094",
-      taxableAmount: 1896.23,
-      taxAmount: 113.77,
-      taxRate: 0.06,
-      net: 2010.00,
-      weekLabel: "2026年3月21日 – 3月27日",
-    },
-    metrics: {
-      weekLabel: "Mar 21 – Mar 27, 2026",
-      weekLabelZh: "2026年3月21日 – 3月27日",
-      net: 2010.00,
-      gross: 2138.30,
-      storeViews: 2914,
-      uniqueVisitors: 1942,
-      avgSession: "2:11",
-      reviews: 19,
-      rating: 4.6,
-      orders: 11,
-      conversion: 0.038,
-      social: { wechat: 71800, xhs: 52900, douyin: 118600 },
-      topContent: [
-        { title: "Morning wellness Q&A", titleZh: "早晨健康答疑", platform: "wechat", views: 24600, orders: 4, revenue: 642.00 },
-        { title: "Eye cream before/after", titleZh: "眼霜前后对比", platform: "xhs", views: 31200, orders: 4, revenue: 658.00 },
-        { title: "Day in my life", titleZh: "我的一天", platform: "douyin", views: 48100, orders: 3, revenue: 710.00 },
-      ],
-      breakdown: { direct: 1162.00, referred: 802.30, bonus: 174.00 },
-      vsLast: -0.04,
-    },
-  },
-];
+type ChartPoint = { name: string; value: number };
 
-const CHART_DATA = [
-  { name: 'W1', value: 2010 },
-  { name: 'W2', value: 2480 },
-  { name: 'W3', value: 2743 },
-  { name: 'W4', value: 3248.50 },
-];
+type LoaderData = {
+  weeklyEarnings: WeeklyEarning[];
+  chartData: ChartPoint[];
+};
 
 export function Earnings() {
-  const { lang, t } = useLang();
+  const { weeklyEarnings, chartData } = useLoaderData<LoaderData>();
+  const { t } = useLang();
   const [fapiaoOpen, setFapiaoOpen] = useState<WeeklyEarning | null>(null);
   const [reportOpen, setReportOpen] = useState<WeeklyEarning | null>(null);
 
@@ -223,7 +58,7 @@ export function Earnings() {
 
           <div className="relative z-10 flex justify-center mt-12">
             <Button
-              onClick={() => setReportOpen(WEEKLY_EARNINGS[0])}
+              onClick={() => setReportOpen(weeklyEarnings[0])}
               className="bg-white text-emerald-950 hover:bg-emerald-50 rounded-xl px-8 h-12 font-semibold shadow-lg text-base group"
             >
               {t("View in PayView", "在 PayView 查看")} <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -235,7 +70,7 @@ export function Earnings() {
           <div className="lg:col-span-2 space-y-4">
             <h2 className="text-xl font-display font-semibold mb-4 text-foreground">{t("Weekly Statements", "每周对账单")}</h2>
             <div className="space-y-4">
-              {WEEKLY_EARNINGS.map((week, idx) => (
+              {weeklyEarnings.map((week, idx) => (
                 <Card key={idx} className="shadow-sm border-border/50 rounded-2xl bg-card hover:shadow-md transition-shadow overflow-hidden">
                   <div className="flex flex-col p-5 gap-5">
                     <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
@@ -299,7 +134,7 @@ export function Earnings() {
               <CardContent>
                 <div className="h-[180px] w-full mt-2">
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={CHART_DATA} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
+                    <AreaChart data={chartData} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
                       <defs>
                         <linearGradient id="colorNet" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>

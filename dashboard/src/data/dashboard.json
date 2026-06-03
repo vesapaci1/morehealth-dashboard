@@ -1,0 +1,52 @@
+{
+  "salesData": [
+    { "dayEn": "Mon", "dayZh": "周一", "value": 4000 },
+    { "dayEn": "Tue", "dayZh": "周二", "value": 3000 },
+    { "dayEn": "Wed", "dayZh": "周三", "value": 5000 },
+    { "dayEn": "Thu", "dayZh": "周四", "value": 2780 },
+    { "dayEn": "Fri", "dayZh": "周五", "value": 6890 },
+    { "dayEn": "Sat", "dayZh": "周六", "value": 8390 },
+    { "dayEn": "Sun", "dayZh": "周日", "value": 10490 }
+  ],
+  "earningsData": [
+    { "labelEn": "Mar 23–29", "labelZh": "3月23–29日", "value": 1200 },
+    { "labelEn": "Mar 30–Apr 5", "labelZh": "3月30–4月5日", "value": 1500 },
+    { "labelEn": "Apr 6–12", "labelZh": "4月6–12日", "value": 1800 },
+    { "labelEn": "Apr 13–19", "labelZh": "4月13–19日", "value": 2200 }
+  ],
+  "activityFeed": [
+    {
+      "id": 1,
+      "type": "purchase",
+      "textEn": "John bought SomaDerm Transdermal Gel",
+      "textZh": "John 购买了 SomaDerm 透皮凝胶",
+      "amountEn": "+¥244.80 commission",
+      "amountZh": "+¥244.80 佣金",
+      "timeEn": "Today, 2:14 PM · 2h ago",
+      "timeZh": "今天 14:14 · 2 小时前",
+      "avatar": "J"
+    },
+    {
+      "id": 2,
+      "type": "subscription",
+      "textEn": "Lisa subscribed monthly to Revitalize Eye Cream",
+      "textZh": "Lisa 订阅了焕颜眼霜（月度）",
+      "amountEn": "",
+      "amountZh": "",
+      "timeEn": "Today, 11:02 AM · 5h ago",
+      "timeZh": "今天 11:02 · 5 小时前",
+      "avatar": "L"
+    },
+    {
+      "id": 3,
+      "type": "payout",
+      "textEn": "Wallet payout sent",
+      "textZh": "钱包打款完成",
+      "amountEn": "¥3,200",
+      "amountZh": "¥3,200",
+      "timeEn": "Yesterday, 6:48 PM",
+      "timeZh": "昨天 18:48",
+      "avatar": "MH"
+    }
+  ]
+}

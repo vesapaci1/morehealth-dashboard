@@ -1,0 +1,19 @@
+{
+  "order": {
+    "customerId": "SHP-CUST-44219",
+    "orderId": "#MH-10482",
+    "sku": "ENROLL-STARTER-KIT",
+    "sponsor": "Lisa Wang · ID 880214",
+    "timestamp": "Apr 17, 2026 · 14:08 CST",
+    "firstName": "Matt",
+    "lastName": "Barros",
+    "email": "matt.barros@newulife.com",
+    "phone": "+86 138 0011 8826",
+    "address1": "1188 Nanjing West Road, Apt 2204",
+    "address2": "Jing'an District",
+    "city": "Shanghai",
+    "state": "Shanghai",
+    "postal": "200040",
+    "country": "China"
+  }
+}

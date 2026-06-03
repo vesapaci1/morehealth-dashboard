@@ -1,6 +1,6 @@
 import "./_group.css";
 import { useCallback, useMemo } from "react";
-import { useNavigate, useSearchParams } from "@remix-run/react";
+import { useNavigate, useSearchParams, useLoaderData } from "@remix-run/react";
 import { AppLayout } from "./_shared/AppLayout";
 import { Sidebar } from "./_shared/Sidebar";
 import { Card } from "@/components/ui/card";
@@ -28,6 +28,8 @@ type Order = {
   tab: OrdersTab;
 };
 
+type LoaderData = { orders: Order[] };
+
 type OrdersUrlState = {
   tab: OrdersTab;
   search: string;
@@ -38,42 +40,6 @@ type OrdersUrlState = {
 const ORDERS_TABS: OrdersTab[] = ["my-orders", "customer-orders", "subscription-orders"];
 const ORDER_STATUSES: OrderStatus[] = ["delivered", "shipped", "paid", "pending"];
 const PAGE_SIZE = 5;
-
-const ORDERS: Order[] = [
-  {
-    id: "ORD-902-18X",
-    customer: "Lei Wang 王磊",
-    product: "SomaDerm Transdermal Gel",
-    amount: 1224,
-    commission: 244.8,
-    date: "2023-10-24",
-    status: "delivered",
-    tracking: "SF1029384756",
-    tab: "customer-orders",
-  },
-  {
-    id: "ORD-902-17X",
-    customer: "Jing Chen 陈静",
-    product: "Revitalize Eye Cream",
-    amount: 560,
-    commission: 112,
-    date: "2023-10-23",
-    status: "shipped",
-    tracking: "SF1029384755",
-    tab: "customer-orders",
-  },
-  {
-    id: "ORD-902-16X",
-    customer: "Wei Zhang 张伟",
-    product: "Rose & Cole Luxe Set",
-    amount: 3384,
-    commission: 676.8,
-    date: "2023-10-22",
-    status: "paid",
-    tracking: "Pending",
-    tab: "customer-orders",
-  },
-];
 
 function parseOrdersParams(search: string): OrdersUrlState {
   const params = new URLSearchParams(search);
@@ -144,6 +110,7 @@ function useOrdersUrlState() {
 }
 
 export function Orders() {
+  const { orders } = useLoaderData<LoaderData>();
   const { t } = useLang();
   const { state, setState } = useOrdersUrlState();
   const { tab, search, status, page } = state;
@@ -161,7 +128,7 @@ export function Orders() {
 
   const filteredOrders = useMemo(() => {
     const query = search.trim().toLowerCase();
-    return ORDERS.filter((order) => {
+    return orders.filter((order) => {
       if (order.tab !== tab) return false;
       if (status && order.status !== status) return false;
       if (!query) return true;
@@ -171,7 +138,7 @@ export function Orders() {
         order.product.toLowerCase().includes(query)
       );
     });
-  }, [search, status, tab]);
+  }, [orders, search, status, tab]);
 
   const totalPages = Math.max(1, Math.ceil(filteredOrders.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);

@@ -1,5 +1,6 @@
 import "./_group.css";
 import React from "react";
+import { useLoaderData } from "@remix-run/react";
 import { QRCodeSVG } from "qrcode.react";
 import { AppLayout } from "./_shared/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,7 +9,11 @@ import { Kpi } from "./_shared/Kpi";
 import { Copy, ExternalLink, QrCode, Download, MessageCircle, ShoppingCart } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 
+type Product = { name: string; units: number; rev: string; thumb: string };
+type LoaderData = { products: Product[] };
+
 export function Storefront() {
+  const { products } = useLoaderData<LoaderData>();
   const { t } = useLang();
   return (
     <AppLayout activeId="storefront">
@@ -85,12 +90,7 @@ export function Storefront() {
               <Button variant="ghost" size="sm" className="text-primary">{t("View All", "查看全部")}</Button>
             </div>
             <div className="p-0">
-              {[
-                { name: "SomaDerm Transdermal Gel", units: 42, rev: "¥51,408", thumb: "/images/somaderm.png" },
-                { name: "Rose & Cole Luxe Set", units: 15, rev: "¥50,760", thumb: "/images/rose-cole-luxe.png" },
-                { name: "TRi-M*LT Liquid Shot", units: 22, rev: "¥18,216", thumb: "/images/tri-mlt.png" },
-                { name: "Revitalize Eye Cream", units: 28, rev: "¥15,680", thumb: "/images/revitalize-eye-cream.png" },
-              ].map((product, i) => (
+              {products.map((product, i) => (
                 <div key={i} className="flex items-center justify-between p-4 border-b border-border/50 last:border-0 hover:bg-secondary/30 transition-colors">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-lg bg-white flex items-center justify-center border border-border/50 shadow-sm overflow-hidden p-1">
@@ -139,10 +139,10 @@ export function Storefront() {
   );
 }
 
-function ShoppingBag(props: any) {
+function ShoppingBag(props: React.SVGProps<SVGSVGElement>) {
   return <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>;
 }
 
-function Badge({ className, children, ...props }: any) {
+function Badge({ className, children, ...props }: React.HTMLAttributes<HTMLSpanElement>) {
   return <span className={`inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors ${className}`} {...props}>{children}</span>
 }

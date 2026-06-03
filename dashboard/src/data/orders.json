@@ -1,0 +1,37 @@
+{
+  "orders": [
+    {
+      "id": "ORD-902-18X",
+      "customer": "Lei Wang 王磊",
+      "product": "SomaDerm Transdermal Gel",
+      "amount": 1224,
+      "commission": 244.8,
+      "date": "2023-10-24",
+      "status": "delivered",
+      "tracking": "SF1029384756",
+      "tab": "customer-orders"
+    },
+    {
+      "id": "ORD-902-17X",
+      "customer": "Jing Chen 陈静",
+      "product": "Revitalize Eye Cream",
+      "amount": 560,
+      "commission": 112,
+      "date": "2023-10-23",
+      "status": "shipped",
+      "tracking": "SF1029384755",
+      "tab": "customer-orders"
+    },
+    {
+      "id": "ORD-902-16X",
+      "customer": "Wei Zhang 张伟",
+      "product": "Rose & Cole Luxe Set",
+      "amount": 3384,
+      "commission": 676.8,
+      "date": "2023-10-22",
+      "status": "paid",
+      "tracking": "Pending",
+      "tab": "customer-orders"
+    }
+  ]
+}

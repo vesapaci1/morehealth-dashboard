@@ -1,15 +1,20 @@
 import React from "react";
-import { Link, useLocation } from "@remix-run/react";
+import { Link, useLocation, useRouteLoaderData } from "@remix-run/react";
 import { LifeBuoy, X } from "lucide-react";
 import { BrandLogo } from "./BrandLogo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useLang } from "@/lib/i18n";
 import {
-  SIDEBAR_FOOTER,
   SIDEBAR_NAV,
-  SIDEBAR_USER,
   type SidebarNavKey,
+  type SidebarUser,
+  type SidebarFooter,
 } from "./sidebar.mock";
+
+type RootLoaderData = {
+  user: SidebarUser;
+  footer: SidebarFooter;
+};
 
 export type SidebarProps = {
   activeKey?: SidebarNavKey;
@@ -20,6 +25,7 @@ export type SidebarProps = {
 export function Sidebar({ activeKey, mobileOpen = false, onClose }: SidebarProps) {
   const location = useLocation().pathname;
   const { t } = useLang();
+  const { user, footer } = useRouteLoaderData<RootLoaderData>("root")!;
 
   return (
     <div
@@ -42,14 +48,14 @@ export function Sidebar({ activeKey, mobileOpen = false, onClose }: SidebarProps
         <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary/50 border border-border/50">
           <Avatar className="w-10 h-10 border border-background">
             <AvatarFallback className="bg-primary/10 text-primary font-medium">
-              {SIDEBAR_USER.initials}
+              {user.initials}
             </AvatarFallback>
-            <AvatarImage src={SIDEBAR_USER.avatar} alt={SIDEBAR_USER.name} />
+            <AvatarImage src={user.avatar} alt={user.name} />
           </Avatar>
           <div className="flex flex-col">
-            <span className="text-sm font-semibold">{SIDEBAR_USER.name}</span>
+            <span className="text-sm font-semibold">{user.name}</span>
             <span className="text-xs text-muted-foreground">
-              {t(SIDEBAR_USER.roleEn, SIDEBAR_USER.roleZh)}
+              {t(user.roleEn, user.roleZh)}
             </span>
           </div>
         </div>
@@ -104,29 +110,29 @@ export function Sidebar({ activeKey, mobileOpen = false, onClose }: SidebarProps
 
       <div className="px-3 pt-2 pb-3 mt-auto border-t border-border">
         <Link
-          to={SIDEBAR_FOOTER.support.path}
+          to={footer.support.path}
           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-            location === SIDEBAR_FOOTER.support.path
+            location === footer.support.path
               ? "bg-primary text-primary-foreground shadow-sm"
               : "text-muted-foreground hover:bg-secondary hover:text-foreground"
           }`}
         >
           <LifeBuoy className="w-4 h-4 opacity-70" />
-          <span>{t(SIDEBAR_FOOTER.support.labelEn, SIDEBAR_FOOTER.support.labelZh)}</span>
+          <span>{t(footer.support.labelEn, footer.support.labelZh)}</span>
         </Link>
       </div>
 
       <div className="px-4 pb-4">
         <Link
-          to={SIDEBAR_FOOTER.wallet.path}
+          to={footer.wallet.path}
           className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground p-4 rounded-xl shadow-sm flex flex-col gap-1 relative overflow-hidden group cursor-pointer hover:shadow-md transition-all"
         >
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none" />
           <span className="text-xs opacity-80 font-medium">
-            {t(SIDEBAR_FOOTER.wallet.labelEn, SIDEBAR_FOOTER.wallet.labelZh)}
+            {t(footer.wallet.labelEn, footer.wallet.labelZh)}
           </span>
           <span className="text-xl font-bold display-num tabular-nums tracking-tight">
-            {SIDEBAR_FOOTER.wallet.amount}
+            {footer.wallet.amount}
           </span>
         </Link>
       </div>

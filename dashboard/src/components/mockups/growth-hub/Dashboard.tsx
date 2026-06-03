@@ -1,5 +1,6 @@
 import "./_group.css";
 import React, { useState } from "react";
+import { useLoaderData } from "@remix-run/react";
 import { AppLayout } from "./_shared/AppLayout";
 import { Kpi } from "./_shared/Kpi";
 import { Sparkline } from "./_shared/Sparkline";
@@ -8,32 +9,33 @@ import { Avatar } from "@/components/ui/avatar";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useLang } from "@/lib/i18n";
 
+type SalesDayRaw = { dayEn: string; dayZh: string; value: number };
+type EarningsWeekRaw = { labelEn: string; labelZh: string; value: number };
+type ActivityItem = {
+  id: number;
+  type: string;
+  textEn: string;
+  textZh: string;
+  amountEn: string;
+  amountZh: string;
+  timeEn: string;
+  timeZh: string;
+  avatar: string;
+};
+
+type LoaderData = {
+  salesData: SalesDayRaw[];
+  earningsData: EarningsWeekRaw[];
+  activityFeed: ActivityItem[];
+};
+
 export function Dashboard() {
+  const { salesData, earningsData, activityFeed } = useLoaderData<LoaderData>();
   const [timeRange, setTimeRange] = useState("7");
-  const { t } = useLang();
+  const { lang, t } = useLang();
 
-  const SALES_DATA = [
-    { name: t("Mon", "周一"), value: 4000 },
-    { name: t("Tue", "周二"), value: 3000 },
-    { name: t("Wed", "周三"), value: 5000 },
-    { name: t("Thu", "周四"), value: 2780 },
-    { name: t("Fri", "周五"), value: 6890 },
-    { name: t("Sat", "周六"), value: 8390 },
-    { name: t("Sun", "周日"), value: 10490 },
-  ];
-
-  const EARNINGS_DATA = [
-    { name: t("Mar 23–29", "3月23–29日"), value: 1200 },
-    { name: t("Mar 30–Apr 5", "3月30–4月5日"), value: 1500 },
-    { name: t("Apr 6–12", "4月6–12日"), value: 1800 },
-    { name: t("Apr 13–19", "4月13–19日"), value: 2200 },
-  ];
-
-  const ACTIVITY_FEED = [
-    { id: 1, type: 'purchase', text: t("John bought SomaDerm Transdermal Gel", "John 购买了 SomaDerm 透皮凝胶"), amount: t("+¥244.80 commission", "+¥244.80 佣金"), time: t("Today, 2:14 PM · 2h ago", "今天 14:14 · 2 小时前"), avatar: 'J' },
-    { id: 2, type: 'subscription', text: t("Lisa subscribed monthly to Revitalize Eye Cream", "Lisa 订阅了焕颜眼霜（月度）"), time: t("Today, 11:02 AM · 5h ago", "今天 11:02 · 5 小时前"), avatar: 'L' },
-    { id: 3, type: 'payout', text: t("Wallet payout sent", "钱包打款完成"), amount: '¥3,200', time: t("Yesterday, 6:48 PM", "昨天 18:48"), avatar: 'MH' },
-  ];
+  const SALES_DATA = salesData.map((d) => ({ name: t(d.dayEn, d.dayZh), value: d.value }));
+  const EARNINGS_DATA = earningsData.map((d) => ({ name: t(d.labelEn, d.labelZh), value: d.value }));
 
   return (
     <AppLayout activeId="dashboard">
@@ -209,24 +211,29 @@ export function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                {ACTIVITY_FEED.map((item) => (
-                  <div key={item.id} className="flex items-start gap-4">
-                    <Avatar className="w-10 h-10 border border-border bg-secondary flex items-center justify-center text-sm font-semibold text-muted-foreground">
-                      {item.avatar}
-                    </Avatar>
-                    <div className="flex-1 flex justify-between items-start">
-                      <div className="flex flex-col gap-1">
-                        <p className="text-sm font-medium leading-tight">{item.text}</p>
-                        <span className="text-xs text-muted-foreground">{item.time}</span>
+                {activityFeed.map((item) => {
+                  const text = lang === "zh" ? item.textZh : item.textEn;
+                  const amount = lang === "zh" ? item.amountZh : item.amountEn;
+                  const time = lang === "zh" ? item.timeZh : item.timeEn;
+                  return (
+                    <div key={item.id} className="flex items-start gap-4">
+                      <Avatar className="w-10 h-10 border border-border bg-secondary flex items-center justify-center text-sm font-semibold text-muted-foreground">
+                        {item.avatar}
+                      </Avatar>
+                      <div className="flex-1 flex justify-between items-start">
+                        <div className="flex flex-col gap-1">
+                          <p className="text-sm font-medium leading-tight">{text}</p>
+                          <span className="text-xs text-muted-foreground">{time}</span>
+                        </div>
+                        {amount && (
+                          <span className={`text-sm font-semibold tabular-nums ${amount.includes('+') ? 'text-primary' : 'text-foreground'}`}>
+                            {amount}
+                          </span>
+                        )}
                       </div>
-                      {item.amount && (
-                        <span className={`text-sm font-semibold tabular-nums ${item.amount.includes('+') ? 'text-primary' : 'text-foreground'}`}>
-                          {item.amount}
-                        </span>
-                      )}
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
