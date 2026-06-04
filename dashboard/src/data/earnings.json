@@ -1,27 +1,26 @@
 {
   "weeklyEarnings": [
     {
-      "date": "Apr 17, 2026",
-      "dateZh": "2026年4月17日",
-      "weekRange": "Apr 11 – Apr 17, 2026",
-      "weekRangeZh": "2026年4月11日 – 4月17日",
+      "startDate": "2026-04-11",
+      "endDate": "2026-04-17",
       "gross": 3456.91,
       "net": 3248.50,
       "rank": "Gold",
       "fapiao": {
         "code": "144032500110",
         "number": "00498372",
-        "date": "2026-04-18",
+        "issuedDate": "2026-04-18",
         "checkCode": "9 4823 7912 8345 0917",
         "taxableAmount": 3064.62,
         "taxAmount": 183.88,
         "taxRate": 0.06,
         "net": 3248.50,
-        "weekLabel": "2026年4月11日 – 4月17日"
+        "weekStartDate": "2026-04-11",
+        "weekEndDate": "2026-04-17"
       },
       "metrics": {
-        "weekLabel": "Apr 11 – Apr 17, 2026",
-        "weekLabelZh": "2026年4月11日 – 4月17日",
+        "startDate": "2026-04-11",
+        "endDate": "2026-04-17",
         "net": 3248.50,
         "gross": 3456.91,
         "storeViews": 4280,
@@ -33,36 +32,35 @@
         "conversion": 0.042,
         "social": { "wechat": 124000, "xhs": 86400, "douyin": 192000 },
         "topContent": [
-          { "title": "How SomaDerm transformed my morning ritual", "titleZh": "SomaDerm 如何改变我的早晨仪式", "platform": "wechat", "views": 48200, "orders": 9, "revenue": 1284.40 },
-          { "title": "30-day Revitalize Eye Cream review", "titleZh": "焕颜眼霜 30 天测评", "platform": "xhs", "views": 32100, "orders": 5, "revenue": 826.00 },
-          { "title": "Quick wellness routine before work", "titleZh": "上班前的快速健康仪式", "platform": "douyin", "views": 78400, "orders": 4, "revenue": 1138.10 }
+          { "id": "c01", "platform": "wechat", "views": 48200, "orders": 9, "revenue": 1284.40 },
+          { "id": "c02", "platform": "xhs", "views": 32100, "orders": 5, "revenue": 826.00 },
+          { "id": "c03", "platform": "douyin", "views": 78400, "orders": 4, "revenue": 1138.10 }
         ],
         "breakdown": { "direct": 1846.30, "referred": 1280.61, "bonus": 330.00 },
         "vsLast": 0.184
       }
     },
     {
-      "date": "Apr 10, 2026",
-      "dateZh": "2026年4月10日",
-      "weekRange": "Apr 4 – Apr 10, 2026",
-      "weekRangeZh": "2026年4月4日 – 4月10日",
+      "startDate": "2026-04-04",
+      "endDate": "2026-04-10",
       "gross": 2918.09,
       "net": 2743.00,
       "rank": "Gold",
       "fapiao": {
         "code": "144032500110",
         "number": "00498141",
-        "date": "2026-04-11",
+        "issuedDate": "2026-04-11",
         "checkCode": "8 1730 4612 9982 4413",
         "taxableAmount": 2587.74,
         "taxAmount": 155.26,
         "taxRate": 0.06,
         "net": 2743.00,
-        "weekLabel": "2026年4月4日 – 4月10日"
+        "weekStartDate": "2026-04-04",
+        "weekEndDate": "2026-04-10"
       },
       "metrics": {
-        "weekLabel": "Apr 4 – Apr 10, 2026",
-        "weekLabelZh": "2026年4月4日 – 4月10日",
+        "startDate": "2026-04-04",
+        "endDate": "2026-04-10",
         "net": 2743.00,
         "gross": 2918.09,
         "storeViews": 3680,
@@ -74,36 +72,35 @@
         "conversion": 0.041,
         "social": { "wechat": 98000, "xhs": 71200, "douyin": 154800 },
         "topContent": [
-          { "title": "Why I switched to TRi-M*LT", "titleZh": "为什么我换成了 TRi-M*LT", "platform": "douyin", "views": 62100, "orders": 6, "revenue": 992.40 },
-          { "title": "Self-care Sunday haul", "titleZh": "周日护理好物分享", "platform": "xhs", "views": 41800, "orders": 4, "revenue": 738.20 },
-          { "title": "Office wellness essentials", "titleZh": "办公室必备健康好物", "platform": "wechat", "views": 36400, "orders": 5, "revenue": 1012.40 }
+          { "id": "c04", "platform": "douyin", "views": 62100, "orders": 6, "revenue": 992.40 },
+          { "id": "c05", "platform": "xhs", "views": 41800, "orders": 4, "revenue": 738.20 },
+          { "id": "c06", "platform": "wechat", "views": 36400, "orders": 5, "revenue": 1012.40 }
         ],
         "breakdown": { "direct": 1532.10, "referred": 1146.99, "bonus": 239.00 },
         "vsLast": 0.106
       }
     },
     {
-      "date": "Apr 03, 2026",
-      "dateZh": "2026年4月3日",
-      "weekRange": "Mar 28 – Apr 3, 2026",
-      "weekRangeZh": "2026年3月28日 – 4月3日",
+      "startDate": "2026-03-28",
+      "endDate": "2026-04-03",
       "gross": 2638.30,
       "net": 2480.00,
       "rank": "Silver",
       "fapiao": {
         "code": "144032500110",
         "number": "00497908",
-        "date": "2026-04-04",
+        "issuedDate": "2026-04-04",
         "checkCode": "7 0291 6634 5128 8801",
         "taxableAmount": 2339.62,
         "taxAmount": 140.38,
         "taxRate": 0.06,
         "net": 2480.00,
-        "weekLabel": "2026年3月28日 – 4月3日"
+        "weekStartDate": "2026-03-28",
+        "weekEndDate": "2026-04-03"
       },
       "metrics": {
-        "weekLabel": "Mar 28 – Apr 3, 2026",
-        "weekLabelZh": "2026年3月28日 – 4月3日",
+        "startDate": "2026-03-28",
+        "endDate": "2026-04-03",
         "net": 2480.00,
         "gross": 2638.30,
         "storeViews": 3320,
@@ -115,36 +112,35 @@
         "conversion": 0.039,
         "social": { "wechat": 84200, "xhs": 64100, "douyin": 138900 },
         "topContent": [
-          { "title": "Spring wellness reset routine", "titleZh": "春季健康重启计划", "platform": "xhs", "views": 38900, "orders": 5, "revenue": 942.00 },
-          { "title": "Rose & Cole unboxing", "titleZh": "Rose & Cole 开箱体验", "platform": "wechat", "views": 28100, "orders": 3, "revenue": 768.00 },
-          { "title": "Quick before/after", "titleZh": "30 秒前后对比", "platform": "douyin", "views": 54200, "orders": 5, "revenue": 770.00 }
+          { "id": "c07", "platform": "xhs", "views": 38900, "orders": 5, "revenue": 942.00 },
+          { "id": "c08", "platform": "wechat", "views": 28100, "orders": 3, "revenue": 768.00 },
+          { "id": "c09", "platform": "douyin", "views": 54200, "orders": 5, "revenue": 770.00 }
         ],
         "breakdown": { "direct": 1420.00, "referred": 990.30, "bonus": 228.00 },
         "vsLast": 0.234
       }
     },
     {
-      "date": "Mar 27, 2026",
-      "dateZh": "2026年3月27日",
-      "weekRange": "Mar 21 – Mar 27, 2026",
-      "weekRangeZh": "2026年3月21日 – 3月27日",
+      "startDate": "2026-03-21",
+      "endDate": "2026-03-27",
       "gross": 2138.30,
       "net": 2010.00,
       "rank": "Silver",
       "fapiao": {
         "code": "144032500110",
         "number": "00497682",
-        "date": "2026-03-28",
+        "issuedDate": "2026-03-28",
         "checkCode": "6 5104 8217 3360 0094",
         "taxableAmount": 1896.23,
         "taxAmount": 113.77,
         "taxRate": 0.06,
         "net": 2010.00,
-        "weekLabel": "2026年3月21日 – 3月27日"
+        "weekStartDate": "2026-03-21",
+        "weekEndDate": "2026-03-27"
       },
       "metrics": {
-        "weekLabel": "Mar 21 – Mar 27, 2026",
-        "weekLabelZh": "2026年3月21日 – 3月27日",
+        "startDate": "2026-03-21",
+        "endDate": "2026-03-27",
         "net": 2010.00,
         "gross": 2138.30,
         "storeViews": 2914,
@@ -156,9 +152,9 @@
         "conversion": 0.038,
         "social": { "wechat": 71800, "xhs": 52900, "douyin": 118600 },
         "topContent": [
-          { "title": "Morning wellness Q&A", "titleZh": "早晨健康答疑", "platform": "wechat", "views": 24600, "orders": 4, "revenue": 642.00 },
-          { "title": "Eye cream before/after", "titleZh": "眼霜前后对比", "platform": "xhs", "views": 31200, "orders": 4, "revenue": 658.00 },
-          { "title": "Day in my life", "titleZh": "我的一天", "platform": "douyin", "views": 48100, "orders": 3, "revenue": 710.00 }
+          { "id": "c10", "platform": "wechat", "views": 24600, "orders": 4, "revenue": 642.00 },
+          { "id": "c11", "platform": "xhs", "views": 31200, "orders": 4, "revenue": 658.00 },
+          { "id": "c12", "platform": "douyin", "views": 48100, "orders": 3, "revenue": 710.00 }
         ],
         "breakdown": { "direct": 1162.00, "referred": 802.30, "bonus": 174.00 },
         "vsLast": -0.04

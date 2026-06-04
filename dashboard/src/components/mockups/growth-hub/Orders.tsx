@@ -117,14 +117,15 @@ export function Orders() {
 
   const statusLabel = (s: OrderStatus) =>
     s === "delivered"
-      ? t("Delivered", "已送达")
+      ? t("orders.status.delivered")
       : s === "shipped"
-        ? t("Shipped", "已发货")
+        ? t("orders.status.shipped")
         : s === "paid"
-          ? t("Paid", "已付款")
-          : t("Pending", "待处理");
+          ? t("orders.status.paid")
+          : t("orders.status.pending");
 
-  const trackingLabel = (tk: string) => (tk === "Pending" ? t("Pending", "待发货") : tk);
+  const trackingLabel = (tk: string) =>
+    tk === "Pending" ? t("orders.status.pendingShipment") : tk;
 
   const filteredOrders = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -152,17 +153,17 @@ export function Orders() {
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-display font-bold tracking-tight">{t("Orders", "订单")}</h1>
+            <h1 className="text-2xl font-display font-bold tracking-tight">{t("orders.title")}</h1>
             <p className="text-muted-foreground text-sm">
-              {t("Manage and track your customer and personal orders.", "管理并追踪你的客户订单与个人订单。")}
+              {t("orders.subtitle")}
             </p>
           </div>
           <div className="flex gap-2">
             <Button variant="outline" className="gap-2 shadow-sm bg-card hover:bg-secondary rounded-xl">
-              <Download className="w-4 h-4" /> {t("Export CSV", "导出 CSV")}
+              <Download className="w-4 h-4" /> {t("orders.actions.exportCsv")}
             </Button>
             <Button className="gap-2 shadow-sm rounded-xl bg-primary text-primary-foreground">
-              {t("New Order", "新建订单")}
+              {t("orders.actions.newOrder")}
             </Button>
           </div>
         </div>
@@ -170,19 +171,19 @@ export function Orders() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card className="shadow-sm border-border/50 rounded-2xl bg-card">
             <div className="p-5 flex flex-col gap-1">
-              <span className="text-sm font-medium text-muted-foreground">{t("Orders this month", "本月订单")}</span>
+              <span className="text-sm font-medium text-muted-foreground">{t("orders.kpi.thisMonth")}</span>
               <span className="text-3xl font-bold display-num tabular-nums tracking-tight">128</span>
             </div>
           </Card>
           <Card className="shadow-sm border-border/50 rounded-2xl bg-card">
             <div className="p-5 flex flex-col gap-1">
-              <span className="text-sm font-medium text-muted-foreground">{t("Commission earned", "已赚佣金")}</span>
+              <span className="text-sm font-medium text-muted-foreground">{t("orders.kpi.commission")}</span>
               <span className="text-3xl font-bold display-num tabular-nums tracking-tight">¥14,280</span>
             </div>
           </Card>
           <Card className="shadow-sm border-border/50 rounded-2xl bg-card">
             <div className="p-5 flex flex-col gap-1">
-              <span className="text-sm font-medium text-muted-foreground">{t("Avg order value", "平均订单金额")}</span>
+              <span className="text-sm font-medium text-muted-foreground">{t("orders.kpi.avgValue")}</span>
               <span className="text-3xl font-bold display-num tabular-nums tracking-tight">¥624</span>
             </div>
           </Card>
@@ -194,23 +195,14 @@ export function Orders() {
           className="w-full"
         >
           <TabsList className="bg-secondary/50 border border-border/50 p-1 rounded-xl w-full sm:w-auto overflow-x-auto justify-start">
-            <TabsTrigger
-              value="my-orders"
-              className="rounded-lg text-sm px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm"
-            >
-              {t("My Orders", "我的订单")}
+            <TabsTrigger value="my-orders" className="rounded-lg text-sm px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm">
+              {t("orders.tabs.myOrders")}
             </TabsTrigger>
-            <TabsTrigger
-              value="customer-orders"
-              className="rounded-lg text-sm px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm"
-            >
-              {t("Customer Orders", "客户订单")}
+            <TabsTrigger value="customer-orders" className="rounded-lg text-sm px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm">
+              {t("orders.tabs.customerOrders")}
             </TabsTrigger>
-            <TabsTrigger
-              value="subscription-orders"
-              className="rounded-lg text-sm px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm"
-            >
-              {t("Subscription Orders", "订阅订单")}
+            <TabsTrigger value="subscription-orders" className="rounded-lg text-sm px-4 data-[state=active]:bg-background data-[state=active]:shadow-sm">
+              {t("orders.tabs.subscriptionOrders")}
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -222,7 +214,7 @@ export function Orders() {
               <Input
                 value={search}
                 onChange={(event) => setState({ search: event.target.value }, { resetPage: true })}
-                placeholder={t("Search by order ID, customer name...", "按订单号或客户姓名搜索…")}
+                placeholder={t("orders.search.placeholder")}
                 className="pl-9 bg-card border-border/60 rounded-xl"
               />
             </div>
@@ -234,14 +226,14 @@ export function Orders() {
                 }
               >
                 <SelectTrigger className="w-full sm:w-[180px] bg-card rounded-xl border-border/60">
-                  <SelectValue placeholder={t("Status", "状态")} />
+                  <SelectValue placeholder={t("orders.filter.status")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">{t("All", "全部")}</SelectItem>
-                  <SelectItem value="delivered">{t("Delivered", "已送达")}</SelectItem>
-                  <SelectItem value="shipped">{t("Shipped", "已发货")}</SelectItem>
-                  <SelectItem value="paid">{t("Paid", "已付款")}</SelectItem>
-                  <SelectItem value="pending">{t("Pending", "待处理")}</SelectItem>
+                  <SelectItem value="all">{t("common.all")}</SelectItem>
+                  <SelectItem value="delivered">{t("orders.status.delivered")}</SelectItem>
+                  <SelectItem value="shipped">{t("orders.status.shipped")}</SelectItem>
+                  <SelectItem value="paid">{t("orders.status.paid")}</SelectItem>
+                  <SelectItem value="pending">{t("orders.status.pending")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -252,14 +244,14 @@ export function Orders() {
               <table className="w-full text-sm text-left">
                 <thead className="text-xs text-muted-foreground bg-secondary/30 uppercase">
                   <tr>
-                    <th className="px-6 py-4 font-semibold">{t("Order ID", "订单号")}</th>
-                    <th className="px-6 py-4 font-semibold">{t("Customer", "客户")}</th>
-                    <th className="px-6 py-4 font-semibold">{t("Product", "产品")}</th>
-                    <th className="px-6 py-4 font-semibold text-right">{t("Amount", "金额")}</th>
-                    <th className="px-6 py-4 font-semibold text-right">{t("Commission", "佣金")}</th>
-                    <th className="px-6 py-4 font-semibold">{t("Date", "日期")}</th>
-                    <th className="px-6 py-4 font-semibold">{t("Status", "状态")}</th>
-                    <th className="px-6 py-4 font-semibold">{t("Tracking", "物流")}</th>
+                    <th className="px-6 py-4 font-semibold">{t("orders.table.orderId")}</th>
+                    <th className="px-6 py-4 font-semibold">{t("orders.table.customer")}</th>
+                    <th className="px-6 py-4 font-semibold">{t("orders.table.product")}</th>
+                    <th className="px-6 py-4 font-semibold text-right">{t("orders.table.amount")}</th>
+                    <th className="px-6 py-4 font-semibold text-right">{t("orders.table.commission")}</th>
+                    <th className="px-6 py-4 font-semibold">{t("orders.table.date")}</th>
+                    <th className="px-6 py-4 font-semibold">{t("orders.filter.status")}</th>
+                    <th className="px-6 py-4 font-semibold">{t("orders.table.tracking")}</th>
                     <th className="px-6 py-4 font-semibold"></th>
                   </tr>
                 </thead>
@@ -267,7 +259,7 @@ export function Orders() {
                   {pageOrders.length === 0 ? (
                     <tr>
                       <td colSpan={9} className="px-6 py-10 text-center text-muted-foreground">
-                        {t("No orders match your filters.", "没有符合筛选条件的订单。")}
+                        {t("orders.empty.noMatch")}
                       </td>
                     </tr>
                   ) : (
@@ -338,11 +330,8 @@ export function Orders() {
             <div className="p-4 border-t border-border/50 flex items-center justify-between bg-secondary/10">
               <span className="text-sm text-muted-foreground">
                 {filteredOrders.length === 0
-                  ? t("No orders to show", "暂无订单")
-                  : t(
-                      `Showing ${rangeStart} to ${rangeEnd} of ${filteredOrders.length} orders`,
-                      `显示 ${filteredOrders.length} 个订单中的第 ${rangeStart} – ${rangeEnd} 个`,
-                    )}
+                  ? t("orders.empty.noOrders")
+                  : t("orders.pagination.showing", { start: rangeStart, end: rangeEnd, total: filteredOrders.length })}
               </span>
               <div className="flex gap-1">
                 <Button

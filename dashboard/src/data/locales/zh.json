@@ -14,7 +14,15 @@
     "email": "邮箱",
     "phone": "手机号",
     "recommended": "推荐",
-    "earnings": "收入"
+    "earnings": "收入",
+    "print": "打印",
+    "downloadPdf": "下载 PDF",
+    "commission": "佣金"
+  },
+  "user": {
+    "roles": {
+      "eliteInfluencer": "精英影响者"
+    }
   },
   "nav": {
     "dashboard": "仪表盘",
@@ -95,7 +103,6 @@
     "volume": {
       "title": "团队业绩",
       "totalVolume": "总业绩",
-      "vsLastWeek": "环比上周 +12.4%",
       "leftLeg": "左区",
       "payLeg": "结算区",
       "rightLeg": "右区",
@@ -104,7 +111,10 @@
       "carryOverToNext": "结转至下周"
     },
     "activity": {
-      "title": "最近动态"
+      "title": "最近动态",
+      "1": { "text": "John 购买了 SomaDerm 透皮凝胶" },
+      "2": { "text": "Lisa 订阅了焕颜眼霜（月度）" },
+      "3": { "text": "钱包打款完成" }
     }
   },
   "earnings": {
@@ -139,6 +149,20 @@
     "progress": {
       "title": "你的收入超过本月 {pct}% 的活跃伙伴",
       "subtitle": "再接再厉 — 距离白金等级仅差几位推荐。"
+    },
+    "content": {
+      "c01": { "title": "SomaDerm 如何改变我的早晨仪式" },
+      "c02": { "title": "焕颜眼霜 30 天测评" },
+      "c03": { "title": "上班前的快速健康仪式" },
+      "c04": { "title": "为什么我换成了 TRi-M*LT" },
+      "c05": { "title": "周日护理好物分享" },
+      "c06": { "title": "办公室必备健康好物" },
+      "c07": { "title": "春季健康重启计划" },
+      "c08": { "title": "Rose & Cole 开箱体验" },
+      "c09": { "title": "30 秒前后对比" },
+      "c10": { "title": "早晨健康答疑" },
+      "c11": { "title": "眼霜前后对比" },
+      "c12": { "title": "我的一天" }
     }
   },
   "storefront": {
@@ -255,10 +279,127 @@
       "push": "推送",
       "email": "邮件",
       "sms": "短信"
+    },
+    "items": {
+      "n1": {
+        "title": "来自王磊的新订单",
+        "detail": "SomaDerm 透皮凝胶 · ORD-902-18X"
+      },
+      "n2": {
+        "title": "钱包打款成功",
+        "detail": "已转入工商银行 •••• 7814 · 流水号 PV-2026-04-17-9012"
+      },
+      "n3": {
+        "title": "Lisa 续订月度订阅",
+        "detail": "焕颜眼霜 · 第 7 期 · 5月5日自动续订"
+      },
+      "n4": {
+        "title": "你的收入超过本月 72% 的合作伙伴",
+        "detail": "再接再厉 — 距离白金等级仅差 4 位推荐。"
+      },
+      "n5": {
+        "title": "订单已发往陈静",
+        "detail": "焕颜眼霜 · 顺丰速运 SF1029384755"
+      },
+      "n6": {
+        "title": "春季健康营销素材已上线",
+        "detail": "可在我的店铺下载小红书与抖音的全新模板。"
+      },
+      "n7": {
+        "title": "打款周期已更新",
+        "detail": "每周打款将于每周一上午 09:00 到账（北京时间）。"
+      },
+      "n8": {
+        "title": "本月有望创下新高",
+        "detail": "4月较你之前最佳月份增长 +42%。"
+      }
     }
   },
   "header": {
     "searchPlaceholder": "搜索订单、伙伴、产品…"
+  },
+  "performanceReport": {
+    "toolbar": {
+      "generatedBy": "由 PayView 数据分析生成"
+    },
+    "header": {
+      "badge": "PayView 绩效报告",
+      "reportMeta": "马特·巴罗斯 · 精英影响者 · 报告编号 {id}",
+      "totalPaid": "本期到账",
+      "vsPriorWeek": "环比上周"
+    },
+    "sections": {
+      "whyPaid": {
+        "title": "本周收入构成",
+        "subtitle": "综合来自店铺、社交渠道与转化数据。"
+      },
+      "funnel": {
+        "title": "转化漏斗",
+        "subtitle": "曝光如何转化为订单。"
+      },
+      "channels": {
+        "title": "渠道表现",
+        "subtitle": "粉丝从哪里来。"
+      },
+      "topContent": {
+        "title": "高转化内容",
+        "subtitle": "本周带来最多收入的内容。"
+      },
+      "breakdown": {
+        "title": "收入明细",
+        "subtitle": "本期到账金额构成。"
+      }
+    },
+    "stats": {
+      "storefrontViews": "店铺浏览",
+      "uniqueVisitors": "{count} 独立访客",
+      "conversion": "转化率",
+      "orderCount": "{count} 笔订单",
+      "reviews": "用户评价",
+      "reviewCount": "{count} 条新增",
+      "socialReach": "社交触达",
+      "platforms": "3 个平台"
+    },
+    "funnel": {
+      "socialImpressions": "社交曝光",
+      "storefrontVisits": "店铺访问",
+      "addToCart": "加入购物车",
+      "ordersPlaced": "完成下单",
+      "perOrder": "/ 单"
+    },
+    "channels": {
+      "impressions": "曝光数"
+    },
+    "table": {
+      "content": "内容",
+      "channel": "渠道",
+      "views": "浏览",
+      "orders": "订单",
+      "revenue": "收入"
+    },
+    "breakdown": {
+      "directSales": "直接销售佣金",
+      "referredOrders": "推荐订单佣金",
+      "bonus": "绩效奖励",
+      "grossEarnings": "毛收入",
+      "withholdingTax": "代扣代缴税款 (6%)",
+      "netPaid": "净到账"
+    },
+    "disclaimer": "本报告由 PayView 数据分析为 More Health 自动生成。数据来自经核验的店铺会话、归因社交曝光与有效订单事件。代扣代缴及打款由派维税务服务（深圳）有限公司处理，资金通过中国工商银行结算。报告编号 {reportId}。"
+  },
+  "fapiao": {
+    "dialogTitle": "增值税普通发票",
+    "toolbar": {
+      "subtitle": "由派维税务代开 · 已完成代扣代缴"
+    },
+    "trail": {
+      "payer": "代付方",
+      "payerSub": "派维税务 · 已扣税",
+      "bank": "清算银行",
+      "bankSub": "跨行划付 · T+0",
+      "taxVerification": "税务校验",
+      "taxVerificationSub": "可联网核验"
+    }
   },
   "activate": {
     "header": {

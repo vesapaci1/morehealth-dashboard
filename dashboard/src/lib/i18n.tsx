@@ -4,11 +4,13 @@ import zhMessages from "@/data/locales/zh.json";
 
 export type Lang = "en" | "zh";
 
+type Params = Record<string, string | number>;
+
 type Ctx = {
   lang: Lang;
   setLang: (l: Lang) => void;
   toggle: () => void;
-  t: (key: string, zh?: string) => string;
+  t: (key: string, zhOrParams?: string | Params) => string;
 };
 
 const LangContext = createContext<Ctx | null>(null);
@@ -21,6 +23,10 @@ function lookup(messages: Record<string, unknown>, key: string): string | undefi
     node = (node as Record<string, unknown>)[part];
   }
   return typeof node === "string" ? node : undefined;
+}
+
+function interpolate(template: string, params: Params): string {
+  return template.replace(/\{(\w+)\}/g, (_, k) => String(params[k] ?? `{${k}}`));
 }
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
@@ -38,14 +44,15 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const toggle = useCallback(() => setLangState((l) => (l === "en" ? "zh" : "en")), []);
 
   const t = useCallback(
-    (key: string, zh?: string): string => {
-      // Backward-compat: two-argument form t("English", "Chinese") still works unchanged.
-      if (zh !== undefined) {
-        return lang === "zh" ? zh : key;
+    (key: string, zhOrParams?: string | Params): string => {
+      // Backward-compat: two-argument string form t("English", "Chinese") still works unchanged.
+      if (typeof zhOrParams === "string") {
+        return lang === "zh" ? zhOrParams : key;
       }
-      // Key-based form: t("section.key") looks up in the active locale JSON.
+      // Key-based lookup in the active locale JSON.
       const messages = (lang === "zh" ? zhMessages : enMessages) as Record<string, unknown>;
-      return lookup(messages, key) ?? key;
+      const template = lookup(messages, key) ?? key;
+      return zhOrParams ? interpolate(template, zhOrParams) : template;
     },
     [lang],
   );

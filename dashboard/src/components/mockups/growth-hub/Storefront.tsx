@@ -21,9 +21,9 @@ export function Storefront() {
 
         <div className="flex items-end justify-between mb-2">
           <div>
-            <h1 className="text-2xl font-display font-bold tracking-tight">{t("My Personal Website", "我的个人店铺")}</h1>
+            <h1 className="text-2xl font-display font-bold tracking-tight">{t("storefront.title")}</h1>
             <p className="text-muted-foreground text-sm">
-              {t("Your storefront link is your business card.", "你的店铺链接就是你的名片。")}
+              {t("storefront.subtitle")}
             </p>
           </div>
           <div className="inline-flex items-center gap-2 bg-secondary border border-border/60 px-3 py-1.5 rounded-full text-xs font-medium text-foreground">
@@ -36,19 +36,19 @@ export function Storefront() {
           <div className="flex flex-col md:flex-row">
             <div className="flex-1 p-8 md:p-10 flex flex-col justify-center">
               <Badge className="w-fit mb-4 bg-primary/10 text-primary hover:bg-primary/20 border-transparent shadow-none">
-                {t("Live Storefront", "店铺已上线")}
+                {t("storefront.badge")}
               </Badge>
               <h2 className="text-3xl font-display font-bold mb-2 text-foreground">morehealth.com/brady</h2>
               <p className="text-muted-foreground mb-8 text-lg">
-                {t("Share this link to earn commission on all purchases made through your store.", "分享此链接，凡通过你的店铺产生的订单，你都将获得佣金。")}
+                {t("storefront.description")}
               </p>
 
               <div className="flex flex-wrap gap-3">
                 <Button className="rounded-xl h-12 px-6 gap-2 text-base shadow-sm">
-                  <Copy className="w-4 h-4" /> {t("Copy Link", "复制链接")}
+                  <Copy className="w-4 h-4" /> {t("storefront.actions.copyLink")}
                 </Button>
                 <Button variant="outline" className="rounded-xl h-12 px-6 gap-2 text-base shadow-sm bg-background border-border/80">
-                  <ExternalLink className="w-4 h-4" /> {t("Open Store", "打开店铺")}
+                  <ExternalLink className="w-4 h-4" /> {t("storefront.actions.openStore")}
                 </Button>
               </div>
             </div>
@@ -70,24 +70,24 @@ export function Storefront() {
                 />
               </div>
               <Button variant="ghost" className="mt-4 gap-2 text-muted-foreground hover:text-foreground">
-                <Download className="w-4 h-4" /> {t("Download QR Code", "下载二维码")}
+                <Download className="w-4 h-4" /> {t("storefront.actions.downloadQr")}
               </Button>
             </div>
           </div>
         </Card>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <Kpi label={t("Store Visits", "店铺访问")} value="1,248" delta="+24%" compare={t("vs. Apr 4 – Apr 10", "对比 4月4日 – 4月10日")} />
-          <Kpi label={t("Conversion Rate", "转化率")} value="4.2%" delta="+0.8%" compare={t("vs. Apr 4 – Apr 10", "对比 4月4日 – 4月10日")} />
-          <Kpi label={t("Store Revenue", "店铺营收")} value="¥28,400" delta="+12%" compare={t("vs. Apr 4 – Apr 10", "对比 4月4日 – 4月10日")} />
-          <Kpi label={t("Direct Commissions", "直接佣金")} value="¥5,680" delta="+12%" compare={t("vs. Apr 4 – Apr 10", "对比 4月4日 – 4月10日")} />
+          <Kpi label={t("storefront.kpi.storeVisits")} value="1,248" delta="+24%" compare={t("vs. Apr 4 – Apr 10", "对比 4月4日 – 4月10日")} />
+          <Kpi label={t("storefront.kpi.conversionRate")} value="4.2%" delta="+0.8%" compare={t("vs. Apr 4 – Apr 10", "对比 4月4日 – 4月10日")} />
+          <Kpi label={t("storefront.kpi.storeRevenue")} value="¥28,400" delta="+12%" compare={t("vs. Apr 4 – Apr 10", "对比 4月4日 – 4月10日")} />
+          <Kpi label={t("storefront.kpi.directCommissions")} value="¥5,680" delta="+12%" compare={t("vs. Apr 4 – Apr 10", "对比 4月4日 – 4月10日")} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Card className="lg:col-span-2 shadow-sm border-border/50 rounded-2xl bg-card">
             <div className="p-6 border-b border-border/50 flex justify-between items-center">
-              <h3 className="font-semibold text-lg">{t("Best Products Sold", "热销产品")}</h3>
-              <Button variant="ghost" size="sm" className="text-primary">{t("View All", "查看全部")}</Button>
+              <h3 className="font-semibold text-lg">{t("storefront.products.title")}</h3>
+              <Button variant="ghost" size="sm" className="text-primary">{t("common.viewAll")}</Button>
             </div>
             <div className="p-0">
               {products.map((product, i) => (
@@ -98,7 +98,7 @@ export function Storefront() {
                     </div>
                     <div>
                       <p className="font-medium text-foreground">{product.name}</p>
-                      <p className="text-sm text-muted-foreground">{t(`${product.units} units sold`, `已售出 ${product.units} 件`)}</p>
+                      <p className="text-sm text-muted-foreground">{t("storefront.products.unitsSold", { units: product.units })}</p>
                     </div>
                   </div>
                   <span className="font-semibold tabular-nums text-foreground">{product.rev}</span>
@@ -109,25 +109,25 @@ export function Storefront() {
 
           <Card className="shadow-sm border-border/50 rounded-2xl bg-card h-fit">
             <div className="p-6 border-b border-border/50">
-              <h3 className="font-semibold text-lg">{t("Quick Share", "一键分享")}</h3>
-              <p className="text-sm text-muted-foreground mt-1">{t("Share directly to social platforms", "直接分享到社交平台")}</p>
+              <h3 className="font-semibold text-lg">{t("storefront.share.title")}</h3>
+              <p className="text-sm text-muted-foreground mt-1">{t("storefront.share.subtitle")}</p>
             </div>
             <CardContent className="p-6 space-y-3">
               <Button variant="outline" className="w-full justify-start gap-3 h-12 rounded-xl text-emerald-600 border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 bg-emerald-50/50">
-                <MessageCircle className="w-5 h-5" /> {t("WeChat", "微信")}
+                <MessageCircle className="w-5 h-5" /> {t("storefront.share.wechat")}
               </Button>
               <Button variant="outline" className="w-full justify-start gap-3 h-12 rounded-xl text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700 bg-red-50/50">
-                <ShoppingBag className="w-5 h-5" /> {t("Xiaohongshu", "小红书")}
+                <ShoppingBag className="w-5 h-5" /> {t("storefront.share.xiaohongshu")}
               </Button>
               <Button variant="outline" className="w-full justify-start gap-3 h-12 rounded-xl text-zinc-800 border-zinc-300 hover:bg-zinc-100 hover:text-zinc-900 bg-zinc-50">
-                <ShoppingCart className="w-5 h-5" /> {t("Douyin", "抖音")}
+                <ShoppingCart className="w-5 h-5" /> {t("storefront.share.douyin")}
               </Button>
               <div className="pt-4 mt-4 border-t border-border/50 flex gap-2">
                 <Button variant="secondary" className="flex-1 rounded-xl h-10 gap-2">
-                  <Copy className="w-4 h-4" /> {t("Link", "链接")}
+                  <Copy className="w-4 h-4" /> {t("storefront.share.link")}
                 </Button>
                 <Button variant="secondary" className="flex-1 rounded-xl h-10 gap-2">
-                  <QrCode className="w-4 h-4" /> {t("QR", "二维码")}
+                  <QrCode className="w-4 h-4" /> {t("storefront.share.qr")}
                 </Button>
               </div>
             </CardContent>

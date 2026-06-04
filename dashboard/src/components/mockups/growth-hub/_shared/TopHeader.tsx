@@ -20,7 +20,7 @@ export function TopHeader({ onOpenMenu }: { onOpenMenu?: () => void }) {
           <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder={t("Search orders, partners, products...", "搜索订单、伙伴、产品…")}
+            placeholder={t("header.searchPlaceholder")}
             className="w-full pl-9 pr-4 py-2 bg-secondary/50 border border-border/50 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
           />
         </div>

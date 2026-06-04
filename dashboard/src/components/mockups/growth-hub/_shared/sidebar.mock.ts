@@ -26,16 +26,13 @@ export type SidebarNavKey =
 
 export type SidebarUser = {
   name: string;
-  roleEn: string;
-  roleZh: string;
+  role: string;
   avatar: string;
   initials: string;
 };
 
 export type SidebarNavItem = {
   key: SidebarNavKey;
-  labelEn: string;
-  labelZh: string;
   path: string;
   icon: LucideIcon;
   external?: boolean;
@@ -43,42 +40,19 @@ export type SidebarNavItem = {
 };
 
 export type SidebarFooter = {
-  support: {
-    labelEn: string;
-    labelZh: string;
-    path: string;
-  };
-  wallet: {
-    labelEn: string;
-    labelZh: string;
-    amount: string;
-    path: string;
-  };
+  support: { path: string };
+  wallet: { amount: string; path: string };
 };
 
 export const SIDEBAR_NAV: SidebarNavItem[] = [
-  { key: "dashboard", labelEn: "Dashboard", labelZh: "仪表盘", path: "/dashboard", icon: LayoutDashboard },
-  {
-    key: "shop",
-    labelEn: "Shop",
-    labelZh: "商城",
-    path: "https://morehealth-3.myshopify.com/collections/all?password=kwik",
-    icon: ShoppingBag,
-    external: true,
-  },
-  {
-    key: "enroll",
-    labelEn: "Enroll",
-    labelZh: "邀请伙伴",
-    path: "https://morehealth-3.myshopify.com/pages/enrollment?password=kwik",
-    icon: UserPlus,
-    external: true,
-  },
-  { key: "storefront", labelEn: "Storefront", labelZh: "我的店铺", path: "/storefront", icon: Store },
-  { key: "wallet", labelEn: "Wallet", labelZh: "钱包", path: "/earnings", icon: Wallet },
-  { key: "subscriptions", labelEn: "Subscriptions", labelZh: "订阅", path: "/subscriptions", icon: Repeat },
-  { key: "earnings", labelEn: "Earnings", labelZh: "收入", path: "/earnings", icon: LineChart },
-  { key: "orders", labelEn: "Orders", labelZh: "订单", path: "/orders", icon: ShoppingBasket },
-  { key: "notifications", labelEn: "Notifications", labelZh: "通知", path: "/notifications", icon: Bell, badge: 3 },
-  { key: "settings", labelEn: "Settings", labelZh: "设置", path: "/settings", icon: Settings },
+  { key: "dashboard", path: "/dashboard", icon: LayoutDashboard },
+  { key: "shop", path: "https://morehealth-3.myshopify.com/collections/all?password=kwik", icon: ShoppingBag, external: true },
+  { key: "enroll", path: "https://morehealth-3.myshopify.com/pages/enrollment?password=kwik", icon: UserPlus, external: true },
+  { key: "storefront", path: "/storefront", icon: Store },
+  { key: "wallet", path: "/earnings", icon: Wallet },
+  { key: "subscriptions", path: "/subscriptions", icon: Repeat },
+  { key: "earnings", path: "/earnings", icon: LineChart },
+  { key: "orders", path: "/orders", icon: ShoppingBasket },
+  { key: "notifications", path: "/notifications", icon: Bell, badge: 3 },
+  { key: "settings", path: "/settings", icon: Settings },
 ];
