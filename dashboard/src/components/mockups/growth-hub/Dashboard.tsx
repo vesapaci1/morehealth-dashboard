@@ -20,14 +20,17 @@ type ActivityItem = {
   avatar: string;
 };
 
+type CurrentPeriod = { startDate: string; endDate: string; prevStartDate: string; prevEndDate: string };
+
 type LoaderData = {
   salesData: SalesDayRaw[];
   earningsData: EarningsWeekRaw[];
   activityFeed: ActivityItem[];
+  currentPeriod: CurrentPeriod;
 };
 
 export function Dashboard() {
-  const { salesData, earningsData, activityFeed } = useLoaderData<LoaderData>();
+  const { salesData, earningsData, activityFeed, currentPeriod } = useLoaderData<LoaderData>();
   const [timeRange, setTimeRange] = useState("7");
   const { lang, t } = useLang();
 
@@ -54,8 +57,8 @@ export function Dashboard() {
                   {t("dashboard.hero.rank")}
                 </div>
                 <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-primary-foreground/90">
-                  <span>{t("Apr 11 – Apr 17, 2026", "2026年4月11日 – 4月17日")}</span>
-                  <span className="text-primary-foreground/60">{t("vs. Apr 4 – Apr 10", "对比 4月4日 – 4月10日")}</span>
+                  <span>{formatWeekRange(currentPeriod.startDate, currentPeriod.endDate, lang)}</span>
+                  <span className="text-primary-foreground/60">{t("common.vsPeriod", { range: formatWeekRange(currentPeriod.prevStartDate, currentPeriod.prevEndDate, lang) })}</span>
                 </div>
               </div>
             </div>

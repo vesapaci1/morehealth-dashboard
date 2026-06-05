@@ -17,7 +17,8 @@
     "earnings": "收入",
     "print": "打印",
     "downloadPdf": "下载 PDF",
-    "commission": "佣金"
+    "commission": "佣金",
+    "vsPeriod": "对比 {range}"
   },
   "user": {
     "roles": {

@@ -37,9 +37,9 @@ export type PerformanceData = {
 };
 
 const PLATFORM_META = {
-  wechat: { label: "WeChat", labelZh: "微信", color: "text-emerald-700", bg: "bg-emerald-50", ring: "ring-emerald-200" },
-  xhs: { label: "Xiaohongshu", labelZh: "小红书", color: "text-rose-700", bg: "bg-rose-50", ring: "ring-rose-200" },
-  douyin: { label: "Douyin", labelZh: "抖音", color: "text-zinc-900", bg: "bg-zinc-100", ring: "ring-zinc-300" },
+  wechat: { localeKey: "storefront.share.wechat", color: "text-emerald-700", bg: "bg-emerald-50", ring: "ring-emerald-200" },
+  xhs:    { localeKey: "storefront.share.xiaohongshu", color: "text-rose-700", bg: "bg-rose-50", ring: "ring-rose-200" },
+  douyin: { localeKey: "storefront.share.douyin", color: "text-zinc-900", bg: "bg-zinc-100", ring: "ring-zinc-300" },
 };
 
 function fmt(n: number) {
@@ -144,7 +144,7 @@ export function PerformanceReportDialog({ open, onOpenChange, data }: { open: bo
                   return (
                     <div key={p} className={`rounded-xl border border-border/50 p-4 ${meta.bg} ring-1 ${meta.ring}`}>
                       <div className="flex items-center justify-between mb-3">
-                        <div className={`text-sm font-semibold ${meta.color}`}>{lang === "zh" ? meta.labelZh : meta.label}</div>
+                        <div className={`text-sm font-semibold ${meta.color}`}>{t(meta.localeKey)}</div>
                         <span className={`text-[10px] font-bold ${meta.color}`}>{pct.toFixed(0)}%</span>
                       </div>
                       <div className={`text-2xl font-display font-bold tabular-nums ${meta.color}`}>{fmt(v)}</div>
@@ -180,7 +180,7 @@ export function PerformanceReportDialog({ open, onOpenChange, data }: { open: bo
                           <td className="px-4 py-3">
                             <span className={`inline-flex items-center gap-1.5 text-xs font-semibold ${pmeta.color}`}>
                               <Icon className="w-3.5 h-3.5" />
-                              {lang === "zh" ? pmeta.labelZh : pmeta.label}
+                              {t(pmeta.localeKey)}
                             </span>
                           </td>
                           <td className="px-4 py-3 text-right tabular-nums text-zinc-700">{fmt(c.views)}</td>

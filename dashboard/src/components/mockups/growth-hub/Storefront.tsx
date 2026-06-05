@@ -8,13 +8,16 @@ import { Button } from "@/components/ui/button";
 import { Kpi } from "./_shared/Kpi";
 import { Copy, ExternalLink, QrCode, Download, MessageCircle, ShoppingCart } from "lucide-react";
 import { useLang } from "@/lib/i18n";
+import { formatWeekRange } from "@/lib/dates";
 
 type Product = { name: string; units: number; rev: string; thumb: string };
-type LoaderData = { products: Product[] };
+type CurrentPeriod = { startDate: string; endDate: string; prevStartDate: string; prevEndDate: string };
+type LoaderData = { products: Product[]; currentPeriod: CurrentPeriod };
 
 export function Storefront() {
-  const { products } = useLoaderData<LoaderData>();
-  const { t } = useLang();
+  const { products, currentPeriod } = useLoaderData<LoaderData>();
+  const { lang, t } = useLang();
+  const prevRangeDisplay = t("common.vsPeriod", { range: formatWeekRange(currentPeriod.prevStartDate, currentPeriod.prevEndDate, lang) });
   return (
     <AppLayout activeId="storefront">
       <div className="space-y-6 max-w-5xl mx-auto">
@@ -27,8 +30,8 @@ export function Storefront() {
             </p>
           </div>
           <div className="inline-flex items-center gap-2 bg-secondary border border-border/60 px-3 py-1.5 rounded-full text-xs font-medium text-foreground">
-            <span>{t("Apr 11 – Apr 17, 2026", "2026年4月11日 – 4月17日")}</span>
-            <span className="text-muted-foreground">{t("vs. Apr 4 – Apr 10", "对比 4月4日 – 4月10日")}</span>
+            <span>{formatWeekRange(currentPeriod.startDate, currentPeriod.endDate, lang)}</span>
+            <span className="text-muted-foreground">{prevRangeDisplay}</span>
           </div>
         </div>
 
@@ -77,10 +80,10 @@ export function Storefront() {
         </Card>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <Kpi label={t("storefront.kpi.storeVisits")} value="1,248" delta="+24%" compare={t("vs. Apr 4 – Apr 10", "对比 4月4日 – 4月10日")} />
-          <Kpi label={t("storefront.kpi.conversionRate")} value="4.2%" delta="+0.8%" compare={t("vs. Apr 4 – Apr 10", "对比 4月4日 – 4月10日")} />
-          <Kpi label={t("storefront.kpi.storeRevenue")} value="¥28,400" delta="+12%" compare={t("vs. Apr 4 – Apr 10", "对比 4月4日 – 4月10日")} />
-          <Kpi label={t("storefront.kpi.directCommissions")} value="¥5,680" delta="+12%" compare={t("vs. Apr 4 – Apr 10", "对比 4月4日 – 4月10日")} />
+          <Kpi label={t("storefront.kpi.storeVisits")} value="1,248" delta="+24%" compare={prevRangeDisplay} />
+          <Kpi label={t("storefront.kpi.conversionRate")} value="4.2%" delta="+0.8%" compare={prevRangeDisplay} />
+          <Kpi label={t("storefront.kpi.storeRevenue")} value="¥28,400" delta="+12%" compare={prevRangeDisplay} />
+          <Kpi label={t("storefront.kpi.directCommissions")} value="¥5,680" delta="+12%" compare={prevRangeDisplay} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

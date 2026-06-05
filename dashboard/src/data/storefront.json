@@ -1,4 +1,10 @@
 {
+  "currentPeriod": {
+    "startDate": "2026-04-11",
+    "endDate": "2026-04-17",
+    "prevStartDate": "2026-04-04",
+    "prevEndDate": "2026-04-10"
+  },
   "products": [
     { "name": "SomaDerm Transdermal Gel", "units": 42, "rev": "¥51,408", "thumb": "/images/somaderm.png" },
     { "name": "Rose & Cole Luxe Set", "units": 15, "rev": "¥50,760", "thumb": "/images/rose-cole-luxe.png" },

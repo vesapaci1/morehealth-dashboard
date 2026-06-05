@@ -17,7 +17,8 @@
     "earnings": "Earnings",
     "print": "Print",
     "downloadPdf": "Download PDF",
-    "commission": "commission"
+    "commission": "commission",
+    "vsPeriod": "vs. {range}"
   },
   "user": {
     "roles": {
