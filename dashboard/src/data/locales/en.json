@@ -1,0 +1,476 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "saveChanges": "Save Changes",
+    "viewAll": "View All",
+    "all": "All",
+    "or": "Or",
+    "and": "and",
+    "days": "Days",
+    "thisWeek": "This week",
+    "vsLastWeek": "vs last week",
+    "edit": "Edit",
+    "password": "Password",
+    "email": "Email",
+    "phone": "Phone",
+    "recommended": "recommended",
+    "earnings": "Earnings",
+    "print": "Print",
+    "downloadPdf": "Download PDF",
+    "commission": "commission",
+    "vsPeriod": "vs. {range}"
+  },
+  "user": {
+    "roles": {
+      "eliteInfluencer": "Elite Influencer"
+    }
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "shop": "Shop",
+    "enroll": "Enroll",
+    "storefront": "Storefront",
+    "wallet": "Wallet",
+    "subscriptions": "Subscriptions",
+    "earnings": "Earnings",
+    "orders": "Orders",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "support": "Support",
+    "walletBalance": "Wallet Balance"
+  },
+  "login": {
+    "hero": {
+      "tagline": "The Partner platform for More Health creators.",
+      "testimonial": "\"The tools here made running my wellness business seamless. I spend less time managing and more time growing my community.\"",
+      "testimonialRole": "Platinum Partner"
+    },
+    "form": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to your Partner dashboard",
+      "identifier": "Email or Phone Number",
+      "identifierPlaceholder": "name@example.com or +86...",
+      "forgot": "Forgot?",
+      "signIn": "Sign In",
+      "smsLogin": "Login with SMS Code",
+      "newUser": "New to More Health?",
+      "becomePartner": "Become a Partner"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account preferences and information.",
+    "nav": {
+      "profile": "Profile",
+      "addresses": "Addresses",
+      "security": "Security",
+      "accountRecords": "Account Records",
+      "placement": "Placement",
+      "language": "Language"
+    },
+    "profile": {
+      "title": "Profile Information",
+      "subtitle": "Update your personal details and public profile.",
+      "uploadPhoto": "Upload new photo",
+      "photoHint": "Recommended: Square JPG, PNG. Max 2MB.",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "emailAddress": "Email Address",
+      "phoneNumber": "Phone Number",
+      "dateOfBirth": "Date of Birth",
+      "preferredLanguage": "Preferred Language"
+    }
+  },
+  "dashboard": {
+    "hero": {
+      "welcome": "Welcome back, {name}",
+      "rank": "Elite Influencer",
+      "walletBalance": "Wallet Balance",
+      "weeklyEarnings": "Weekly Earnings",
+      "ordersGenerated": "Orders Generated"
+    },
+    "kpi": {
+      "totalOrders": "Total Orders",
+      "referredOrders": "Referred Orders",
+      "personalOrders": "Personal Orders",
+      "repeatCustomers": "Repeat Customers"
+    },
+    "charts": {
+      "salesTrend": "Sales Trend",
+      "sales": "Sales",
+      "earningsGrowth": "Earnings Growth",
+      "weekOf": "Week of {label}"
+    },
+    "volume": {
+      "title": "Volume",
+      "totalVolume": "Total Volume",
+      "leftLeg": "Left Leg",
+      "payLeg": "Pay Leg",
+      "rightLeg": "Right Leg",
+      "carryOver": "Carry Over",
+      "ofTotal": "of total",
+      "carryOverToNext": "Carry-over to next week"
+    },
+    "activity": {
+      "title": "Recent Activity",
+      "1": { "text": "John bought SomaDerm Transdermal Gel" },
+      "2": { "text": "Lisa subscribed monthly to Revitalize Eye Cream" },
+      "3": { "text": "Wallet payout sent" }
+    }
+  },
+  "earnings": {
+    "hero": {
+      "thisWeekNetPaid": "This Week Net Paid",
+      "vsLastWeek": "{delta} vs last week",
+      "viewInPayView": "View in PayView"
+    },
+    "rank": {
+      "gold": "Gold",
+      "silver": "Silver"
+    },
+    "statements": {
+      "title": "Weekly Statements",
+      "weekOf": "Week of {date}",
+      "gross": "Gross: ¥{amount}",
+      "netPaid": "Net Paid",
+      "fapiao": "Fapiao 发票",
+      "performanceReport": "Performance Report",
+      "detail": "Statement detail",
+      "viewPast": "View Past Statements"
+    },
+    "chart": {
+      "trajectory": "Earnings Trajectory",
+      "net": "Net"
+    },
+    "bestMonth": {
+      "title": "Best Month Ever",
+      "yoyGrowth": "+42% YoY Growth",
+      "body": "April is tracking to be your highest earning month since joining."
+    },
+    "progress": {
+      "title": "You earned more than {pct}% of active partners this month",
+      "subtitle": "Keep going — Platinum tier is just a few referrals away."
+    },
+    "content": {
+      "c01": { "title": "How SomaDerm transformed my morning ritual" },
+      "c02": { "title": "30-day Revitalize Eye Cream review" },
+      "c03": { "title": "Quick wellness routine before work" },
+      "c04": { "title": "Why I switched to TRi-M*LT" },
+      "c05": { "title": "Self-care Sunday haul" },
+      "c06": { "title": "Office wellness essentials" },
+      "c07": { "title": "Spring wellness reset routine" },
+      "c08": { "title": "Rose & Cole unboxing" },
+      "c09": { "title": "Quick before/after" },
+      "c10": { "title": "Morning wellness Q&A" },
+      "c11": { "title": "Eye cream before/after" },
+      "c12": { "title": "Day in my life" }
+    }
+  },
+  "storefront": {
+    "title": "My Personal Website",
+    "subtitle": "Your storefront link is your business card.",
+    "badge": "Live Storefront",
+    "description": "Share this link to earn commission on all purchases made through your store.",
+    "actions": {
+      "copyLink": "Copy Link",
+      "openStore": "Open Store",
+      "downloadQr": "Download QR Code"
+    },
+    "kpi": {
+      "storeVisits": "Store Visits",
+      "conversionRate": "Conversion Rate",
+      "storeRevenue": "Store Revenue",
+      "directCommissions": "Direct Commissions"
+    },
+    "products": {
+      "title": "Best Products Sold",
+      "unitsSold": "{units} units sold"
+    },
+    "share": {
+      "title": "Quick Share",
+      "subtitle": "Share directly to social platforms",
+      "wechat": "WeChat",
+      "xiaohongshu": "Xiaohongshu",
+      "douyin": "Douyin",
+      "link": "Link",
+      "qr": "QR"
+    }
+  },
+  "orders": {
+    "title": "Orders",
+    "subtitle": "Manage and track your customer and personal orders.",
+    "actions": {
+      "exportCsv": "Export CSV",
+      "newOrder": "New Order"
+    },
+    "kpi": {
+      "thisMonth": "Orders this month",
+      "commission": "Commission earned",
+      "avgValue": "Avg order value"
+    },
+    "tabs": {
+      "myOrders": "My Orders",
+      "customerOrders": "Customer Orders",
+      "subscriptionOrders": "Subscription Orders"
+    },
+    "search": {
+      "placeholder": "Search by order ID, customer name..."
+    },
+    "filter": {
+      "status": "Status"
+    },
+    "status": {
+      "delivered": "Delivered",
+      "shipped": "Shipped",
+      "paid": "Paid",
+      "pending": "Pending",
+      "pendingShipment": "Pending"
+    },
+    "table": {
+      "orderId": "Order ID",
+      "customer": "Customer",
+      "product": "Product",
+      "amount": "Amount",
+      "commission": "Commission",
+      "date": "Date",
+      "tracking": "Tracking"
+    },
+    "empty": {
+      "noMatch": "No orders match your filters.",
+      "noOrders": "No orders to show"
+    },
+    "pagination": {
+      "showing": "Showing {start} to {end} of {total} orders"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "updatedJustNow": "Updated just now",
+    "allCaughtUp": "You're all caught up",
+    "unreadCount": "{count} unread",
+    "empty": "Nothing here yet",
+    "loadOlder": "Load older",
+    "showing": "Showing {visible} of {total}",
+    "actions": {
+      "filters": "Filters",
+      "markAllRead": "Mark all read",
+      "settings": "Notification settings"
+    },
+    "filters": {
+      "unread": "Unread"
+    },
+    "categories": {
+      "orders": "Orders",
+      "payouts": "Payouts",
+      "subscriptions": "Subscriptions",
+      "milestones": "Milestones",
+      "announcements": "Announcements"
+    },
+    "prefs": {
+      "title": "Delivery preferences",
+      "subtitle": "Choose how you'd like to be reached.",
+      "newOrders": "New orders",
+      "payoutsWallet": "Payouts & wallet",
+      "subscriptionRenewals": "Subscription renewals",
+      "milestonesRankUps": "Milestones & rank ups",
+      "marketingCampaigns": "Marketing campaigns",
+      "openSettings": "Open full settings"
+    },
+    "channels": {
+      "push": "Push",
+      "email": "Email",
+      "sms": "SMS"
+    },
+    "items": {
+      "n1": {
+        "title": "New order from Lei Wang 王磊",
+        "detail": "SomaDerm Transdermal Gel · ORD-902-18X"
+      },
+      "n2": {
+        "title": "Wallet payout completed",
+        "detail": "Transferred to ICBC •••• 7814 · Reference PV-2026-04-17-9012"
+      },
+      "n3": {
+        "title": "Lisa renewed her monthly subscription",
+        "detail": "Revitalize Eye Cream · 7th cycle · Auto-renew on May 5"
+      },
+      "n4": {
+        "title": "You earned more than 72% of partners this month",
+        "detail": "Keep going — Platinum tier is 4 referrals away."
+      },
+      "n5": {
+        "title": "Order shipped to Jing Chen 陈静",
+        "detail": "Revitalize Eye Cream · SF Express SF1029384755"
+      },
+      "n6": {
+        "title": "Spring Wellness campaign assets are live",
+        "detail": "Download new Xiaohongshu and Douyin templates from the Storefront."
+      },
+      "n7": {
+        "title": "Payout schedule updated",
+        "detail": "Weekly payouts will now arrive every Monday at 09:00 CST."
+      },
+      "n8": {
+        "title": "Best month ever in progress",
+        "detail": "April is tracking +42% vs. your previous best month."
+      }
+    }
+  },
+  "header": {
+    "searchPlaceholder": "Search orders, partners, products..."
+  },
+  "performanceReport": {
+    "toolbar": {
+      "generatedBy": "Generated by PayView Analytics"
+    },
+    "header": {
+      "badge": "PayView Performance Report",
+      "reportMeta": "Matt Barros · Elite Influencer · Report {id}",
+      "totalPaid": "Total Paid",
+      "vsPriorWeek": "vs prior week"
+    },
+    "sections": {
+      "whyPaid": {
+        "title": "Why you got paid this week",
+        "subtitle": "Aggregated from your storefront, social channels, and conversions."
+      },
+      "funnel": {
+        "title": "Conversion funnel",
+        "subtitle": "How impressions became orders."
+      },
+      "channels": {
+        "title": "Channel performance",
+        "subtitle": "Where your audience came from."
+      },
+      "topContent": {
+        "title": "Top performing content",
+        "subtitle": "Posts that drove the most paid revenue this week."
+      },
+      "breakdown": {
+        "title": "Earnings breakdown",
+        "subtitle": "How the total paid was calculated."
+      }
+    },
+    "stats": {
+      "storefrontViews": "Storefront Views",
+      "uniqueVisitors": "{count} unique",
+      "conversion": "Conversion",
+      "orderCount": "{count} orders",
+      "reviews": "Reviews",
+      "reviewCount": "{count} new",
+      "socialReach": "Social Reach",
+      "platforms": "3 platforms"
+    },
+    "funnel": {
+      "socialImpressions": "Social impressions",
+      "storefrontVisits": "Storefront visits",
+      "addToCart": "Add to cart",
+      "ordersPlaced": "Orders placed",
+      "perOrder": "/ order"
+    },
+    "channels": {
+      "impressions": "impressions"
+    },
+    "table": {
+      "content": "Content",
+      "channel": "Channel",
+      "views": "Views",
+      "orders": "Orders",
+      "revenue": "Revenue"
+    },
+    "breakdown": {
+      "directSales": "Direct sales commission",
+      "referredOrders": "Referred orders commission",
+      "bonus": "Performance bonus",
+      "grossEarnings": "Gross earnings",
+      "withholdingTax": "Withholding tax (6%)",
+      "netPaid": "Net paid"
+    },
+    "disclaimer": "This report was automatically generated by PayView Analytics on behalf of More Health. Metrics are sourced from verified storefront sessions, attributed social impressions, and validated order events. Withholding and disbursement handled by PayView Tax Services (Shenzhen) Co., Ltd. Funds settled via ICBC. Report ID {reportId}."
+  },
+  "fapiao": {
+    "dialogTitle": "VAT Invoice (Fapiao)",
+    "toolbar": {
+      "subtitle": "Issued by PayView Tax Services · Withholding completed"
+    },
+    "trail": {
+      "payer": "Payer",
+      "payerSub": "PayView Tax · Withheld",
+      "bank": "Settlement Bank",
+      "bankSub": "Interbank · T+0",
+      "taxVerification": "Tax Verification",
+      "taxVerificationSub": "Online verifiable"
+    }
+  },
+  "activate": {
+    "header": {
+      "needHelp": "Need help?",
+      "contactSupport": "Contact support"
+    },
+    "badge": {
+      "orderConfirmed": "Order Confirmed"
+    },
+    "hero": {
+      "welcome": "Welcome to More Health, {name}.",
+      "subtitle": "Your enrollment is complete. Let's activate your account."
+    },
+    "steps": {
+      "purchase": "Purchase",
+      "activate": "Activate",
+      "dashboard": "Dashboard"
+    },
+    "verifiedInfo": {
+      "title": "Verified information",
+      "subtitle": "Imported from your order",
+      "fullName": "Full name",
+      "verified": "Verified",
+      "shippingAddress": "Shipping address",
+      "securityNote": "Securely transferred from your checkout. We'll never share your details."
+    },
+    "password": {
+      "title": "Create your password",
+      "subtitle": "Last step before your dashboard",
+      "minCharsPlaceholder": "Minimum 8 characters",
+      "strength": {
+        "label": "Strength",
+        "tooWeak": "Too weak",
+        "weak": "Weak",
+        "fair": "Fair",
+        "strong": "Strong",
+        "excellent": "Excellent"
+      },
+      "confirmPassword": "Confirm password",
+      "reenterPlaceholder": "Re-enter password",
+      "mismatch": "Passwords do not match",
+      "rules": {
+        "minChars": "8+ characters",
+        "uppercase": "1 uppercase",
+        "number": "1 number"
+      },
+      "createAccount": "Create my account"
+    },
+    "terms": {
+      "prefix": "By continuing you agree to the",
+      "partnerAgreement": "Partner Agreement",
+      "privacyPolicy": "Privacy Policy"
+    },
+    "enrollment": {
+      "title": "Your enrollment",
+      "productName": "Partner Starter Kit",
+      "orderLabel": "Order",
+      "sku": "SKU",
+      "placed": "Placed",
+      "sponsor": "Sponsor",
+      "totalPaid": "Total paid"
+    },
+    "security": {
+      "title": "Secure activation",
+      "subtitle": "One-time link"
+    },
+    "footer": {
+      "alreadyActivated": "Already activated?",
+      "signIn": "Sign in",
+      "resetPassword": "Reset password"
+    }
+  }
+}

@@ -7,14 +7,13 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronRight, TrendingUp, Award, Trophy, Medal, FileText, BarChart3 } from "lucide-react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, CartesianGrid } from "recharts";
 import { useLang } from "@/lib/i18n";
+import { formatDate } from "@/lib/dates";
 import { FapiaoDialog, type FapiaoData } from "./_shared/FapiaoDialog";
 import { PerformanceReportDialog, type PerformanceData } from "./_shared/PerformanceReportDialog";
 
 type WeeklyEarning = {
-  date: string;
-  dateZh: string;
-  weekRange: string;
-  weekRangeZh: string;
+  startDate: string;
+  endDate: string;
   gross: number;
   net: number;
   rank: "Gold" | "Silver" | "Bronze";
@@ -31,11 +30,12 @@ type LoaderData = {
 
 export function Earnings() {
   const { weeklyEarnings, chartData } = useLoaderData<LoaderData>();
-  const { t } = useLang();
+  const { lang, t } = useLang();
   const [fapiaoOpen, setFapiaoOpen] = useState<WeeklyEarning | null>(null);
   const [reportOpen, setReportOpen] = useState<WeeklyEarning | null>(null);
 
-  const rankLabel = (r: string) => r === "Gold" ? t("Gold", "金牌") : r === "Silver" ? t("Silver", "银牌") : r;
+  const rankLabel = (r: string) =>
+    r === "Gold" ? t("earnings.rank.gold") : r === "Silver" ? t("earnings.rank.silver") : r;
 
   return (
     <AppLayout activeId="earnings">
@@ -47,12 +47,12 @@ export function Earnings() {
 
           <div className="relative z-10 flex flex-col items-center text-center mt-4">
             <span className="text-emerald-100/70 font-medium tracking-wide mb-2 uppercase text-sm">
-              {t("This Week Net Paid", "本周净收入")}
+              {t("earnings.hero.thisWeekNetPaid")}
             </span>
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-display font-bold tabular-nums tracking-tighter mb-4 break-all">¥3,248.50</h1>
             <div className="flex items-center gap-2 bg-emerald-500/20 text-emerald-300 px-4 py-1.5 rounded-full text-sm font-semibold border border-emerald-500/30 backdrop-blur-sm">
               <TrendingUp className="w-4 h-4" />
-              {t("+18.4% vs last week", "环比上周 +18.4%")}
+              {t("earnings.hero.vsLastWeek", { delta: "+18.4%" })}
             </div>
           </div>
 
@@ -61,14 +61,14 @@ export function Earnings() {
               onClick={() => setReportOpen(weeklyEarnings[0])}
               className="bg-white text-emerald-950 hover:bg-emerald-50 rounded-xl px-8 h-12 font-semibold shadow-lg text-base group"
             >
-              {t("View in PayView", "在 PayView 查看")} <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              {t("earnings.hero.viewInPayView")} <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">
-            <h2 className="text-xl font-display font-semibold mb-4 text-foreground">{t("Weekly Statements", "每周对账单")}</h2>
+            <h2 className="text-xl font-display font-semibold mb-4 text-foreground">{t("earnings.statements.title")}</h2>
             <div className="space-y-4">
               {weeklyEarnings.map((week, idx) => (
                 <Card key={idx} className="shadow-sm border-border/50 rounded-2xl bg-card hover:shadow-md transition-shadow overflow-hidden">
@@ -80,17 +80,17 @@ export function Earnings() {
                         </div>
                         <div className="min-w-0">
                           <p className="font-semibold text-base sm:text-lg">
-                            {t(`Week of ${week.date}`, `${week.dateZh} 当周`)}
+                            {t("earnings.statements.weekOf", { date: formatDate(week.endDate, lang) })}
                           </p>
                           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mt-0.5">
                             <span className="bg-secondary px-2 py-0.5 rounded">{rankLabel(week.rank)}</span>
-                            <span>{t(`Gross: ¥${week.gross.toFixed(2)}`, `毛收入：¥${week.gross.toFixed(2)}`)}</span>
+                            <span>{t("earnings.statements.gross", { amount: week.gross.toFixed(2) })}</span>
                           </div>
                         </div>
                       </div>
                       <div className="flex items-center justify-between sm:justify-end gap-4 border-t sm:border-t-0 pt-4 sm:pt-0 border-border/50">
                         <div className="text-right">
-                          <p className="text-xs text-muted-foreground">{t("Net Paid", "净到账")}</p>
+                          <p className="text-xs text-muted-foreground">{t("earnings.statements.netPaid")}</p>
                           <p className="font-bold text-xl tabular-nums text-foreground">¥{week.net.toFixed(2)}</p>
                         </div>
                       </div>
@@ -102,19 +102,19 @@ export function Earnings() {
                         className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 h-10 rounded-xl bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 text-sm font-semibold transition-colors"
                       >
                         <FileText className="w-4 h-4" />
-                        <span>{t("Fapiao 发票", "查看发票 Fapiao")}</span>
+                        <span>{t("earnings.statements.fapiao")}</span>
                       </button>
                       <button
                         onClick={() => setReportOpen(week)}
                         className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 h-10 rounded-xl bg-primary/10 text-primary hover:bg-primary/15 border border-primary/20 text-sm font-semibold transition-colors"
                       >
                         <BarChart3 className="w-4 h-4" />
-                        <span>{t("Performance Report", "绩效报告")}</span>
+                        <span>{t("earnings.statements.performanceReport")}</span>
                       </button>
                       <button
                         className="ml-auto inline-flex items-center justify-center gap-1.5 px-3 h-10 rounded-xl text-muted-foreground hover:text-foreground hover:bg-secondary text-xs font-medium transition-colors"
                       >
-                        {t("Statement detail", "对账详情")} <ChevronRight className="w-4 h-4" />
+                        {t("earnings.statements.detail")} <ChevronRight className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
@@ -122,14 +122,14 @@ export function Earnings() {
               ))}
             </div>
             <Button variant="outline" className="w-full h-12 rounded-xl border-border/60 bg-card hover:bg-secondary">
-              {t("View Past Statements", "查看历史对账单")}
+              {t("earnings.statements.viewPast")}
             </Button>
           </div>
 
           <div className="space-y-6">
             <Card className="shadow-sm border-border/50 rounded-2xl bg-card">
               <CardHeader className="pb-2">
-                <CardTitle className="text-base font-semibold">{t("Earnings Trajectory", "收入走势")}</CardTitle>
+                <CardTitle className="text-base font-semibold">{t("earnings.chart.trajectory")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="h-[180px] w-full mt-2">
@@ -144,7 +144,7 @@ export function Earnings() {
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
                       <Tooltip
                         contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                        formatter={(val) => [`¥${val}`, t("Net", "净额")]}
+                        formatter={(val) => [`¥${val}`, t("earnings.chart.net")]}
                         labelStyle={{ color: '#6b7280' }}
                       />
                       <Area type="monotone" dataKey="value" stroke="#10b981" strokeWidth={3} fill="url(#colorNet)" />
@@ -160,14 +160,14 @@ export function Earnings() {
                   <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-600">
                     <Trophy className="w-5 h-5" />
                   </div>
-                  <h3 className="font-semibold text-lg text-amber-900 dark:text-amber-500">{t("Best Month Ever", "史上最佳月份")}</h3>
+                  <h3 className="font-semibold text-lg text-amber-900 dark:text-amber-500">{t("earnings.bestMonth.title")}</h3>
                 </div>
                 <div className="space-y-1">
                   <p className="text-3xl font-display font-bold tabular-nums text-foreground">¥14,280.00</p>
-                  <p className="text-sm font-medium text-amber-600/80">{t("+42% YoY Growth", "同比增长 +42%")}</p>
+                  <p className="text-sm font-medium text-amber-600/80">{t("earnings.bestMonth.yoyGrowth")}</p>
                 </div>
                 <p className="text-sm text-muted-foreground mt-4">
-                  {t("April is tracking to be your highest earning month since joining.", "4月有望成为你入驻以来收入最高的月份。")}
+                  {t("earnings.bestMonth.body")}
                 </p>
               </CardContent>
             </Card>
@@ -177,10 +177,10 @@ export function Earnings() {
         <div className="bg-secondary border border-border/60 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <div className="flex flex-col gap-1">
             <h3 className="font-semibold text-lg text-foreground">
-              {t("You earned more than 72% of active partners this month", "你的收入超过本月 72% 的活跃伙伴")}
+              {t("earnings.progress.title", { pct: "72" })}
             </h3>
             <p className="text-muted-foreground text-sm">
-              {t("Keep going — Platinum tier is just a few referrals away.", "再接再厉 — 距离白金等级仅差几位推荐。")}
+              {t("earnings.progress.subtitle")}
             </p>
           </div>
           <div className="w-full sm:w-64 h-3 bg-card rounded-full overflow-hidden border border-border/50">

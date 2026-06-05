@@ -3,17 +3,19 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Download, Printer, ShieldCheck, Building2, Landmark } from "lucide-react";
 import { useLang } from "@/lib/i18n";
+import { formatWeekRange } from "@/lib/dates";
 
 export type FapiaoData = {
   code: string;
   number: string;
-  date: string;
+  issuedDate: string;
   checkCode: string;
   taxAmount: number;
   taxableAmount: number;
   taxRate: number;
   net: number;
-  weekLabel: string;
+  weekStartDate: string;
+  weekEndDate: string;
 };
 
 const BUYER = {
@@ -68,22 +70,22 @@ function toCnAmount(amount: number): string {
 }
 
 export function FapiaoDialog({ open, onOpenChange, data }: { open: boolean; onOpenChange: (o: boolean) => void; data: FapiaoData }) {
-  const { lang } = useLang();
+  const { t } = useLang();
   const cnAmount = toCnAmount(data.net);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl p-0 overflow-hidden bg-white" onOpenAutoFocus={(e) => e.preventDefault()}>
-        <DialogTitle className="sr-only">{lang === "zh" ? "增值税普通发票" : "VAT Invoice (Fapiao)"}</DialogTitle>
+        <DialogTitle className="sr-only">{t("fapiao.dialogTitle")}</DialogTitle>
 
         <div className="bg-secondary/40 border-b border-border/60 px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <ShieldCheck className="w-3.5 h-3.5 text-primary" />
-            <span>{lang === "zh" ? "由派维税务代开 · 已完成代扣代缴" : "Issued by PayView Tax Services · Withholding completed"}</span>
+            <span>{t("fapiao.toolbar.subtitle")}</span>
           </div>
           <div className="flex gap-2">
-            <Button size="sm" variant="ghost" className="h-8 gap-1.5 text-xs"><Printer className="w-3.5 h-3.5" />{lang === "zh" ? "打印" : "Print"}</Button>
-            <Button size="sm" className="h-8 gap-1.5 text-xs"><Download className="w-3.5 h-3.5" />{lang === "zh" ? "下载 PDF" : "Download PDF"}</Button>
+            <Button size="sm" variant="ghost" className="h-8 gap-1.5 text-xs"><Printer className="w-3.5 h-3.5" />{t("common.print")}</Button>
+            <Button size="sm" className="h-8 gap-1.5 text-xs"><Download className="w-3.5 h-3.5" />{t("common.downloadPdf")}</Button>
           </div>
         </div>
 
@@ -93,7 +95,7 @@ export function FapiaoDialog({ open, onOpenChange, data }: { open: boolean; onOp
             <div className="absolute top-6 right-6 text-[11px] text-rose-700 leading-tight tabular-nums">
               <div>发票代码 <span className="font-mono ml-1">{data.code}</span></div>
               <div>发票号码 <span className="font-mono ml-1">{data.number}</span></div>
-              <div>开票日期 <span className="ml-1">{data.date}</span></div>
+              <div>开票日期 <span className="ml-1">{data.issuedDate}</span></div>
               <div>校 验 码 <span className="font-mono ml-1">{data.checkCode}</span></div>
             </div>
 
@@ -133,7 +135,7 @@ export function FapiaoDialog({ open, onOpenChange, data }: { open: boolean; onOp
                 <tr>
                   <td className="border border-zinc-700 p-2 align-top">
                     <div>*经纪代理服务* 推广服务佣金</div>
-                    <div className="text-[10px] text-zinc-500 mt-0.5">More Health 合作伙伴佣金 · {data.weekLabel}</div>
+                    <div className="text-[10px] text-zinc-500 mt-0.5">More Health 合作伙伴佣金 · {formatWeekRange(data.weekStartDate, data.weekEndDate, "zh")}</div>
                   </td>
                   <td className="border border-zinc-700 p-2 text-right tabular-nums">¥{data.taxableAmount.toFixed(2)}</td>
                   <td className="border border-zinc-700 p-2 text-center tabular-nums">{(data.taxRate * 100).toFixed(0)}%</td>
@@ -201,9 +203,9 @@ export function FapiaoDialog({ open, onOpenChange, data }: { open: boolean; onOp
           </div>
 
           <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-3">
-            <Trail icon={<Building2 className="w-4 h-4" />} label={lang === "zh" ? "代付方" : "Payer"} title="PayView" sub={lang === "zh" ? "派维税务 · 已扣税" : "PayView Tax · Withheld"} />
-            <Trail icon={<Landmark className="w-4 h-4" />} label={lang === "zh" ? "清算银行" : "Settlement Bank"} title="ICBC 工商银行" sub={lang === "zh" ? "跨行划付 · T+0" : "Interbank · T+0"} />
-            <Trail icon={<ShieldCheck className="w-4 h-4" />} label={lang === "zh" ? "税务校验" : "Tax Verification"} title="国家税务总局" sub={lang === "zh" ? "可联网核验" : "Online verifiable"} />
+            <Trail icon={<Building2 className="w-4 h-4" />} label={t("fapiao.trail.payer")} title="PayView" sub={t("fapiao.trail.payerSub")} />
+            <Trail icon={<Landmark className="w-4 h-4" />} label={t("fapiao.trail.bank")} title="ICBC 工商银行" sub={t("fapiao.trail.bankSub")} />
+            <Trail icon={<ShieldCheck className="w-4 h-4" />} label={t("fapiao.trail.taxVerification")} title="国家税务总局" sub={t("fapiao.trail.taxVerificationSub")} />
           </div>
         </div>
       </DialogContent>

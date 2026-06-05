@@ -76,11 +76,11 @@ export function ActivateAccount() {
   const ruleNum = /[0-9]/.test(pw);
 
   const STRENGTH_LABEL = [
-    t("Too weak", "太弱"),
-    t("Weak", "较弱"),
-    t("Fair", "中等"),
-    t("Strong", "较强"),
-    t("Excellent", "极强"),
+    t("activate.password.strength.tooWeak"),
+    t("activate.password.strength.weak"),
+    t("activate.password.strength.fair"),
+    t("activate.password.strength.strong"),
+    t("activate.password.strength.excellent"),
   ];
 
   return (
@@ -90,9 +90,9 @@ export function ActivateAccount() {
           <BrandLogo variant="dark" className="h-7" />
           <div className="flex items-center gap-5 text-sm">
             <span className="hidden md:inline text-muted-foreground">
-              {t("Need help?", "需要帮助？")}{" "}
+              {t("activate.header.needHelp")}{" "}
               <a href="#" className="text-foreground font-medium hover:underline">
-                {t("Contact support", "联系客服")}
+                {t("activate.header.contactSupport")}
               </a>
             </span>
             <button
@@ -114,25 +114,25 @@ export function ActivateAccount() {
         <div className="max-w-6xl mx-auto px-6 py-12 relative">
           <div className="flex items-center gap-2 mb-5">
             <Badge className="bg-primary/10 text-primary border-0 rounded-full font-semibold tracking-wide px-3 py-1 text-[11px] uppercase">
-              <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" /> {t("Order Confirmed", "订单已确认")}
+              <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" /> {t("activate.badge.orderConfirmed")}
             </Badge>
             <Badge variant="outline" className="rounded-full border-border/60 text-muted-foreground font-medium text-[11px]">
               {ORDER.orderId}
             </Badge>
           </div>
           <h1 className="text-4xl md:text-5xl font-display font-semibold tracking-tight text-foreground leading-[1.05]">
-            {t(`Welcome to More Health, ${ORDER.firstName}.`, `欢迎加入 More Health，${ORDER.firstName}。`)}
+            {t("activate.hero.welcome", { name: ORDER.firstName })}
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mt-3 font-medium">
-            {t("Your enrollment is complete. Let's activate your account.", "你的注册已完成，让我们激活你的账户。")}
+            {t("activate.hero.subtitle")}
           </p>
 
           <div className="mt-8 flex items-center gap-3 text-sm">
-            <Step n={1} label={t("Purchase", "购买")} done />
+            <Step n={1} label={t("activate.steps.purchase")} done />
             <Connector done />
-            <Step n={2} label={t("Activate", "激活")} active />
+            <Step n={2} label={t("activate.steps.activate")} active />
             <Connector />
-            <Step n={3} label={t("Dashboard", "进入后台")} />
+            <Step n={3} label={t("activate.steps.dashboard")} />
           </div>
         </div>
       </section>
@@ -143,36 +143,34 @@ export function ActivateAccount() {
             <Card className="rounded-2xl border-border/50 bg-card shadow-sm overflow-hidden">
               <div className="px-6 py-5 flex items-center justify-between border-b border-border/50">
                 <div>
-                  <h2 className="font-display font-semibold text-base text-foreground">{t("Verified information", "已验证信息")}</h2>
-                  <p className="text-xs text-muted-foreground mt-0.5">{t("Imported from your order", "已从你的订单同步")}</p>
+                  <h2 className="font-display font-semibold text-base text-foreground">{t("activate.verifiedInfo.title")}</h2>
+                  <p className="text-xs text-muted-foreground mt-0.5">{t("activate.verifiedInfo.subtitle")}</p>
                 </div>
-                <button className="text-xs font-medium text-primary hover:underline">{t("Edit", "编辑")}</button>
+                <button className="text-xs font-medium text-primary hover:underline">{t("common.edit")}</button>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border/50">
-                <Field icon={<User className="w-4 h-4" />} label={t("Full name", "姓名")} value={`${ORDER.firstName} ${ORDER.lastName}`} />
-                <Field icon={<Mail className="w-4 h-4" />} label={t("Email", "邮箱")} value={ORDER.email} verifiedLabel={t("Verified", "已验证")} verified />
-                <Field icon={<Phone className="w-4 h-4" />} label={t("Phone", "手机号")} value={ORDER.phone} verifiedLabel={t("Verified", "已验证")} verified />
-                <Field icon={<MapPin className="w-4 h-4" />} label={t("Shipping address", "收货地址")} value={`${ORDER.address1}, ${ORDER.city} ${ORDER.postal}`} />
+                <Field icon={<User className="w-4 h-4" />} label={t("activate.verifiedInfo.fullName")} value={`${ORDER.firstName} ${ORDER.lastName}`} />
+                <Field icon={<Mail className="w-4 h-4" />} label={t("common.email")} value={ORDER.email} verifiedLabel={t("activate.verifiedInfo.verified")} verified />
+                <Field icon={<Phone className="w-4 h-4" />} label={t("common.phone")} value={ORDER.phone} verifiedLabel={t("activate.verifiedInfo.verified")} verified />
+                <Field icon={<MapPin className="w-4 h-4" />} label={t("activate.verifiedInfo.shippingAddress")} value={`${ORDER.address1}, ${ORDER.city} ${ORDER.postal}`} />
               </div>
 
               <div className="px-6 py-4 bg-secondary/30 border-t border-border/50 flex items-center gap-3 text-xs">
                 <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
-                <span className="text-muted-foreground">
-                  {t("Securely transferred from your checkout. We'll never share your details.", "所有信息已从结账过程中加密同步，绝不外泄。")}
-                </span>
+                <span className="text-muted-foreground">{t("activate.verifiedInfo.securityNote")}</span>
               </div>
             </Card>
 
             <Card className="rounded-2xl border-border/50 bg-card shadow-sm">
               <div className="px-6 py-5 border-b border-border/50">
-                <h2 className="font-display font-semibold text-base text-foreground">{t("Create your password", "设置登录密码")}</h2>
-                <p className="text-xs text-muted-foreground mt-0.5">{t("Last step before your dashboard", "进入后台前的最后一步")}</p>
+                <h2 className="font-display font-semibold text-base text-foreground">{t("activate.password.title")}</h2>
+                <p className="text-xs text-muted-foreground mt-0.5">{t("activate.password.subtitle")}</p>
               </div>
 
               <div className="p-6 space-y-5">
                 <div className="space-y-2">
-                  <Label htmlFor="pw" className="text-sm font-medium">{t("Password", "密码")}</Label>
+                  <Label htmlFor="pw" className="text-sm font-medium">{t("common.password")}</Label>
                   <div className="relative">
                     <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
                     <Input
@@ -180,7 +178,7 @@ export function ActivateAccount() {
                       type={show ? "text" : "password"}
                       value={pw}
                       onChange={(e) => setPw(e.target.value)}
-                      placeholder={t("Minimum 8 characters", "至少 8 个字符")}
+                      placeholder={t("activate.password.minCharsPlaceholder")}
                       className="h-12 pl-10 pr-11 bg-card border-border/60 focus:border-primary shadow-sm rounded-xl"
                     />
                     <button
@@ -204,7 +202,7 @@ export function ActivateAccount() {
                       ))}
                     </div>
                     <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-muted-foreground">{t("Strength", "强度")}</span>
+                      <span className="text-muted-foreground">{t("activate.password.strength.label")}</span>
                       <span className="font-semibold text-foreground">
                         {pw.length === 0 ? "—" : STRENGTH_LABEL[score]}
                       </span>
@@ -213,7 +211,7 @@ export function ActivateAccount() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="pw2" className="text-sm font-medium">{t("Confirm password", "确认密码")}</Label>
+                  <Label htmlFor="pw2" className="text-sm font-medium">{t("activate.password.confirmPassword")}</Label>
                   <div className="relative">
                     <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
                     <Input
@@ -221,7 +219,7 @@ export function ActivateAccount() {
                       type={show ? "text" : "password"}
                       value={pw2}
                       onChange={(e) => setPw2(e.target.value)}
-                      placeholder={t("Re-enter password", "再次输入密码")}
+                      placeholder={t("activate.password.reenterPlaceholder")}
                       className={`h-12 pl-10 pr-11 bg-card shadow-sm rounded-xl ${
                         pw2.length === 0
                           ? "border-border/60 focus:border-primary"
@@ -235,14 +233,14 @@ export function ActivateAccount() {
                     )}
                   </div>
                   {pw2.length > 0 && !matches && (
-                    <p className="text-[11px] text-rose-500">{t("Passwords do not match", "两次输入不一致")}</p>
+                    <p className="text-[11px] text-rose-500">{t("activate.password.mismatch")}</p>
                   )}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
-                  <Rule ok={ruleLen} label={t("8+ characters", "8 个以上字符")} />
-                  <Rule ok={ruleUp} label={t("1 uppercase", "1 个大写字母")} recommended recommendedLabel={t("recommended", "推荐")} />
-                  <Rule ok={ruleNum} label={t("1 number", "1 个数字")} recommended recommendedLabel={t("recommended", "推荐")} />
+                  <Rule ok={ruleLen} label={t("activate.password.rules.minChars")} />
+                  <Rule ok={ruleUp} label={t("activate.password.rules.uppercase")} recommended recommendedLabel={t("common.recommended")} />
+                  <Rule ok={ruleNum} label={t("activate.password.rules.number")} recommended recommendedLabel={t("common.recommended")} />
                 </div>
 
                 <Button
@@ -251,14 +249,14 @@ export function ActivateAccount() {
                   className="w-full h-12 text-base font-semibold rounded-xl mt-2 shadow-sm flex items-center justify-center gap-2"
                   disabled={!matches || score < 2}
                 >
-                  {t("Create my account", "创建我的账户")} <ArrowRight className="w-4 h-4" />
+                  {t("activate.password.createAccount")} <ArrowRight className="w-4 h-4" />
                 </Button>
 
                 <p className="text-[11px] text-muted-foreground text-center pt-1">
-                  {t("By continuing you agree to the", "继续即表示你同意")}{" "}
-                  <a href="#" className="text-foreground hover:underline">{t("Partner Agreement", "合作伙伴协议")}</a>{" "}
-                  {t("and", "及")}{" "}
-                  <a href="#" className="text-foreground hover:underline">{t("Privacy Policy", "隐私政策")}</a>
+                  {t("activate.terms.prefix")}{" "}
+                  <a href="#" className="text-foreground hover:underline">{t("activate.terms.partnerAgreement")}</a>{" "}
+                  {t("common.and")}{" "}
+                  <a href="#" className="text-foreground hover:underline">{t("activate.terms.privacyPolicy")}</a>
                 </p>
               </div>
             </Card>
@@ -268,7 +266,7 @@ export function ActivateAccount() {
             <Card className="rounded-2xl border-border/50 bg-card shadow-sm overflow-hidden">
               <div className="px-5 py-4 border-b border-border/50 flex items-center gap-2">
                 <Package className="w-4 h-4 text-muted-foreground" />
-                <h3 className="font-display font-semibold text-sm text-foreground">{t("Your enrollment", "你的注册")}</h3>
+                <h3 className="font-display font-semibold text-sm text-foreground">{t("activate.enrollment.title")}</h3>
               </div>
               <div className="p-5 space-y-4">
                 <div className="flex items-center gap-3">
@@ -276,17 +274,17 @@ export function ActivateAccount() {
                     <Sparkles className="w-5 h-5 text-primary" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-foreground">{t("Partner Starter Kit", "合作伙伴启动套装")}</p>
+                    <p className="text-sm font-semibold text-foreground">{t("activate.enrollment.productName")}</p>
                   </div>
                 </div>
                 <div className="space-y-2.5 text-xs">
-                  <Row label={t("Order", "订单")} value={ORDER.orderId} mono />
-                  <Row label={t("SKU", "SKU")} value={ORDER.sku} mono />
-                  <Row label={t("Placed", "下单时间")} value={ORDER.timestamp} />
-                  <Row label={t("Sponsor", "推荐人")} value={ORDER.sponsor} />
+                  <Row label={t("activate.enrollment.orderLabel")} value={ORDER.orderId} mono />
+                  <Row label={t("activate.enrollment.sku")} value={ORDER.sku} mono />
+                  <Row label={t("activate.enrollment.placed")} value={ORDER.timestamp} />
+                  <Row label={t("activate.enrollment.sponsor")} value={ORDER.sponsor} />
                 </div>
                 <div className="pt-3 border-t border-border/50 flex items-center justify-between">
-                  <span className="text-xs text-muted-foreground">{t("Total paid", "已支付")}</span>
+                  <span className="text-xs text-muted-foreground">{t("activate.enrollment.totalPaid")}</span>
                   <span className="text-lg font-display font-bold tabular-nums">¥1,888.00</span>
                 </div>
               </div>
@@ -298,8 +296,8 @@ export function ActivateAccount() {
                   <ShieldCheck className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-sm font-display font-semibold text-foreground">{t("Secure activation", "安全激活")}</p>
-                  <p className="text-[11px] text-muted-foreground">{t("One-time link", "一次性链接")}</p>
+                  <p className="text-sm font-display font-semibold text-foreground">{t("activate.security.title")}</p>
+                  <p className="text-[11px] text-muted-foreground">{t("activate.security.subtitle")}</p>
                 </div>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
@@ -312,10 +310,10 @@ export function ActivateAccount() {
             </Card>
 
             <div className="text-center text-[11px] text-muted-foreground">
-              {t("Already activated?", "已激活账户？")}{" "}
-              <a href="#" className="text-foreground font-medium hover:underline">{t("Sign in", "登录")}</a>
+              {t("activate.footer.alreadyActivated")}{" "}
+              <a href="#" className="text-foreground font-medium hover:underline">{t("activate.footer.signIn")}</a>
               {" · "}
-              <a href="#" className="text-foreground font-medium hover:underline">{t("Reset password", "重置密码")}</a>
+              <a href="#" className="text-foreground font-medium hover:underline">{t("activate.footer.resetPassword")}</a>
             </div>
           </div>
         </div>
@@ -361,54 +359,38 @@ function Field({
   verifiedLabel?: string;
 }) {
   return (
-    <div className="p-5">
-      <div className="flex items-center gap-2 text-muted-foreground mb-1.5">
-        <span className="text-muted-foreground">{icon}</span>
-        <span className="text-[11px] uppercase tracking-wider font-semibold">{label}</span>
-      </div>
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-sm font-medium text-foreground truncate">{value}</p>
-        {verified && (
-          <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full shrink-0">
-            <CheckCircle2 className="w-3 h-3" /> {verifiedLabel}
-          </span>
-        )}
+    <div className="px-5 py-3.5 flex items-start gap-3">
+      <div className="mt-0.5 text-muted-foreground shrink-0">{icon}</div>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">{label}</span>
+          {verified && verifiedLabel && (
+            <span className="text-[10px] font-semibold text-primary bg-primary/10 px-1.5 py-0.5 rounded">{verifiedLabel}</span>
+          )}
+        </div>
+        <p className="text-sm font-medium text-foreground mt-0.5 truncate">{value}</p>
       </div>
     </div>
   );
 }
 
-function Rule({
-  ok,
-  label,
-  recommended,
-  recommendedLabel,
-}: {
-  ok: boolean;
-  label: string;
-  recommended?: boolean;
-  recommendedLabel?: string;
-}) {
+function Rule({ ok, label, recommended, recommendedLabel }: { ok: boolean; label: string; recommended?: boolean; recommendedLabel?: string }) {
   return (
-    <div
-      className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-[11px] ${
-        ok
-          ? "border-primary/30 bg-primary/5 text-foreground"
-          : "border-border/60 bg-secondary/30 text-muted-foreground"
-      }`}
-    >
-      <CheckCircle2 className={`w-3.5 h-3.5 ${ok ? "text-primary" : "text-muted-foreground/50"}`} />
-      <span className="font-medium">{label}</span>
-      {recommended && !ok && <span className="ml-auto text-[10px] text-muted-foreground/70">{recommendedLabel}</span>}
+    <div className={`flex items-center gap-1.5 text-[11px] ${ok ? "text-primary" : "text-muted-foreground"}`}>
+      <div className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center shrink-0 ${ok ? "bg-primary border-primary" : "border-border"}`}>
+        {ok && <CheckCircle2 className="w-2.5 h-2.5 text-primary-foreground" />}
+      </div>
+      {label}
+      {recommended && !ok && recommendedLabel && <span className="text-[10px] opacity-60">({recommendedLabel})</span>}
     </div>
   );
 }
 
 function Row({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
   return (
-    <div className="flex items-center justify-between gap-3">
+    <div className="flex justify-between gap-4">
       <span className="text-muted-foreground">{label}</span>
-      <span className={`text-foreground font-medium ${mono ? "font-mono text-[11px]" : ""}`}>{value}</span>
+      <span className={`font-medium text-foreground truncate ${mono ? "font-mono" : ""}`}>{value}</span>
     </div>
   );
 }

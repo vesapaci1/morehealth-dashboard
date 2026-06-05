@@ -1,20 +1,15 @@
 {
   "user": {
     "name": "Matt Baros",
-    "roleEn": "Elite Influencer",
-    "roleZh": "精英影响者",
+    "role": "eliteInfluencer",
     "avatar": "/mock/avatar.png",
     "initials": "MB"
   },
   "footer": {
     "support": {
-      "labelEn": "Support",
-      "labelZh": "客服支持",
       "path": "/support"
     },
     "wallet": {
-      "labelEn": "Wallet Balance",
-      "labelZh": "钱包余额",
       "amount": "¥12,480.00",
       "path": "/earnings"
     }

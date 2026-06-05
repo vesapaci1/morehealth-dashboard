@@ -20,18 +20,14 @@ import {
   Smartphone,
 } from "lucide-react";
 import { useLang } from "@/lib/i18n";
+import { formatTimestamp } from "@/lib/dates";
 
 type Category = "order" | "payout" | "subscription" | "milestone" | "announcement";
 
 type Notification = {
   id: string;
   category: Category;
-  titleEn: string;
-  titleZh: string;
-  detailEn: string;
-  detailZh: string;
-  time: string;
-  timeZh: string;
+  timestamp: string;
   unread: boolean;
   amount?: string;
   actor?: { initials: string; tone: string };
@@ -49,30 +45,30 @@ export function Notifications() {
     Category,
     { label: string; Icon: React.ComponentType<{ className?: string }>; tint: string; ring: string }
   > = useMemo(() => ({
-    order: { label: t("Orders", "订单"), Icon: ShoppingBag, tint: "bg-emerald-50 text-emerald-700", ring: "ring-emerald-200" },
-    payout: { label: t("Payouts", "打款"), Icon: Wallet, tint: "bg-amber-50 text-amber-700", ring: "ring-amber-200" },
-    subscription: { label: t("Subscriptions", "订阅"), Icon: Repeat, tint: "bg-violet-50 text-violet-700", ring: "ring-violet-200" },
-    milestone: { label: t("Milestones", "里程碑"), Icon: Trophy, tint: "bg-rose-50 text-rose-700", ring: "ring-rose-200" },
-    announcement: { label: t("Announcements", "公告"), Icon: Megaphone, tint: "bg-sky-50 text-sky-700", ring: "ring-sky-200" },
+    order:        { label: t("notifications.categories.orders"),        Icon: ShoppingBag, tint: "bg-emerald-50 text-emerald-700", ring: "ring-emerald-200" },
+    payout:       { label: t("notifications.categories.payouts"),       Icon: Wallet,      tint: "bg-amber-50 text-amber-700",   ring: "ring-amber-200" },
+    subscription: { label: t("notifications.categories.subscriptions"), Icon: Repeat,      tint: "bg-violet-50 text-violet-700", ring: "ring-violet-200" },
+    milestone:    { label: t("notifications.categories.milestones"),    Icon: Trophy,      tint: "bg-rose-50 text-rose-700",     ring: "ring-rose-200" },
+    announcement: { label: t("notifications.categories.announcements"), Icon: Megaphone,   tint: "bg-sky-50 text-sky-700",       ring: "ring-sky-200" },
   }), [t]);
 
   const FILTERS: { id: "all" | "unread" | Category; label: string }[] = [
-    { id: "all", label: t("All", "全部") },
-    { id: "unread", label: t("Unread", "未读") },
-    { id: "order", label: t("Orders", "订单") },
-    { id: "payout", label: t("Payouts", "打款") },
-    { id: "subscription", label: t("Subscriptions", "订阅") },
-    { id: "milestone", label: t("Milestones", "里程碑") },
-    { id: "announcement", label: t("Announcements", "公告") },
+    { id: "all",          label: t("common.all") },
+    { id: "unread",       label: t("notifications.filters.unread") },
+    { id: "order",        label: t("notifications.categories.orders") },
+    { id: "payout",       label: t("notifications.categories.payouts") },
+    { id: "subscription", label: t("notifications.categories.subscriptions") },
+    { id: "milestone",    label: t("notifications.categories.milestones") },
+    { id: "announcement", label: t("notifications.categories.announcements") },
   ];
 
   type Channel = "push" | "email" | "sms";
   const PREFS: { id: string; label: string; channels: readonly Channel[] }[] = [
-    { id: "orders", label: t("New orders", "新订单"), channels: ["push", "email"] },
-    { id: "payouts", label: t("Payouts & wallet", "钱包与打款"), channels: ["push", "email", "sms"] },
-    { id: "subs", label: t("Subscription renewals", "订阅续费"), channels: ["push", "email"] },
-    { id: "milestones", label: t("Milestones & rank ups", "里程碑与升级"), channels: ["push"] },
-    { id: "marketing", label: t("Marketing campaigns", "营销活动"), channels: ["email"] },
+    { id: "orders",     label: t("notifications.prefs.newOrders"),            channels: ["push", "email"] },
+    { id: "payouts",    label: t("notifications.prefs.payoutsWallet"),        channels: ["push", "email", "sms"] },
+    { id: "subs",       label: t("notifications.prefs.subscriptionRenewals"), channels: ["push", "email"] },
+    { id: "milestones", label: t("notifications.prefs.milestonesRankUps"),    channels: ["push"] },
+    { id: "marketing",  label: t("notifications.prefs.marketingCampaigns"),   channels: ["email"] },
   ];
 
   const unreadCount = items.filter((n) => n.unread).length;
@@ -95,35 +91,35 @@ export function Notifications() {
               <Bell className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-2xl font-display font-bold tracking-tight">{t("Notifications", "通知中心")}</h1>
+              <h1 className="text-2xl font-display font-bold tracking-tight">{t("notifications.title")}</h1>
               <p className="text-muted-foreground text-sm mt-0.5">
                 {unreadCount > 0 ? (
                   <>
                     <span className="text-foreground font-medium">
-                      {t(`${unreadCount} unread`, `${unreadCount} 条未读`)}
+                      {t("notifications.unreadCount", { count: unreadCount })}
                     </span>
                     <span className="mx-1.5">·</span>
-                    {t("Updated just now", "刚刚更新")}
+                    {t("notifications.updatedJustNow")}
                   </>
                 ) : (
-                  t("You're all caught up", "全部已读")
+                  t("notifications.allCaughtUp")
                 )}
               </p>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Button variant="outline" className="rounded-xl h-10 gap-2 bg-card border-border/60">
-              <Filter className="w-4 h-4" /> {t("Filters", "筛选")}
+              <Filter className="w-4 h-4" /> {t("notifications.actions.filters")}
             </Button>
             <Button
               variant="outline"
               className="rounded-xl h-10 gap-2 bg-card border-border/60"
               onClick={markAllRead}
             >
-              <CheckCheck className="w-4 h-4" /> {t("Mark all read", "全部标为已读")}
+              <CheckCheck className="w-4 h-4" /> {t("notifications.actions.markAllRead")}
             </Button>
             <Button className="rounded-xl h-10 gap-2 shadow-sm">
-              <SettingsIcon className="w-4 h-4" /> {t("Notification settings", "通知设置")}
+              <SettingsIcon className="w-4 h-4" /> {t("notifications.actions.settings")}
             </Button>
           </div>
         </div>
@@ -156,7 +152,7 @@ export function Notifications() {
               <div className="divide-y divide-border/50">
                 {visible.length === 0 && (
                   <div className="p-10 text-center text-muted-foreground text-sm">
-                    {t("Nothing here yet", "暂无通知")}
+                    {t("notifications.empty")}
                   </div>
                 )}
                 {visible.map((n) => {
@@ -190,10 +186,10 @@ export function Notifications() {
                                 n.unread ? "font-semibold text-foreground" : "font-medium text-foreground/90"
                               }`}
                             >
-                              {lang === "zh" ? n.titleZh : n.titleEn}
+                              {t(`notifications.items.${n.id}.title`)}
                             </p>
                             <p className="text-xs text-muted-foreground mt-0.5 truncate">
-                              {lang === "zh" ? n.detailZh : n.detailEn}
+                              {t(`notifications.items.${n.id}.detail`)}
                             </p>
                           </div>
                           {n.amount && (
@@ -214,7 +210,7 @@ export function Notifications() {
                             {meta.label}
                           </Badge>
                           <span className="text-[11px] text-muted-foreground">
-                            {lang === "zh" ? n.timeZh : n.time}
+                            {formatTimestamp(n.timestamp, lang)}
                           </span>
                         </div>
                       </div>
@@ -224,10 +220,10 @@ export function Notifications() {
               </div>
               <div className="p-4 border-t border-border/50 flex items-center justify-between bg-secondary/20">
                 <span className="text-xs text-muted-foreground">
-                  {t(`Showing ${visible.length} of ${items.length}`, `显示 ${items.length} 条中的 ${visible.length} 条`)}
+                  {t("notifications.showing", { visible: visible.length, total: items.length })}
                 </span>
                 <Button variant="ghost" size="sm" className="text-primary text-xs h-8 hover:bg-primary/10">
-                  {t("Load older", "加载更早")}
+                  {t("notifications.loadOlder")}
                 </Button>
               </div>
             </Card>
@@ -236,8 +232,8 @@ export function Notifications() {
           <div className="space-y-6">
             <Card className="shadow-sm border-border/50 rounded-2xl bg-card p-6 space-y-5">
               <div>
-                <h3 className="font-display font-semibold text-base text-foreground">{t("Delivery preferences", "通知接收方式")}</h3>
-                <p className="text-xs text-muted-foreground mt-0.5">{t("Choose how you'd like to be reached.", "选择你希望接收通知的渠道。")}</p>
+                <h3 className="font-display font-semibold text-base text-foreground">{t("notifications.prefs.title")}</h3>
+                <p className="text-xs text-muted-foreground mt-0.5">{t("notifications.prefs.subtitle")}</p>
               </div>
               <div className="space-y-4">
                 {PREFS.map((p) => (
@@ -247,17 +243,17 @@ export function Notifications() {
                       <div className="flex items-center gap-3 mt-1.5 text-[11px] text-muted-foreground">
                         {p.channels.includes("push") && (
                           <span className="inline-flex items-center gap-1">
-                            <Bell className="w-3 h-3" /> {t("Push", "推送")}
+                            <Bell className="w-3 h-3" /> {t("notifications.channels.push")}
                           </span>
                         )}
                         {p.channels.includes("email") && (
                           <span className="inline-flex items-center gap-1">
-                            <Mail className="w-3 h-3" /> {t("Email", "邮件")}
+                            <Mail className="w-3 h-3" /> {t("notifications.channels.email")}
                           </span>
                         )}
                         {p.channels.includes("sms") && (
                           <span className="inline-flex items-center gap-1">
-                            <Smartphone className="w-3 h-3" /> {t("SMS", "短信")}
+                            <Smartphone className="w-3 h-3" /> {t("notifications.channels.sms")}
                           </span>
                         )}
                       </div>
@@ -267,7 +263,7 @@ export function Notifications() {
                 ))}
               </div>
               <Button variant="outline" className="w-full rounded-xl h-10 bg-card border-border/60">
-                {t("Open full settings", "打开完整设置")}
+                {t("notifications.prefs.openSettings")}
               </Button>
             </Card>
           </div>

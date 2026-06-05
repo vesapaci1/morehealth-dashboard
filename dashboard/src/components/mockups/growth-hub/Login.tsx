@@ -33,21 +33,18 @@ export function Login() {
             )}
           </h1>
           <p className="text-lg text-primary-foreground/80 font-medium mb-12">
-            {t("The Partner platform for More Health creators.", "More Health 创作者的合作伙伴平台。")}
+            {t("login.hero.tagline")}
           </p>
 
           <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 mt-12">
             <p className="text-lg leading-relaxed mb-4">
-              {t(
-                "\"The tools here made running my wellness business seamless. I spend less time managing and more time growing my community.\"",
-                "「这里的工具让我的健康事业运营得游刃有余。我花在管理上的时间更少，花在社群成长上的时间更多。」"
-              )}
+              {t("login.hero.testimonial")}
             </p>
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-white/20" />
               <div>
                 <p className="font-semibold text-sm">Lisa Wang</p>
-                <p className="text-xs text-primary-foreground/70">{t("Platinum Partner", "白金合作伙伴")}</p>
+                <p className="text-xs text-primary-foreground/70">{t("login.hero.testimonialRole")}</p>
               </div>
             </div>
           </div>
@@ -72,28 +69,28 @@ export function Login() {
           <div className="w-full max-w-sm">
             <div className="mb-10">
               <h2 className="text-3xl font-display font-bold tracking-tight mb-2 text-foreground">
-                {t("Welcome back", "欢迎回来")}
+                {t("login.form.title")}
               </h2>
               <p className="text-muted-foreground">
-                {t("Sign in to your Partner dashboard", "登录你的合作伙伴后台")}
+                {t("login.form.subtitle")}
               </p>
             </div>
 
             <form className="space-y-5" onSubmit={goDashboard}>
               <div className="space-y-2">
-                <Label htmlFor="identifier">{t("Email or Phone Number", "邮箱或手机号")}</Label>
+                <Label htmlFor="identifier">{t("login.form.identifier")}</Label>
                 <Input
                   id="identifier"
-                  placeholder={t("name@example.com or +86...", "name@example.com 或 +86…")}
+                  placeholder={t("login.form.identifierPlaceholder")}
                   className="h-12 bg-card border-border/60 focus:border-primary shadow-sm rounded-xl px-4"
                 />
               </div>
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password">{t("Password", "密码")}</Label>
+                  <Label htmlFor="password">{t("common.password")}</Label>
                   <a href="#" className="text-sm font-medium text-primary hover:underline">
-                    {t("Forgot?", "忘记密码？")}
+                    {t("login.form.forgot")}
                   </a>
                 </div>
                 <Input
@@ -105,7 +102,7 @@ export function Login() {
               </div>
 
               <Button className="w-full h-12 text-base font-semibold rounded-xl mt-6 shadow-sm flex items-center justify-center gap-2">
-                {t("Sign In", "登录")} <ArrowRight className="w-4 h-4" />
+                {t("login.form.signIn")} <ArrowRight className="w-4 h-4" />
               </Button>
             </form>
 
@@ -115,19 +112,19 @@ export function Login() {
                   <div className="w-full border-t border-border"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-background text-muted-foreground">{t("Or", "或")}</span>
+                  <span className="px-2 bg-background text-muted-foreground">{t("common.or")}</span>
                 </div>
               </div>
 
               <Button onClick={() => goDashboard()} variant="outline" className="w-full h-12 mt-6 rounded-xl font-medium shadow-sm bg-card hover:bg-secondary">
-                {t("Login with SMS Code", "使用短信验证码登录")}
+                {t("login.form.smsLogin")}
               </Button>
             </div>
 
             <p className="mt-10 text-center text-sm text-muted-foreground">
-              {t("New to More Health?", "首次加入 More Health？")}{" "}
+              {t("login.form.newUser")}{" "}
               <a href="/activate" className="font-semibold text-foreground hover:underline">
-                {t("Become a Partner", "成为合作伙伴")}
+                {t("login.form.becomePartner")}
               </a>
             </p>
           </div>

@@ -3,12 +3,7 @@
     {
       "id": "n1",
       "category": "order",
-      "titleEn": "New order from Lei Wang 王磊",
-      "titleZh": "来自王磊的新订单",
-      "detailEn": "SomaDerm Transdermal Gel · ORD-902-18X",
-      "detailZh": "SomaDerm 透皮凝胶 · ORD-902-18X",
-      "time": "Today, 2:14 PM",
-      "timeZh": "今天 14:14",
+      "timestamp": "2026-04-17T14:14:00+08:00",
       "unread": true,
       "amount": "+¥244.80",
       "actor": { "initials": "LW", "tone": "bg-blue-100 text-blue-700" }
@@ -16,24 +11,14 @@
     {
       "id": "n2",
       "category": "payout",
-      "titleEn": "Wallet payout completed",
-      "titleZh": "钱包打款成功",
-      "detailEn": "Transferred to ICBC •••• 7814 · Reference PV-2026-04-17-9012",
-      "detailZh": "已转入工商银行 •••• 7814 · 流水号 PV-2026-04-17-9012",
-      "time": "Today, 11:48 AM",
-      "timeZh": "今天 11:48",
+      "timestamp": "2026-04-17T11:48:00+08:00",
       "unread": true,
       "amount": "¥3,200.00"
     },
     {
       "id": "n3",
       "category": "subscription",
-      "titleEn": "Lisa renewed her monthly subscription",
-      "titleZh": "Lisa 续订月度订阅",
-      "detailEn": "Revitalize Eye Cream · 7th cycle · Auto-renew on May 5",
-      "detailZh": "焕颜眼霜 · 第 7 期 · 5月5日自动续订",
-      "time": "Today, 11:02 AM",
-      "timeZh": "今天 11:02",
+      "timestamp": "2026-04-17T11:02:00+08:00",
       "unread": true,
       "amount": "+¥112.00",
       "actor": { "initials": "L", "tone": "bg-emerald-100 text-emerald-700" }
@@ -41,57 +26,32 @@
     {
       "id": "n4",
       "category": "milestone",
-      "titleEn": "You earned more than 72% of partners this month",
-      "titleZh": "你的收入超过本月 72% 的合作伙伴",
-      "detailEn": "Keep going — Platinum tier is 4 referrals away.",
-      "detailZh": "再接再厉 — 距离白金等级仅差 4 位推荐。",
-      "time": "Yesterday, 6:48 PM",
-      "timeZh": "昨天 18:48",
+      "timestamp": "2026-04-16T18:48:00+08:00",
       "unread": false
     },
     {
       "id": "n5",
       "category": "order",
-      "titleEn": "Order shipped to Jing Chen 陈静",
-      "titleZh": "订单已发往陈静",
-      "detailEn": "Revitalize Eye Cream · SF Express SF1029384755",
-      "detailZh": "焕颜眼霜 · 顺丰速运 SF1029384755",
-      "time": "Yesterday, 3:22 PM",
-      "timeZh": "昨天 15:22",
+      "timestamp": "2026-04-16T15:22:00+08:00",
       "unread": false,
       "actor": { "initials": "JC", "tone": "bg-amber-100 text-amber-700" }
     },
     {
       "id": "n6",
       "category": "announcement",
-      "titleEn": "Spring Wellness campaign assets are live",
-      "titleZh": "春季健康营销素材已上线",
-      "detailEn": "Download new Xiaohongshu and Douyin templates from the Storefront.",
-      "detailZh": "可在我的店铺下载小红书与抖音的全新模板。",
-      "time": "Apr 15, 2026",
-      "timeZh": "2026年4月15日",
+      "timestamp": "2026-04-15T09:00:00+08:00",
       "unread": false
     },
     {
       "id": "n7",
       "category": "payout",
-      "titleEn": "Payout schedule updated",
-      "titleZh": "打款周期已更新",
-      "detailEn": "Weekly payouts will now arrive every Monday at 09:00 CST.",
-      "detailZh": "每周打款将于每周一上午 09:00 到账（北京时间）。",
-      "time": "Apr 14, 2026",
-      "timeZh": "2026年4月14日",
+      "timestamp": "2026-04-14T09:00:00+08:00",
       "unread": false
     },
     {
       "id": "n8",
       "category": "milestone",
-      "titleEn": "Best month ever in progress",
-      "titleZh": "本月有望创下新高",
-      "detailEn": "April is tracking +42% vs. your previous best month.",
-      "detailZh": "4月较你之前最佳月份增长 +42%。",
-      "time": "Apr 13, 2026",
-      "timeZh": "2026年4月13日",
+      "timestamp": "2026-04-13T09:00:00+08:00",
       "unread": false
     }
   ]

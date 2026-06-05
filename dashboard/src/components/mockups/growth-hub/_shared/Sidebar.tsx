@@ -55,7 +55,7 @@ export function Sidebar({ activeKey, mobileOpen = false, onClose }: SidebarProps
           <div className="flex flex-col">
             <span className="text-sm font-semibold">{user.name}</span>
             <span className="text-xs text-muted-foreground">
-              {t(user.roleEn, user.roleZh)}
+              {t(`user.roles.${user.role}`)}
             </span>
           </div>
         </div>
@@ -78,7 +78,7 @@ export function Sidebar({ activeKey, mobileOpen = false, onClose }: SidebarProps
             <>
               <div className="flex items-center gap-3">
                 <Icon className={`w-4 h-4 ${isActive ? "opacity-100" : "opacity-70"}`} />
-                <span>{t(item.labelEn, item.labelZh)}</span>
+                <span>{t(`nav.${item.key}`)}</span>
               </div>
               {item.badge ? (
                 <span
@@ -118,7 +118,7 @@ export function Sidebar({ activeKey, mobileOpen = false, onClose }: SidebarProps
           }`}
         >
           <LifeBuoy className="w-4 h-4 opacity-70" />
-          <span>{t(footer.support.labelEn, footer.support.labelZh)}</span>
+          <span>{t("nav.support")}</span>
         </Link>
       </div>
 
@@ -129,7 +129,7 @@ export function Sidebar({ activeKey, mobileOpen = false, onClose }: SidebarProps
         >
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none" />
           <span className="text-xs opacity-80 font-medium">
-            {t(footer.wallet.labelEn, footer.wallet.labelZh)}
+            {t("nav.walletBalance")}
           </span>
           <span className="text-xl font-bold display-num tabular-nums tracking-tight">
             {footer.wallet.amount}
